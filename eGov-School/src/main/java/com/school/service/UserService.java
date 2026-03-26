@@ -12,4 +12,7 @@ public interface UserService {
 	// 회원가입
 	void regist(UserVO user) throws SQLException;
 	
+	// 로그인 (이메일로 조회)
+	UserVO login(String userEmail, String userPwd) throws SQLException;
+	
 }

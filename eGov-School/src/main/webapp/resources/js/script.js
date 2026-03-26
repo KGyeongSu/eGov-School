@@ -56,16 +56,6 @@ $(document).ready(function () {
         });
     }
 
-    /* ===== 회원가입 폼 제출 시 약관 동의 확인 ===== */
-    var joinForm = document.getElementById('joinform');
-    if (joinForm) {
-        joinForm.addEventListener('submit', function (e) {
-            if (!document.getElementById('terms_agree').checked) {
-                e.preventDefault();
-                alert('이용약관에 동의해주세요.');
-            }
-        });
-    }
 
     /* ===== 비밀번호 재설정 - 비밀번호 일치 확인 ===== */
     var repwdForm = document.getElementById('repwdform');

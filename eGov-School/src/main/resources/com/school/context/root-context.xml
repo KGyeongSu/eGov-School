@@ -16,6 +16,7 @@
 	<!-- import시킬 context -->
 	<import resource="./dataSource-context.xml"></import>
 	<import resource="./application-context.xml"></import>
+	<import resource="./mail-context.xml"></import>
 	
 	
 	
