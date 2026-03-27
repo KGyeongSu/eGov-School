@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserVO login(String userEmail, String userPwd) throws SQLException {
-		// 1. 이메일로 유저 조회
+		// 1. 이메일로 유저 조회dd
 		UserVO user = userDAO.selectUserByEmail(userEmail);
 		
 		// 2. 유저가 없으면 null 리턴
