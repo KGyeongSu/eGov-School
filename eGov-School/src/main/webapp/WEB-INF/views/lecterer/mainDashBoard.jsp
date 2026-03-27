@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 
 <%@ include file="../modules/lecHeader.jsp"%>
+
+<head>
 <!-- 개별 css -->
 <link type="text/css" rel="stylesheet"
 	href="../../../resources/css/lecterer/style.css" />
@@ -24,7 +26,7 @@
 				<a href=""><i class="fa-regular fa-user"></i></a>
 			</div>
 			<div class="state_bar">
-				<p>???님의 메인 대시보드</p>
+				<p>${loginUser.userName}님의 메인 대시보드</p>
 			</div>
 			<div class="logout_dash">
 				<div class="mes">
@@ -216,6 +218,7 @@
 		</div>
 </body>
 
+<script src="/resources/js/commons.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -321,16 +324,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 	
-</script>
-
-<script>
-
-	function openPro() {
-		
-		
-		
-	}
-
 </script>
 
 </html>

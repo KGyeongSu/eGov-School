@@ -1,3 +1,4 @@
+
 package com.school.service;
 
 import java.sql.SQLException;
@@ -44,6 +45,15 @@ public class UserServiceImpl implements UserService {
 		userDAO.resetFailCount(userEmail);
 		
 		return user;
+	}
+	
+	@Override
+	public boolean updateLectererProfile(UserVO user) throws SQLException {
+		
+		int updatedRows = userDAO.updateLectererProfile(user);
+		
+		return updatedRows > 0;
+		
 	}
 
 }
