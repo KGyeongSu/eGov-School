@@ -17,7 +17,6 @@
 
 	<view-controller path="/admin/admin_main" />
 
-
 	<view-controller path="/lecterer/testMake" />
 	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->

@@ -62,15 +62,21 @@
                     <div class="jinput_wrap">
                         <label>이메일<span style="color:red"> *</span></label>
                         <div class="jinput_row">
-                            <input type="email" name="userEmail" placeholder="example@email.com" required>
-                            <button type="button" class="jbtn_check">인증번호 발송</button>
+                            <input type="email" id="userEmail" name="userEmail" placeholder="example@email.com" required>
+                            <button type="button" id="btnSendCode" class="jbtn_check">인증번호 발송</button>
                         </div>
+                        <span id="emailMsg" style="font-size:12px; color:#999;"></span>
                     </div>
                     <div class="jinput_wrap">
                         <label>인증번호<span style="color:red"> *</span></label>
-                        <input type="text" name="verifycode" placeholder="인증번호 6자리 입력" required maxlength="6"
-                            pattern="[0-9]{6}" title="숫자 6자리를 입력해주세요.">
+                        <div class="jinput_row">
+                            <input type="text" id="verifyCode" name="verifycode" placeholder="인증번호 6자리 입력" required maxlength="6"
+                                pattern="[0-9]{6}" title="숫자 6자리를 입력해주세요.">
+                            <button type="button" id="btnVerifyCode" class="jbtn_check">인증 확인</button>
+                        </div>
+                        <span id="codeMsg" style="font-size:12px; color:#999;"></span>
                     </div>
+                    
                     <div class="jinput_wrap">
                         <label>비밀번호<span style="color:red"> *</span></label>
                         <input type="password" name="userPwd" placeholder="8자 이상 20자 이하 (문자 + 숫자 조합)" required
@@ -133,7 +139,7 @@
                     <p>수집항목: 이메일, 이름, 전화번호<br>수집목적: 회원관리, 교육과정 제공<br>보유기간: 회원 탈퇴 시까지...</p>
                 </div>
             </div>
-            <!-- 개별 약관 3 -->
+            <!-- 개별 약관 3 dd-->
             <div class="terms_item">
                 <div class="term_row" onclick="this.querySelector('input').click()">
                     <input type="checkbox" class="term_check" data-required="false" onchange="checkAgree()">
@@ -146,6 +152,93 @@
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    
+    var emailVerified = false;
+    
+    // 인증번호 발송
+    $('#btnSendCode').click(function() {
+        var email = $('#userEmail').val();
+        
+        if (!email) {
+            alert('이메일을 입력해주세요.');
+            return;
+        }
+        
+        var btn = $(this);
+        btn.text('발송 중...').prop('disabled', true);
+        $('#emailMsg').text('').css('color', '#999');
+        
+        $.ajax({
+            url: '/commons/sendCode',
+            type: 'POST',
+            data: { userEmail: email },
+            success: function(result) {
+                if (result === 'success') {
+                    $('#emailMsg').text('인증번호가 발송되었습니다. 이메일을 확인해주세요.').css('color', '#2ecc71');
+                    btn.text('재발송').prop('disabled', false);
+                } else {
+                    $('#emailMsg').text('발송에 실패했습니다. 이메일을 확인해주세요.').css('color', 'red');
+                    btn.text('인증번호 발송').prop('disabled', false);
+                }
+            },
+            error: function() {
+                $('#emailMsg').text('서버 오류가 발생했습니다.').css('color', 'red');
+                btn.text('인증번호 발송').prop('disabled', false);
+            }
+        });
+    });
+    
+    // 인증번호 검증
+    $('#btnVerifyCode').click(function() {
+        var code = $('#verifyCode').val();
+        
+        if (!code || code.length !== 6) {
+            alert('인증번호 6자리를 입력해주세요.');
+            return;
+        }
+        
+        $.ajax({
+            url: '/commons/verifyCode',
+            type: 'POST',
+            data: { code: code },
+            success: function(result) {
+                if (result === 'success') {
+                    emailVerified = true;
+                    $('#codeMsg').text('인증이 완료되었습니다.').css('color', '#2ecc71');
+                    $('#verifyCode').prop('readonly', true);
+                    $('#userEmail').prop('readonly', true);
+                    $('#btnVerifyCode').prop('disabled', true).text('인증완료');
+                    $('#btnSendCode').prop('disabled', true);
+                } else if (result === 'expired') {
+                    $('#codeMsg').text('인증번호가 만료되었습니다. 다시 발송해주세요.').css('color', 'red');
+                } else {
+                    $('#codeMsg').text('인증번호가 일치하지 않습니다.').css('color', 'red');
+                }
+            },
+            error: function() {
+                $('#codeMsg').text('서버 오류가 발생했습니다.').css('color', 'red');
+            }
+        });
+    });
+    
+    // 폼 제출 시 이메일 인증 확인
+    $('#joinform').on('submit', function(e) {
+        if (!document.getElementById('terms_agree').checked) {
+            e.preventDefault();
+            alert('이용약관에 동의해주세요.');
+            return false;
+        }
+        if (!emailVerified) {
+            e.preventDefault();
+            alert('이메일 인증을 완료해주세요.');
+            return false;
+        }
+    });
+});
+</script>
 
 </body>
 
