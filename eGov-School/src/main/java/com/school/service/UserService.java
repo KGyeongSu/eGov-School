@@ -12,4 +12,7 @@ public interface UserService {
 	// 회원가입
 	void regist(UserVO user) throws SQLException;
 	
+	// 강사 프로필 업데이트 (회원가입 시 기본 정보 다 등록했음 -> 사진만 등록) 
+	boolean updateLectererProfile(UserVO user) throws SQLException;
+	
 }
