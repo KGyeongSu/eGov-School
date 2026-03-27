@@ -10,7 +10,7 @@
 
 <link type="text/css" rel="stylesheet"
 	href="../../../resources/css/user/styleEX.css" />
-<%@include file="../modules/userHeader.jsp"%>
+<%@include file="../../modules/userHeader.jsp"%>
 </head>
 <body>
 

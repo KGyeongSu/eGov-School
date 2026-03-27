@@ -53,7 +53,7 @@ public class PageMaker {
 	public int getDisplayPageNum() {
 		return displayPageNum;
 	}
-	public int getStargPage() {
+	public int getStartPage() {
 		return startPage;
 	}
 	public int getEndPage() {

@@ -20,14 +20,14 @@
 <body>	
 <header>
 		<div class="logo">
-			<a href=""><img src="../../../resources/imgs/dashboardLogo.png" /></a>
+			<a href=""><img src="../../../resources/images/dashboardLogo.png" /></a>
 		</div>
 
 		<nav class="menu">
 			<ul>
-				<li onclick="openPro();"><a href=""><span>My 프로필</span></a></li>
-				<li><a href=""><span>My 강의실</span></a></li>
-				<li><a href=""><span>평&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;가</span></a></li>
+				<li onclick="OpenWindow('profile', 'My 프로필', 700, 900);"><a href=""><span>My 프로필</span></a></li>
+				<li><span>My 강의실</span></li>
+				<li><span>평&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;가</span></li>
 			</ul>
 		</nav>
 </header>

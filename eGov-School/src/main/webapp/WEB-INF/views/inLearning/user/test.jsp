@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <title>정보처리기기 평가 시스템</title>
-     <%@include file="../modules/userHeader.jsp" %>
+     <%@include file="../../modules/userHeader.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user/teststyle.css" />
    
 </head>

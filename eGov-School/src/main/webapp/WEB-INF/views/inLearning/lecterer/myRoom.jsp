@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<%@ include file="../modules/lecHeader.jsp"%>
+<%@ include file="../../modules/lecHeader.jsp"%>
 <!-- 개별 css -->
 <link type="text/css" rel="stylesheet"
 	href="../../../resources/css/lecterer/styler.css" />
