@@ -5,7 +5,7 @@
 <head>
 
 <link type="text/css" rel="stylesheet" href="../../../resources/css/user/stylek.css" />
- <%@include file="../../modules/userHeader.jsp" %>
+ <%@include file="../modules/userHeader.jsp" %>
 
 <title>Dashboard</title>
 </head>

@@ -5,7 +5,7 @@
     <title>강좌 시청</title>
     
     <link type="text/css" rel="stylesheet" href="../../../resources/css/user/styleV.css" />
-     <%@include file="../../modules/userHeader.jsp" %>
+     <%@include file="../modules/userHeader.jsp" %>
 </head>
 
 <body class="videolet">

@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <link type="text/css" rel="stylesheet" href="../../../resources/css/user/style.css" />
-    <%@include file="../../modules/userHeader.jsp" %>
+    <%@include file="../modules/userHeader.jsp" %>
     <title>Dashboard</title>
 </head>
 <body>

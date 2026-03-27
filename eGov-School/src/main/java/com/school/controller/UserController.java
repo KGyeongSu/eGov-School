@@ -4,7 +4,9 @@ import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -157,7 +159,25 @@ public class UserController {
 		    }
 		}
 		
-		
+		@PostMapping("/lecterer/profile")
+		public String updateLectererProfile(@ModelAttribute UserVO user, Model model) throws SQLException {
+			
+			boolean success = userService.updateLectererProfile(user);
+			
+			if  (success) {
+				
+				model.addAttribute("msg", "프로필 업데이트가 완료되었습니다.");
+				
+			} else {
+				
+				model.addAttribute("msg", "서버 장애로 인해 프로필 업데이트가 실패했습니다.");
+				
+			}
+			
+			return "lecterer/profile";
+			
+		}
+
 		// ===== 로그아웃 =====
 		
 		@GetMapping("/commons/logout")
