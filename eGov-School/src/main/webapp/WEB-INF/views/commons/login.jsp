@@ -28,19 +28,27 @@
         <div class="login_form">
             <h2>로그인</h2>
             <p class="lsub_text">eGov-School 계정으로 로그인하세요.</p>
-        
-        <form id="loginform">
+        <!-- 에러 메시지 표시 -->
+				<% String message = (String) request.getAttribute("message"); %>
+				<% if (message != null) { %>
+				<div
+					style="color: red; font-size: 13px; margin-bottom: 10px; text-align: center;">
+					<%=message%>
+				</div>
+				<% } %>
+
+				<form id="loginform" action="/commons/login" method="post">
             <div class="linput_wrap">
                 <label>이메일</label>
                 <div class="linput_row">
-                    <input type="text" placeholder="example@email.com"
+                    <input type="text" name="userEmail" placeholder="example@email.com"
                     required>
                 </div>
             </div>
 
             <div class="linput_wrap">
                 <label>비밀번호</label>
-                <input type="password" placeholder="비밀번호를 입력하세요."
+                <input type="password" name="userPwd" placeholder="비밀번호를 입력하세요."
                 required
                 minlength="8"
                 maxlength="20"
@@ -53,6 +61,8 @@
             </div>
             <button type="submit" class="lbtn_submit">로그인</button>
 
+	
+			
         </form>
 
             <p class="join_p">아직 계정이 없으신가요?</p>
