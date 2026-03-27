@@ -108,7 +108,32 @@ public class UserController {
 		return "commons/login";
 	}
 
-	
+	@PostMapping("/commons/login")
+	public String login(@RequestParam("userEmail") String userEmail,
+						@RequestParam("userPwd") String userPwd,
+						HttpSession session,
+						RedirectAttributes rttr) {
+		try {
+			UserVO loginUser = userService.login(userEmail, userPwd);
+			
+			if (loginUser == null) {
+				rttr.addFlashAttribute("message", "이메일 또는 비밀번호가 일치하지 않습니다.");
+				return "redirect:/commons/login";
+			}
+			
+			// 세션에 로그인 유저 정보 저장
+			session.setAttribute("loginUser", loginUser);
+			session.setMaxInactiveInterval(1800); // 30분
+			
+			// 로그인 성공 → 메인페이지로 이동
+			return "redirect:/main";
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			rttr.addFlashAttribute("message", "서버 오류가 발생했습니다.");
+			return "redirect:/commons/login";
+		}
+	}
 
 	// ===== 인러닝 (역할별 분기) =====
 
