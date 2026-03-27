@@ -159,7 +159,21 @@ public class UserController {
 		    }
 		}
 		
-		@PostMapping("/lecterer/profile")
+		@GetMapping("/lecterer/profile")
+		public String profileForm(HttpSession session, Model model) {
+			
+			//로그인 정보 가져오기
+			UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+			
+			if (loginUser == null) return "redirect:/commons/login";
+			
+			model.addAttribute("loginUser", loginUser);
+			
+			return "lecterer/profile";
+			
+		}
+		
+		@PostMapping("/profile")
 		public String updateLectererProfile(@ModelAttribute UserVO user, Model model) throws SQLException {
 			
 			boolean success = userService.updateLectererProfile(user);
@@ -174,7 +188,7 @@ public class UserController {
 				
 			}
 			
-			return "lecterer/profile";
+			return "/profile";
 			
 		}
 

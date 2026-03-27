@@ -25,7 +25,7 @@
 
 		<div class="wrap">
 			<div class="pimg">
-				<div class="upload-contaioner">
+				<div class="upload-container">
 					<div class="upload-placeholder">
 						<p>클릭하거나 이미지를 드래그하세요</p>
 						<span>(JPG, PNG, 최대 5MB)</span>
@@ -37,7 +37,7 @@
 			<div class="divider"></div>
 
 			<div class="info">
-				<div class="form-container">
+				<div class="form-container upload-container">
 					<!-- 사진첨부 -->
 					<form name="profile" action="/inLearning/lecterer/profile"
 						method="post" enctype="multipart/form-data">
