@@ -8,17 +8,16 @@
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<view-controller path="/main"/>
-	<view-controller path="/commons/login"/>
 	<view-controller path="/commons/repwd"/>
 	<view-controller path="/page/cregist"/>
 	<view-controller path="/page/l_recruit"/>
 	<view-controller path="/page/l_recruit_detail"/>
 	<view-controller path="/page/l_recruit_apply"/>
 	<view-controller path="/lecterer/mainDashBoard"/>
-	<view-controller path="/user/dashBoard" />
+
 	<view-controller path="/admin/admin_main" />
-	<view-controller path="/user/exam" />
-	<view-controller path="/user/test" />
+
+
 	<view-controller path="/lecterer/testMake" />
 	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->

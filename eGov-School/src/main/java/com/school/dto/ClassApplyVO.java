@@ -31,4 +31,8 @@ public class ClassApplyVO {
 	private Date claStartdate;
 	private Date claEnddate;
 	private int claMaxstu;
+	
+	// ClassApplyVO.java에 추가
+	private String claName; // JSP ${apply.claName} 매핑용
+	private int progress;   // JSP ${apply.progress} 매핑용
 }

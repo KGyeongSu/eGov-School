@@ -7,23 +7,22 @@
 
 	<select id="selectClassApply" resultType="classapply">
 		SELECT
-		A.CA_NUM,
-		A.CA_DATE,
-		C.CLA_TITLE,
-		C.CLA_CONTENT,
-		C.CLA_CATEGORY,
-		C.CLA_STARTDATE,
-		C.CLA_ENDDATE,
-		C.CLA_MAXSTU,
-		E.ER_PASS,
-		E.ER_SCORE,
-		R.REP_NUM
+			A.CA_NUM,
+			A.CA_DATE,
+			C.CLA_NUM,
+			C.CLA_TITLE,
+			C.CLA_TITLE AS claName,    C.CLA_CONTENT,
+			C.CLA_CATEGORY,
+			C.CLA_STARTDATE,
+			C.CLA_ENDDATE,
+			C.CLA_MAXSTU,
+			0 AS progress,             E.ER_PASS,
+			E.ER_SCORE,
+			R.REP_NUM
 		FROM ClassApply A
 		JOIN Class C ON A.CLA_NUM = C.CLA_NUM
-		LEFT OUTER JOIN Exam_Result E ON (A.USER_NUM = E.USER_NUM AND A.CLA_NUM =
-		E.CLA_NUM)
-		LEFT OUTER JOIN REPUTATION R ON (A.USER_NUM = R.USER_NUM AND A.CLA_NUM =
-		R.CLA_NUM)
+		LEFT OUTER JOIN Exam_Result E ON (A.USER_NUM = E.USER_NUM)
+		LEFT OUTER JOIN REPUTATION R ON (A.USER_NUM = R.USER_NUM AND A.CLA_NUM = R.CLA_NUM)
 		WHERE A.USER_NUM = #{userNum}
 		ORDER BY A.CA_DATE DESC
 	</select>
@@ -36,10 +35,10 @@
 
 	<select id="selectClassByCaNum" resultType="classapply">
 		SELECT
-		A.CA_NUM,
-		A.CA_DATE,
-		C.CLA_NUM,
-		C.CLA_TITLE
+			A.CA_NUM,
+			A.CA_DATE,
+			C.CLA_NUM,
+			C.CLA_TITLE
 		FROM ClassApply A
 		JOIN Class C ON A.CLA_NUM = C.CLA_NUM
 		WHERE A.CA_NUM = #{caNum}
@@ -61,14 +60,8 @@
 		WHERE CA_NUM = #{caNum}
 	</delete>
 	
-	
-	
-	<select id="selectClassApplySeqNext">
-  		
-  		SELECT
-  		CERTIFICATE_SEQ.NEXTVAL AS CA_NUM 
-  		FROM DUAL
-  	
-  	</select>
+	<select id="selectClassApplySeqNext" resultType="int">
+		SELECT CERTIFICATE_SEQ.NEXTVAL FROM DUAL
+	</select>
 
 </mapper>
