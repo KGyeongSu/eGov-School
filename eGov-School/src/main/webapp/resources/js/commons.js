@@ -1,3 +1,25 @@
+// 윈도우 창
+function OpenWindow(UrlStr, WinTitle, WinWidth, WinHeight) {
+	
+	winleft = (screen.width - WinWidth) / 2;
+	wintop = (screen.height - WinHeight) / 2;
+	var win = window.open(UrlStr, WinTitle, "width=" + WinWidth
+							+ ",height=" + WinHeight + ", top=" + wintop + ", left="
+							+ winleft + ", status=yes");
+	
+	win.focus();
+	
+	}
+		
+		
+//팝업창 닫기
+function CloseWindow(){
+
+	window.opener.location.reload(true);
+	window.close();
+	
+}
+
 /** 비디오 업로드 시 미리보기 */
 function previewVideo(input) {
     const file = input.files[0];
@@ -105,3 +127,79 @@ const dateIcon = document.getElementById('calendarIcon');
 		        fp.open();
 		    });
 		}
+
+// 강사 프로필 등록 시 사진 미리보기 (DOMContentLoaded: js 내장객체로 document 를 선구성한 후 html 잘읽게 해줌)
+document.addEventListener('DOMContentLoaded', () => {
+	
+	//모든 업로드 컨테이너에서
+	document.querySelectorAll('.upload-container').forEach(container => {
+		
+		const placeholder = container.querySelector('.upload-placeholder')
+		const input = container.querySelector('.upload-input');
+		
+		// 클릭 시 파일 선택창 열리게
+		placeholder.addEventListener('click', () => input.click());
+		
+		// 파일 선택 시 미리보기
+		input.addEventListener('change', (e) => {
+			
+			const file = e.target.files[0];
+			if (!file) return;
+			if (!file.type.startsWith('image/')) return alert ('이미지 파일만 가능합니다.');
+			
+			const reader = new FileReader();
+			reader.onload = function(ev) {
+				
+				placeholder.innerHTML = `<img src="${ev.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
+				
+			}
+			
+			reader.readAsDataURL(file);
+			
+		});
+		
+		// 드래그 & 드롭
+		placeholder.addEventListener('dragover', (e) => {
+			
+			e.preventDefault();
+			placeholder.classList.add('dragover');
+			
+		});
+		
+		// 드래그 하려다가 안 한 경우
+		placeholder.addEventListener('dragleave', (e) => {
+			
+			e.preventDefault();
+			placeholder.classList.remove('dragover');
+			
+		});
+		
+		// 드롭
+		placeholder.addEventListener('drop', (e) => {
+			
+			e.preventDefault();
+			placeholder.classList.remove('dragover');
+			
+			const file = e.dataTransfer.files[0];
+			if (!file) return;
+			if(!file.type.startsWith('image/')) return alert ("이미지 파일만 가능합니다.");
+			
+			const reader = new FileReader();
+			reader.onload = function(ev) {
+							
+				placeholder.innerHTML = `<img src="${ev.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
+							
+			}
+						
+			reader.readAsDataURL(file)
+
+			// 파일을 input에도 넣어 폼으로 전송
+			const dataTransfer = new DataTransfer();
+			dataTransfer.items.add(file);
+			input.files = dataTransfer.files;
+			
+		});
+		
+	});
+	
+});
