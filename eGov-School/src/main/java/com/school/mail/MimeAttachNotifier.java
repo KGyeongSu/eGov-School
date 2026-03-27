@@ -16,7 +16,7 @@ public class MimeAttachNotifier {
 		this.mailSender = mailSender;
 	}
 
-	// 인증번호 메일 발송
+	// 인증번호 메일 발송dd
 	public String sendVerifyCode(String receiver) throws Exception {
 		
 		// 6자리 랜덤 인증번호 생성

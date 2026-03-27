@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    /* ===== 이미지 슬라이드 (메인페이지) ===== */
+    /* ===== 이미지 슬라이드 (메인페이지) dd===== */
     if ($('.img_slide').length) {
         let current = 0;
         const total = 3;

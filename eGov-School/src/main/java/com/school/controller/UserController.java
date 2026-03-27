@@ -22,7 +22,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	// ★ 추가: 메일 발송 클래스 주입
+	// ★ 추가: 메일 발송 클래스 주입dd
 	@Autowired
 	private MimeAttachNotifier mailNotifier;
 	
@@ -137,7 +137,7 @@ public class UserController {
 			}
 		}
 		
-		// ===== 인러닝 (역할별 분기) =====
+		// ===== 인러닝 (역할별 분기!!!!!) =====
 
 		@GetMapping("/inlearning")
 		public String dashboard(HttpSession session) {
