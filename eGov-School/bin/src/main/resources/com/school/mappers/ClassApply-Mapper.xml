@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ClassApply-Mapper">
+
+	<select id="selectClassApply" resultType="classapply">
+		SELECT
+		A.CA_NUM,
+		A.CA_DATE,
+		C.CLA_TITLE,
+		C.CLA_CONTENT,
+		C.CLA_CATEGORY,
+		C.CLA_STARTDATE,
+		C.CLA_ENDDATE,
+		C.CLA_MAXSTU,
+		E.ER_PASS,
+		E.ER_SCORE,
+		R.REP_NUM
+		FROM ClassApply A
+		JOIN Class C ON A.CLA_NUM = C.CLA_NUM
+		LEFT OUTER JOIN Exam_Result E ON (A.USER_NUM = E.USER_NUM AND A.CLA_NUM =
+		E.CLA_NUM)
+		LEFT OUTER JOIN REPUTATION R ON (A.USER_NUM = R.USER_NUM AND A.CLA_NUM =
+		R.CLA_NUM)
+		WHERE A.USER_NUM = #{userNum}
+		ORDER BY A.CA_DATE DESC
+	</select>
+
+	<select id="selectClassApplyListCount" resultType="int">
+		SELECT COUNT(*)
+		FROM ClassApply
+		WHERE USER_NUM = #{userNum}
+	</select>
+
+	<select id="selectClassByCaNum" resultType="classapply">
+		SELECT
+		A.CA_NUM,
+		A.CA_DATE,
+		C.CLA_NUM,
+		C.CLA_TITLE
+		FROM ClassApply A
+		JOIN Class C ON A.CLA_NUM = C.CLA_NUM
+		WHERE A.CA_NUM = #{caNum}
+	</select>
+
+	<insert id="insertClassApply" parameterType="classapply">
+		INSERT INTO ClassApply(CA_NUM, USER_NUM, CLA_NUM, CA_DATE)
+		VALUES(#{caNum}, #{userNum}, #{claNum}, SYSDATE)
+	</insert>
+
+	<update id="updateClassApply" parameterType="classapply">
+		UPDATE ClassApply
+		SET CLA_NUM = #{claNum}
+		WHERE CA_NUM = #{caNum}
+	</update>
+
+	<delete id="deleteClassApply" parameterType="classapply">
+		DELETE FROM ClassApply
+		WHERE CA_NUM = #{caNum}
+	</delete>
+	
+	
+	
+	<select id="selectClassApplySeqNext">
+  		
+  		SELECT
+  		CERTIFICATE_SEQ.NEXTVAL AS CA_NUM 
+  		FROM DUAL
+  	
+  	</select>
+
+</mapper>

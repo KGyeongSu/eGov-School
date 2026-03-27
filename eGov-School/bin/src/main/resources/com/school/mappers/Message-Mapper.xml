@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Message-Mapper">
+
+	<select id="selectMessageSeqNext" resultType="str">
+		SELECT SEQ_MESSAGE.NEXTVAL FROM DUAL
+	</select>
+
+	<insert id="insertMessage" parameterType="message">
+		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM)
+		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum})
+	</insert>
+
+	<!-- 받은 쪽지 목록 -->
+	<select id="selectReceivedList" parameterType="str" resultType="message">
+		SELECT * FROM MESSAGE
+		WHERE MS_RECEIVER_NUM = #{userNum}
+		ORDER BY MS_SENDDATE DESC
+	</select>
+
+	<!-- 보낸 쪽지 목록 -->
+	<select id="selectSentList" parameterType="str" resultType="message">
+		SELECT * FROM MESSAGE
+		WHERE MS_SENDER_NUM = #{userNum}
+		ORDER BY MS_SENDDATE DESC
+	</select>
+
+	<!-- 쪽지 단건 조회 -->
+	<select id="selectMessageByNum" parameterType="str" resultType="message">
+		SELECT * FROM MESSAGE
+		WHERE MS_NUM = #{msNum}
+	</select>
+
+	<!-- 읽음 처리 -->
+	<update id="updateMessageCheck" parameterType="str">
+		UPDATE MESSAGE
+		SET MS_CHECK = 'Y'
+		WHERE MS_NUM = #{msNum}
+	</update>
+
+	<!-- 쪽지 삭제 -->
+	<delete id="deleteMessage" parameterType="str">
+		DELETE FROM MESSAGE
+		WHERE MS_NUM = #{msNum}
+	</delete>
+
+</mapper>

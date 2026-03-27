@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="LecRecruitAttach-Mapper">
+ 
+	<select id="selectLRAttachSeqNext" resultType="str">
+		SELECT SEQ_LECRECRUIT_ATTACH.NEXTVAL FROM DUAL
+	</select>
+ 
+	<insert id="insertLRAttach" parameterType="lrAttach">
+		INSERT INTO LECRECRUIT_ATTACH(LRA_NUM, LT_NUM, LRA_NAME, LRA_TYPE)
+		VALUES(#{lraNum}, #{ltNum}, #{lraName}, #{lraType})
+	</insert>
+ 
+	<select id="selectLRAttachList" parameterType="str" resultType="lrAttach">
+		SELECT * FROM LECRECRUIT_ATTACH
+		WHERE LT_NUM = #{ltNum}
+		ORDER BY LRA_NUM ASC
+	</select>
+ 
+	<delete id="deleteLRAttach" parameterType="str">
+		DELETE FROM LECRECRUIT_ATTACH
+		WHERE LRA_NUM = #{lraNum}
+	</delete>
+ 
+	<delete id="deleteLRAttachByParent" parameterType="str">
+		DELETE FROM LECRECRUIT_ATTACH
+		WHERE LT_NUM = #{ltNum}
+	</delete>
+ 
+</mapper>
