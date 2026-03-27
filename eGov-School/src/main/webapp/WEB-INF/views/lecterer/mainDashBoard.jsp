@@ -26,7 +26,7 @@
 				<a href=""><i class="fa-regular fa-user"></i></a>
 			</div>
 			<div class="state_bar">
-				<p>???님의 메인 대시보드</p>
+				<p>${loginUser.userName}님의 메인 대시보드</p>
 			</div>
 			<div class="logout_dash">
 				<div class="mes">

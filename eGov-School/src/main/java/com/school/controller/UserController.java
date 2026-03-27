@@ -1,8 +1,11 @@
 package com.school.controller;
 
+import java.io.File;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.school.dto.UserVO;
@@ -173,22 +177,89 @@ public class UserController {
 			
 		}
 		
-		@PostMapping("/profile")
-		public String updateLectererProfile(@ModelAttribute UserVO user, Model model) throws SQLException {
+		@Value("${savedPath.lecterer.photo}")
+		private String picturePath;
+		
+		@PostMapping("/lecterer/profile")
+		public String updateLectererProfile(@ModelAttribute UserVO user,
+											@RequestParam ("uploadProfile") MultipartFile file,
+											@RequestParam("type") String type,
+											HttpSession session,
+											RedirectAttributes rttr) throws Exception {
 			
-			boolean success = userService.updateLectererProfile(user);
-			
-			if  (success) {
+			// 로그인 정보 가져오기
+			UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+			if (loginUser == null) {
 				
-				model.addAttribute("msg", "프로필 업데이트가 완료되었습니다.");
+				rttr.addFlashAttribute("msg", "로그인 세션이 만료되었습니다.");
 				
-			} else {
-				
-				model.addAttribute("msg", "서버 장애로 인해 프로필 업데이트가 실패했습니다.");
+				return "redirect:/commons/login";
 				
 			}
 			
-			return "/profile";
+			user.setUserNum(loginUser.getUserNum());
+			
+			// 폴더 존재 여부 확인
+			File uploadDir = new File(picturePath);
+			
+			if (!uploadDir.exists()) uploadDir.mkdirs();
+			
+			// 파일 저장 과정
+			if (file != null && !file.isEmpty()) {
+				
+				// 기존 파일 삭제
+				String oldFileName = loginUser.getUserPhoto();
+				
+				if (oldFileName != null) {
+					
+					File oldFile = new File(picturePath + oldFileName);
+					
+					if (oldFile.exists()) oldFile.delete();
+					
+				}
+				
+				// 새 파일 저장
+				String saveName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+				File newFile = new File(picturePath, saveName);
+				file.transferTo(newFile);
+				
+				//VO에 새 파일명 넣기
+				user.setUserPhoto(saveName);
+				
+			} else {
+				
+				// 새로운거 없으면 기존거 유지
+				user.setUserPhoto(loginUser.getUserPhoto());
+				
+			}
+			
+			// DB에 저장
+			boolean success = userService.updateLectererProfile(user);
+			
+			// 사용자에게 보여줌
+			if (success) {
+				
+			    loginUser.setUserPhoto(user.getUserPhoto());
+			    
+			    // 2. 새로 저장된 사진 파일명만 기존 정보에 덮어씌웁니다.
+			    if (loginUser != null) {
+			    	
+			        loginUser.setUserPhoto(user.getUserPhoto());
+			        
+			        session.setAttribute("loginUser", loginUser);
+			        
+			    }
+
+			    rttr.addFlashAttribute("msg", "프로필이 성공적으로 " + type + "되었습니다.");
+			    
+
+			} else {
+				
+			    rttr.addFlashAttribute("msg", "프로필 " + type + "이 서버 장애로 인해 불가능합니다.");
+			    
+			}
+
+			return "redirect:/lecterer/profile";
 			
 		}
 

@@ -80,8 +80,8 @@
 	<update id="updateLectererProfile" parameterType="user">
 	
 		update users
-		set user_photo = #{user_photo}
-		where user_num = #{user_num}
+		set user_photo = #{userPhoto}
+		where user_num = #{userNum}
 	
 	</update>
 
