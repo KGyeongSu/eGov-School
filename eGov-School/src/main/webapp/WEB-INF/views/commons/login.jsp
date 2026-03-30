@@ -28,16 +28,18 @@
         <div class="login_form">
             <h2>로그인</h2>
             <p class="lsub_text">eGov-School 계정으로 로그인하세요.</p>
-        <!-- 에러 메시지 표시 -->
-				<% String message = (String) request.getAttribute("message"); %>
-				<% if (message != null) { %>
+				<!-- 변경 후 → Security가 세션에 저장한 방식 -->
+				<% String loginError = (String) session.getAttribute("loginError"); %>
+				<% if (loginError != null) { %>
 				<div
 					style="color: red; font-size: 13px; margin-bottom: 10px; text-align: center;">
-					<%=message%>
+					<%=loginError%>
 				</div>
+				<% session.removeAttribute("loginError"); %>
 				<% } %>
 
-				<form id="loginform" action="/commons/login" method="post">
+				<!-- Controller가 아니고 Security가 처리하는 url -->	
+			<form id="loginform" action="/commons/login/post" method="post">
             <div class="linput_wrap">
                 <label>이메일</label>
                 <div class="linput_row">

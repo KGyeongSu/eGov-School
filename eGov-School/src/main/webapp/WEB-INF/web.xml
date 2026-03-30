@@ -30,7 +30,8 @@ version="6.0">
       <url-pattern>/*</url-pattern>
    </filter-mapping>
    
-   <!-- SecurityFilter 아직 안씀.
+   <!-- SecurityFilter -->
+   <!-- encodingFilter보다 뒤에 와야함 -->
    <filter>
    		<filter-name>springSecurityFilterChain</filter-name>
    		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -39,7 +40,7 @@ version="6.0">
    		<filter-name>springSecurityFilterChain</filter-name>
    		<url-pattern>/*</url-pattern>
    </filter-mapping>
-    -->
+    
 	
 	<!-- Processes application requests -->
 	<servlet>
