@@ -6,61 +6,59 @@
 <head>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user/stylek.css" />
     <%@include file="../modules/userHeader.jsp" %>
-    <title>Dashboard</title>
 </head>
-<body>   
-    <div class="mid">
-        <div class="container-fluid">
-            <div class="tabs">
-                <span class="tab active" onclick="showTab('ing')">수강 중인 강좌</span> 
-                <span class="tab" onclick="showTab('end')">수강 종료 강좌</span>
-            </div>
-
-            <div class="card_wrap ing">
-                <div class="row">
-                    <c:if test="${empty result.applyList}">
-                        <div class="col-12 text-center" style="padding: 100px 0; color: #888;">
-                            수강 중인 강좌 내역이 없습니다.
-                        </div>
-                    </c:if>
-
-                    <c:forEach items="${result.applyList}" var="apply">
-                        <div class="col-md-4">
-                            <div class="course-card-custom hover-reveal">
-                                <div class="card-thumb-area">
-                                    <div class="inner-rect">D-DAY</div>
-                                    <img src="${pageContext.request.contextPath}/resources/images/psyduck.png" class="thumb-img">
-                                    <div class="thumb-overlay">
-                                        <span class="view-text">상세보기</span>
-                                    </div>
-                                </div>
-                                <div class="card-body-area">
-                                    <h3 class="course-name">${apply.claName}</h3>
-                                    <div class="progress-wrapper">
-                                        <div class="progress-text">
-                                            <span>진도율</span><strong>${apply.progress}%</strong>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-striped bg-primary"
-                                                style="width: ${apply.progress}%;">${apply.progress}%</div>
+<body style="display: flex; height: 100vh; overflow: hidden; margin: 0;">   
+    <div class="content" style="display: flex; flex-direction: column; flex: 1; height: 100vh; min-width: 0;">
+        <div class="mid" style="flex: 1; overflow-y: auto; padding: 30px 40px;">
+            <div class="container-fluid">
+                <div class="tabs">
+                    <span class="tab active" onclick="showTab('ing')">수강 중인 강좌</span> 
+                    <span class="tab" onclick="showTab('end')">수강 종료 강좌</span>
+                </div>
+                <div class="card_wrap ing">
+                    <div class="row">
+                        <c:if test="${empty result.applyList}">
+                            <div class="col-12 text-center" style="padding: 100px 0; color: #888;">
+                                수강 중인 강좌 내역이 없습니다.
+                            </div>
+                        </c:if>
+                        <c:forEach items="${result.applyList}" var="apply">
+                            <div class="col-md-4">
+                                <div class="course-card-custom hover-reveal">
+                                    <div class="card-thumb-area">
+                                        <div class="inner-rect">D-DAY</div>
+                                        <img src="${pageContext.request.contextPath}/resources/images/psyduck.png" class="thumb-img">
+                                        <div class="thumb-overlay">
+                                            <span class="view-text">상세보기</span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="button-area">
-                                    <button class="btn-learn-full btn-main-action" data-clanum="${apply.claNum}">
-                                        학습하기 | 이어하기
-                                    </button>
+                                    <div class="card-body-area">
+                                        <h3 class="course-name">${apply.claName}</h3>
+                                        <div class="progress-wrapper">
+                                            <div class="progress-text">
+                                                <span>진도율</span><strong><fmt:formatNumber value="${apply.progress}" pattern="0" />%</strong>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-striped bg-primary"
+                                                    style="width: ${apply.progress}%;"><fmt:formatNumber value="${apply.progress}" pattern="0" />%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="button-area">
+                                        <button class="btn-learn-full btn-main-action" data-clanum="${apply.claNum}">
+                                            학습하기 | 이어하기
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
+                        </c:forEach>
+                    </div>
+                </div>
+                <div class="pagination-wrap">
+                    <%@ include file="/WEB-INF/views/modules/pagination.jsp"%>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="pagination-wrap">
-        <%@ include file="/WEB-INF/views/modules/pagination.jsp"%>
     </div>
 
     <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -68,15 +66,11 @@
             <div class="modal-content" style="border-radius: 8px; border: none; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);">
                 <div class="modal-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px solid #f4f4f4;">
-                        <div>
-                            <h2 id="mTitle" style="font-size: 22px; font-weight: bold; color: #0e506e; margin: 0;"></h2>
-                        </div>
+                        <div><h2 id="mTitle" style="font-size: 22px; font-weight: bold; color: #0e506e; margin: 0;"></h2></div>
                         <button type="button" class="close" data-dismiss="modal" style="font-size: 28px; line-height: 1;">&times;</button>
                     </div>
                     <div style="margin-bottom: 10px;">
-                        <h5 style="font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px;">
-                            <i class="fa-solid fa-layer-group mr-2"></i>전체 강좌 구성
-                        </h5>
+                        <h5 style="font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px;"><i class="fa-solid fa-layer-group mr-2"></i>전체 강좌 구성</h5>
                         <div style="max-height: 500px; overflow-y: auto; padding-right: 5px;" class="lecture-scroll">
                             <ul class="list-group list-group-flush" id="lList"></ul>
                         </div>
@@ -89,75 +83,21 @@
         </div>
     </div>
 
-    <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 12px; overflow: hidden;">
-                <div class="modal-header" style="background: #0e506e; color: #fff;">
-                    <h5 class="modal-title">강좌 피드백 등록</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="text-center mb-4">
-                        <p style="font-weight: bold; color: #333;">만족도 설정</p>
-                        <div class="star-rating">
-                            <input type="radio" id="5-stars" name="rating" value="5" /><label for="5-stars"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="4-stars" name="rating" value="4" /><label for="4-stars"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="3-stars" name="rating" value="3" /><label for="3-stars"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="2-stars" name="rating" value="2" /><label for="2-stars"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="1-star" name="rating" value="1" /><label for="1-star"><i class="fa-solid fa-star"></i></label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <p style="font-weight: bold; color: #333;">피드백 작성</p>
-                        <textarea id="feedbackContent" style="width:100%; height:100px; padding:10px; border-radius:8px; border:1px solid #ddd;" placeholder="의견을 남겨주세요."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="submitFeedback" style="background: #0e506e; border:none; padding: 8px 30px;">등록</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal fade" id="certificateModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 15px; border: 3px double #0e506e;">
-                <div class="modal-body text-center p-5">
-                    <i class="fa-solid fa-award" style="font-size: 80px; color: #f1c40f; margin-bottom: 20px;"></i>
-                    <h2 style="font-weight: bold; color: #0e506e;">강좌 수료를 축하합니다!</h2>
-                    <p style="font-size: 18px; color: #555; margin-top: 15px;">
-                        모든 교육 과정을 성공적으로 마치셨습니다.<br>
-                        아래 버튼을 눌러 수료증을 확인하세요.
-                    </p>
-                    <div style="margin-top: 30px;">
-                        <button type="button" class="btn btn-lg" style="background: #0e506e; color: #fff; padding: 10px 40px;" onclick="alert('다운로드를 시작합니다.')">
-                            <i class="fa-solid fa-file-pdf mr-2"></i>수료증 다운로드
-                        </button>
-                    </div>
-                </div>
-                <div class="modal-footer" style="border: none; justify-content: center;">
-                    <button type="button" class="btn btn-link" data-dismiss="modal" style="color: #888;">닫기</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
     $(document).ready(function() {
         $(document).on('click', '.course-card-custom', function(e) {
             if($(e.target).closest('.button-area').length > 0) return;
             const title = $(this).find('.course-name').text();
+            const claNum = $(this).find('.btn-main-action').data('clanum');
             $('#mTitle').text(title);
-            
             let html = '';
-            for(let i=1; i<=10; i++) {
-                html += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center" 
-                        style="padding: 18px 20px; border: 1px solid #eee; margin-bottom: 8px; cursor: pointer; border-radius: 6px;">
+            for(let i=1; i<=12; i++) {
+                html += `<li class="list-group-item d-flex justify-content-between align-items-center" 
+                            style="padding: 18px 20px; border: 1px solid #eee; margin-bottom: 8px; cursor: pointer; border-radius: 6px;"
+                            onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=\${claNum}&lsnSeq=\${i}'">
                         <span style="font-size:16px; font-weight:500;">\${i}차시 강좌</span>
                         <div class="d-flex align-items-center">
-                            <span style="font-size: 13px; color: #888; margin-right: 15px;">미수강</span>
+                            <span style="font-size: 13px; color: #888; margin-right: 15px;">학습하기</span>
                             <i class="fa-regular fa-circle-play" style="font-size:22px; color:#0e506e;"></i>
                         </div>
                     </li>`;
@@ -169,23 +109,7 @@
         $(document).on('click', '.btn-main-action', function(e) {
             e.stopPropagation(); 
             const claNum = $(this).data('clanum');
-            
-            if($(this).hasClass('is-completed')) {
-                $('#certificateModal').modal('show');
-            } else if($(this).hasClass('is-feedback')) {
-                $('#feedbackModal').modal('show');
-            } else {
-                location.href = "${pageContext.request.contextPath}/user/videolect?claNum=" + claNum;
-            }
-        });
-
-        $('#submitFeedback').on('click', function() {
-            const rating = $('input[name="rating"]:checked').val();
-            if(!rating) { alert("별점을 선택해주세요."); return; }
-            alert("등록이 완료되었습니다.");
-            $('#feedbackModal').modal('hide');
-            $('.btn-main-action.is-feedback').text('수료증 발급받기').removeClass('is-feedback').addClass('is-completed').css('background-color', '#27ae60');
-            setTimeout(() => $('#certificateModal').modal('show'), 500);
+            location.href = "${pageContext.request.contextPath}/user/videolect?claNum=" + claNum;
         });
     });
 
@@ -193,10 +117,10 @@
         $('.tab').removeClass('active');
         if (type === 'ing') {
             $('.tab:eq(0)').addClass('active');
-            $('.btn-main-action').text('학습하기 | 이어하기').removeClass('is-feedback');
+            $('.btn-main-action').text('학습하기 | 이어하기');
         } else {
             $('.tab:eq(1)').addClass('active');
-            $('.btn-main-action').text('피드백 | 수료증').addClass('is-feedback');
+            $('.btn-main-action').text('수강완료');
         }
     }
     </script>

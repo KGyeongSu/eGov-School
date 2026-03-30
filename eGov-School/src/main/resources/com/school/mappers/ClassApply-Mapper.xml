@@ -11,12 +11,13 @@
 			A.CA_DATE,
 			C.CLA_NUM,
 			C.CLA_TITLE,
-			C.CLA_TITLE AS claName,    C.CLA_CONTENT,
+			C.CLA_TITLE AS claName,
+			C.CLA_CONTENT,
 			C.CLA_CATEGORY,
 			C.CLA_STARTDATE,
 			C.CLA_ENDDATE,
 			C.CLA_MAXSTU,
-			0 AS progress,             E.ER_PASS,
+			E.ER_PASS,
 			E.ER_SCORE,
 			R.REP_NUM
 		FROM ClassApply A
@@ -45,8 +46,8 @@
 	</select>
 
 	<insert id="insertClassApply" parameterType="classapply">
-		INSERT INTO ClassApply(CA_NUM, USER_NUM, CLA_NUM, CA_DATE)
-		VALUES(#{caNum}, #{userNum}, #{claNum}, SYSDATE)
+		INSERT INTO ClassApply(CA_NUM, USER_NUM, CLA_NUM, CA_DATE, PROGRESS)
+		VALUES(#{caNum}, #{userNum}, #{claNum}, SYSDATE, 0)
 	</insert>
 
 	<update id="updateClassApply" parameterType="classapply">
@@ -63,5 +64,12 @@
 	<select id="selectClassApplySeqNext" resultType="int">
 		SELECT CERTIFICATE_SEQ.NEXTVAL FROM DUAL
 	</select>
+
+    <update id="updateClassProgress" parameterType="classApply">
+	    UPDATE CLASSAPPLY
+	    SET PROGRESS = #{progress}
+	    WHERE USER_NUM = #{userNum}
+	      AND CLA_NUM = #{claNum}
+	</update>
 
 </mapper>

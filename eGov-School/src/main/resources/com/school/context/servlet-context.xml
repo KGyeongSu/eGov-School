@@ -14,8 +14,8 @@
 	<view-controller path="/page/l_recruit_detail"/>
 	<view-controller path="/page/l_recruit_apply"/>
 	<view-controller path="/lecterer/mainDashBoard"/>
-
 	<view-controller path="/admin/admin_main" />
+	<view-controller path="/user/dashBoard" view-name="user/dashBoard"/>
 
 	<view-controller path="/lecterer/testMake" />
 	

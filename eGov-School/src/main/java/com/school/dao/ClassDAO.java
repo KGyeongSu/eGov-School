@@ -22,4 +22,6 @@ public interface ClassDAO {
 	
 	int selectClassSeqNext() throws SQLException;
 
+	void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException;
+
 }

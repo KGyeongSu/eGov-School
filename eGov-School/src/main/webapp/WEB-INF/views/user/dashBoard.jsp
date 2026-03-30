@@ -1,54 +1,89 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <link type="text/css" rel="stylesheet" href="../../../resources/css/user/style.css" />
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user/style.css" />
     <%@include file="../modules/userHeader.jsp" %>
     <title>Dashboard</title>
+    <style>
+        /* 수강 중인 강좌 섹션 스타일 */
+        .section-header {
+            border-bottom: 2px solid #0e506e;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .course-card-custom {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            transition: transform 0.3s ease;
+        }
+        .course-card-custom:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 </head>
-<body>
+<body>   
     <div class="mid">
         <div class="container-fluid">
-            <h4 class="section-title">진행중인 강좌</h4>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card course-card-v2">
-                        <div class="course-img-wrapper">
-                            <img src="../../../resources/imgs/lope.png" class="course-img">
-                            <div class="course-overlay"><button class="btn-play" onclick="location.href='#'"><i class="fas fa-play"></i> 학습하기</button></div>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="course-title">자바 프로그래밍</h3>
-                            <div class="course-status-text"><span>학습 진행률</span><span class="percent-text">65%</span></div>
-                            <div class="progress custom-progress-v2"><div class="progress-bar" style="width:65%"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card course-card-v2">
-                        <div class="course-img-wrapper">
-                            <img src="../../../resources/imgs/lope.png" class="course-img">
-                            <div class="course-overlay"><button class="btn-play" onclick="location.href='#'"><i class="fas fa-play"></i> 학습하기</button></div>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="course-title">데이터베이스</h3>
-                            <div class="course-status-text"><span>학습 진행률</span><span class="percent-text">40%</span></div>
-                            <div class="progress custom-progress-v2"><div class="progress-bar bg-warning" style="width:40%"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card course-card-v2">
-                        <div class="course-img-wrapper">
-                            <img src="../../../resources/imgs/lope.png" class="course-img">
-                            <div class="course-overlay"><button class="btn-play" onclick="location.href='#'"><i class="fas fa-play"></i> 학습하기</button></div>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="course-title">웹 퍼블리싱</h3>
-                            <div class="course-status-text"><span>학습 진행률</span><span class="percent-text">85%</span></div>
-                            <div class="progress custom-progress-v2"><div class="progress-bar bg-success" style="width:85%"></div></div>
-                        </div>
-                    </div>
+            
+            <div class="section-header">
+                <h4 class="section-title" style="font-weight: bold; color: #0e506e; margin: 0;">
+                    <i class="fa-solid fa-book-open-reader mr-2"></i>수강 중인 강좌
+                </h4>
+            </div>
+
+            <div class="card_wrap">
+                <div class="row">
+                    <c:choose>
+                        <%-- 데이터가 없을 경우 --%>
+                        <c:when test="${empty result.applyList}">
+                            <div class="col-12 text-center" style="padding: 80px 0; color: #888;">
+                                <i class="fa-solid fa-folder-open mb-3" style="font-size: 40px; display: block;"></i>
+                                수강 중인 강좌 내역이 없습니다.
+                            </div>
+                        </c:when>
+                        
+                        <%-- 데이터가 있을 경우 반복 출력 --%>
+                        <c:otherwise>
+                            <c:forEach items="${result.applyList}" var="apply" end="2">
+                                <div class="col-md-4 mb-4">
+                                    <div class="course-card-custom shadow-sm">
+                                        <div class="card-thumb-area" style="position: relative; height: 180px; overflow: hidden;">
+                                            <div class="inner-rect" style="position: absolute; top: 10px; left: 10px; z-index: 2; background: #ff4757; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">ING</div>
+                                            <img src="${pageContext.request.contextPath}/resources/imgs/lope.png" class="thumb-img" style="width: 100%; height: 100%; object-fit: cover;">
+                                            <div class="thumb-overlay">
+                                                <span class="view-text">상세보기</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body-area" style="padding: 20px;">
+                                            <h3 class="course-name" style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px;">${apply.claName}</h3>
+                                            <div class="progress-wrapper">
+                                                <div class="progress-text" style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+                                                    <span style="color: #666;">학습 진행률</span>
+                                                    <strong style="color: #0e506e;">${apply.progress}%</strong>
+                                                </div>
+                                                <div class="progress" style="height: 10px; background-color: #f0f0f0; border-radius: 5px;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated ${apply.progress >= 80 ? 'bg-success' : 'bg-primary'}"
+                                                        style="width: ${apply.progress}%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="button-area" style="padding: 0 20px 20px;">
+                                            <button class="btn btn-block" 
+                                                    style="background: #0e506e; color: #fff; font-weight: bold; padding: 10px; border-radius: 6px;"
+                                                    onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=${apply.claNum}'">
+                                                학습하기 | 이어하기
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
@@ -98,6 +133,7 @@
     var calendarEvents = JSON.parse(localStorage.getItem('dashEvents')) || [{ title: '강좌 마감', start: '2026-03-20', color: '#f39c12' }];
 
     $(document).ready(function() {
+        // 그래프 데이터 및 초기화 (수정 없음)
         var evaluationData = [
             { subject: '자바 프로그래밍', score: 85, status: 'pass', rank: 5.2 },
             { subject: '데이터베이스', score: 55, status: 'fail', rank: null },
@@ -134,6 +170,7 @@
         }
         $("#evaluationStatusList").html(statusHtml);
 
+        // 캘린더 초기화 (수정 없음)
         miniCalendar = new FullCalendar.Calendar(document.getElementById('mini-calendar'), {
             initialView: 'dayGridMonth',
             locale: 'ko',
@@ -193,6 +230,7 @@
             Swal.fire('저장 성공', '대시보드에 반영되었습니다.', 'success');
         });
     });
+    
     function retakeCourse(name) { Swal.fire(name + ' 재수강 신청 완료'); }
     </script>
 </body>

@@ -6,7 +6,7 @@ public class PageMaker {
 	private String keyword="";
 	
 	private int page=1;
-	private int perPageNum=10;
+	private int perPageNum=6;
 	private int totalCount;
 	private int displayPageNum=10;
 	

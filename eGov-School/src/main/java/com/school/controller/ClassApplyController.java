@@ -5,35 +5,79 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.school.cmd.ClassApplyListCommand;
 import com.school.cmd.PageMaker;
 import com.school.dto.UserVO;
+import com.school.dto.LessonVO;
 import com.school.service.ClassApplyService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
 public class ClassApplyController {
-	
-	@Autowired
-	private ClassApplyService classApplyService;
-	
-	@RequestMapping("/myKang")
-	public String list(PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
-	    String url = "user/myKang";
-	    UserVO loginUser = (UserVO) session.getAttribute("loginUser");
-	    String userNum = "rudtn778";
+    
+    @Autowired
+    private ClassApplyService classApplyService;
 
-	    // 1. 서비스에서 리스트와 '계산된' PageMaker를 받아옵니다.
-	    ClassApplyListCommand result = classApplyService.getClassApplyList(userNum, pageMaker);
-	    
-	    // 2. 만약 result.getPageMaker()가 내부에서 계산을 안 했다면 여기서 수동으로 호출해야 할 수도 있습니다.
-	    // 보통 서비스에서 totalCount를 세팅하면 자동으로 계산되도록 짜여있을 겁니다.
-	    
-	    model.addAttribute("result", result);
-	    model.addAttribute("pageMaker", result.getPageMaker());
-	    
-	    return url;
-	}
-	
+    @RequestMapping("/dashBoard")
+    public String dashBoard(PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
+        UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        String userNum = (loginUser != null) ? String.valueOf(loginUser.getUserNum()) : "2";
+        
+        ClassApplyListCommand result = classApplyService.getClassApplyList(userNum, pageMaker);
+        model.addAttribute("result", result);
+        return "user/dashBoard";
+    }
+
+    @RequestMapping("/myKang")
+    public String list(PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
+        UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        String userNum = (loginUser != null) ? String.valueOf(loginUser.getUserNum()) : "2";
+        
+        ClassApplyListCommand result = classApplyService.getClassApplyList(userNum, pageMaker);
+        model.addAttribute("result", result);
+        model.addAttribute("pageMaker", result.getPageMaker());
+        return "user/myKang";
+    }
+
+    @RequestMapping("/videolect")
+    public String videolect(
+            @RequestParam("claNum") String claNum, 
+            // 수정: lsnNum 대신 lsnSeq로 명확히 받습니다.
+            @RequestParam(value="lsnSeq", required = false) String lsnSeq, 
+            HttpSession session, Model model) throws SQLException {
+        
+        UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        String userNum = (loginUser != null) ? String.valueOf(loginUser.getUserNum()) : "2";
+        
+        // 서비스에도 lsnSeq를 그대로 넘깁니다.
+        LessonVO lesson = classApplyService.getLessonDetail(userNum, claNum, lsnSeq);
+        
+        model.addAttribute("lesson", lesson);
+        model.addAttribute("claNum", claNum);
+        
+        return "user/videolect";
+    }
+    
+    @RequestMapping("/updateProgress")
+    @ResponseBody 
+    public String updateProgress(
+            @RequestParam("claNum") String claNum, 
+            @RequestParam("lsnSeq") int lsnSeq,
+            HttpSession session) {
+        
+        UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        String userNum = (loginUser != null) ? String.valueOf(loginUser.getUserNum()) : "2";
+
+        try {
+            classApplyService.updateLessonProgress(userNum, claNum, lsnSeq);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
 }
