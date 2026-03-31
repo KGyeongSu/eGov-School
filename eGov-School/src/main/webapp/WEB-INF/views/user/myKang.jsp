@@ -63,21 +63,20 @@
 
     <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 8px; border: none; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);">
+            <div class="modal-content" style="border-radius: 8px; border: none;">
                 <div class="modal-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px solid #f4f4f4;">
                         <div><h2 id="mTitle" style="font-size: 22px; font-weight: bold; color: #0e506e; margin: 0;"></h2></div>
-                        <button type="button" class="close" data-dismiss="modal" style="font-size: 28px; line-height: 1;">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal" style="font-size: 28px;">&times;</button>
                     </div>
                     <div style="margin-bottom: 10px;">
-                        <h5 style="font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px;"><i class="fa-solid fa-layer-group mr-2"></i>전체 강좌 구성</h5>
-                        <div style="max-height: 500px; overflow-y: auto; padding-right: 5px;" class="lecture-scroll">
+                        <h5 style="font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px;">
+                            <i class="fa-solid fa-layer-group mr-2"></i>전체 강좌 구성
+                        </h5>
+                        <div style="max-height: 500px; overflow-y: auto;" class="lecture-scroll">
                             <ul class="list-group list-group-flush" id="lList"></ul>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer" style="border-top: 1px solid #eee; background: #f9f9f9;">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="padding: 8px 25px;">닫기</button>
                 </div>
             </div>
         </div>
@@ -87,23 +86,40 @@
     $(document).ready(function() {
         $(document).on('click', '.course-card-custom', function(e) {
             if($(e.target).closest('.button-area').length > 0) return;
+            
             const title = $(this).find('.course-name').text();
             const claNum = $(this).find('.btn-main-action').data('clanum');
             $('#mTitle').text(title);
-            let html = '';
-            for(let i=1; i<=12; i++) {
-                html += `<li class="list-group-item d-flex justify-content-between align-items-center" 
-                            style="padding: 18px 20px; border: 1px solid #eee; margin-bottom: 8px; cursor: pointer; border-radius: 6px;"
-                            onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=\${claNum}&lsnSeq=\${i}'">
-                        <span style="font-size:16px; font-weight:500;">\${i}차시 강좌</span>
-                        <div class="d-flex align-items-center">
-                            <span style="font-size: 13px; color: #888; margin-right: 15px;">학습하기</span>
-                            <i class="fa-regular fa-circle-play" style="font-size:22px; color:#0e506e;"></i>
-                        </div>
-                    </li>`;
-            }
-            $('#lList').html(html);
-            $('#courseModal').modal('show');
+            
+            $.ajax({
+                url: '${pageContext.request.contextPath}/user/getLessonList',
+                type: 'GET',
+                data: { "claNum": claNum },
+                dataType: 'json',
+                success: function(data) {
+                    let html = '';
+                    if(data.length > 0) {
+                        data.forEach(function(item) {
+                            html += `<li class="list-group-item d-flex justify-content-between align-items-center" 
+                                        style="padding: 18px 20px; border: 1px solid #eee; margin-bottom: 8px; cursor: pointer; border-radius: 6px;"
+                                        onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=\${item.claNum}&lsnSeq=\${item.lsnSeq}'">
+                                    <span style="font-size:16px; font-weight:500;">\${item.lsnSeq}차시 : \${item.lsnTitle}</span>
+                                    <div class="d-flex align-items-center">
+                                        <span style="font-size: 13px; color: #888; margin-right: 15px;">학습하기</span>
+                                        <i class="fa-regular fa-circle-play" style="font-size:22px; color:#0e506e;"></i>
+                                    </div>
+                                </li>`;
+                        });
+                    } else {
+                        html = '<li class="text-center py-4">등록된 강좌가 없습니다.</li>';
+                    }
+                    $('#lList').html(html);
+                    $('#courseModal').modal('show');
+                },
+                error: function() {
+                    alert("강좌 목록을 불러오는데 실패했습니다.");
+                }
+            });
         });
 
         $(document).on('click', '.btn-main-action', function(e) {

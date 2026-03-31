@@ -8,7 +8,6 @@
     <%@include file="../modules/userHeader.jsp" %>
     <title>Dashboard</title>
     <style>
-        /* 수강 중인 강좌 섹션 스타일 */
         .section-header {
             border-bottom: 2px solid #0e506e;
             padding-bottom: 10px;
@@ -39,7 +38,6 @@
             <div class="card_wrap">
                 <div class="row">
                     <c:choose>
-                        <%-- 데이터가 없을 경우 --%>
                         <c:when test="${empty result.applyList}">
                             <div class="col-12 text-center" style="padding: 80px 0; color: #888;">
                                 <i class="fa-solid fa-folder-open mb-3" style="font-size: 40px; display: block;"></i>
@@ -47,7 +45,6 @@
                             </div>
                         </c:when>
                         
-                        <%-- 데이터가 있을 경우 반복 출력 --%>
                         <c:otherwise>
                             <c:forEach items="${result.applyList}" var="apply" end="2">
                                 <div class="col-md-4 mb-4">
@@ -64,11 +61,13 @@
                                             <div class="progress-wrapper">
                                                 <div class="progress-text" style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
                                                     <span style="color: #666;">학습 진행률</span>
-                                                    <strong style="color: #0e506e;">${apply.progress}%</strong>
+                                                    <strong style="color: #0e506e;">
+                                                        <fmt:formatNumber value="${apply.progress}" pattern="0" />%
+                                                    </strong>
                                                 </div>
                                                 <div class="progress" style="height: 10px; background-color: #f0f0f0; border-radius: 5px;">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated ${apply.progress >= 80 ? 'bg-success' : 'bg-primary'}"
-                                                        style="width: ${apply.progress}%;"></div>
+                                                        style="width: <fmt:formatNumber value="${apply.progress}" pattern="0" />%;"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -133,7 +132,6 @@
     var calendarEvents = JSON.parse(localStorage.getItem('dashEvents')) || [{ title: '강좌 마감', start: '2026-03-20', color: '#f39c12' }];
 
     $(document).ready(function() {
-        // 그래프 데이터 및 초기화 (수정 없음)
         var evaluationData = [
             { subject: '자바 프로그래밍', score: 85, status: 'pass', rank: 5.2 },
             { subject: '데이터베이스', score: 55, status: 'fail', rank: null },
@@ -170,7 +168,6 @@
         }
         $("#evaluationStatusList").html(statusHtml);
 
-        // 캘린더 초기화 (수정 없음)
         miniCalendar = new FullCalendar.Calendar(document.getElementById('mini-calendar'), {
             initialView: 'dayGridMonth',
             locale: 'ko',

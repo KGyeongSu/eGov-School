@@ -52,5 +52,23 @@
         FROM PROGRESS
         WHERE USER_NUM = #{userNum} AND LSN_NUM = #{lsnNum}
     </select>
+    
+    
+    <select id="selectCourseProgress" resultType="double">
+    SELECT 
+        CASE 
+            WHEN total_cnt = 0 THEN 0 
+            ELSE ROUND((completed_cnt / total_cnt) * 100, 1) 
+        END as progress
+    FROM (
+        SELECT 
+            (SELECT COUNT(*) FROM LESSON WHERE CLA_NUM = #{claNum}) as total_cnt,
+            (SELECT COUNT(*) FROM PROGRESS 
+             WHERE CLA_NUM = #{claNum} 
+               AND USER_NUM = #{userNum} 
+               AND PRG_COMPLETE = 'Y') as completed_cnt
+        FROM DUAL
+    )
+</select>
 
 </mapper>

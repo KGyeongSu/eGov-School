@@ -1,6 +1,8 @@
 package com.school.service;
 
 import java.sql.SQLException;
+import java.util.List;
+
 import com.school.cmd.ClassApplyListCommand;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
@@ -19,4 +21,6 @@ public interface ClassApplyService {
     Integer getResumeLsnSeq(String userNum, String claNum) throws SQLException;
 
     void updateLessonProgress(String userNum, String claNum, int lsnSeq) throws SQLException;
+
+	List<LessonVO> getLessonListByCoures(String claNum) throws SQLException;
 }

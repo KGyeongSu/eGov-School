@@ -20,7 +20,6 @@ public class ClassApplyServiceImpl implements ClassApplyService {
     private LessonDAO lessonDAO;
     private LearningStatusDAO learningStatusDAO;
 
-    public ClassApplyServiceImpl() {}
 
     public ClassApplyServiceImpl(ClassApplyDAO classApplyDAO, LessonDAO lessonDAO, LearningStatusDAO learningStatusDAO) {
         this.classApplyDAO = classApplyDAO;
@@ -35,7 +34,32 @@ public class ClassApplyServiceImpl implements ClassApplyService {
 
     @Override
     public ClassApplyListCommand getClassApplyList(String userNum, PageMaker pageMaker) throws SQLException {
+       
         List<ClassApplyVO> applyList = classApplyDAO.selectClassApply(userNum, pageMaker);
+        
+
+        if (applyList != null) {
+            for (ClassApplyVO apply : applyList) {
+               
+                int totalLessons = lessonDAO.selectTotalLessonCount(apply.getClaNum());
+                
+            
+                LearningStatusVO status = new LearningStatusVO();
+                status.setUserNum(userNum);
+                status.setClaNum(apply.getClaNum());
+                int completedLessons = learningStatusDAO.selectCompletedLessonCount(status);
+                
+                // 진도율 계산
+                double progressPercent = 0.0;
+                if (totalLessons > 0) {
+                    progressPercent = ((double) completedLessons / totalLessons) * 100;
+                }
+                
+           
+                apply.setProgress(progressPercent);
+            }
+        }
+
         ClassApplyListCommand command = new ClassApplyListCommand(applyList, pageMaker);
         return command;
     }
@@ -43,36 +67,31 @@ public class ClassApplyServiceImpl implements ClassApplyService {
     @Override
     public LessonVO getLessonDetail(String userNum, String claNum, String lsnSeq) throws SQLException {
         
-        // 1. 파라미터가 없거나, 비어있거나, "0"인 경우에만 '이어하기' 로직 수행
-        // 사용자가 리스트에서 차시를 직접 클릭하면 lsnSeq에 값이 들어오므로 이 if문을 건너뜁니다.
+    
         if (lsnSeq == null || lsnSeq.trim().isEmpty() || lsnSeq.equals("0")) {
             int resumeSeq = this.getResumeLsnSeq(userNum, claNum);
             lsnSeq = String.valueOf(resumeSeq);
-            System.out.println(">>> 이어하기 발동! 이동 차시: " + lsnSeq);
-        } else {
-            System.out.println(">>> 사용자가 선택한 차시: " + lsnSeq);
-        }
+        } 
 
-        // 2. 파라미터 세팅
+      
         LessonVO paramVO = new LessonVO();
         paramVO.setClaNum(claNum);
         try {
             paramVO.setLsnSeq(Integer.parseInt(lsnSeq));
         } catch (NumberFormatException e) {
-            // 혹시라도 숫자가 아닌 값이 올 경우를 대비한 방어 코드 (기본 1차시)
+            
             paramVO.setLsnSeq(1);
         }
 
-        // 3. 해당 차시의 강의 정보 조회
+    
         LessonVO lesson = lessonDAO.selectLessonByNum(paramVO);
 
         if (lesson != null) {
-            // 4. 첨부파일 목록 조회
+     
             List<LessonAttachVO> files = lessonDAO.selectLessonFileList(lesson.getLsnNum());
             lesson.setLessonFiles(files);
 
-            // 5. 이전/다음 차시 번호 계산 (단순 연산)
-            // 화면에서 '이전글/다음글' 버튼 만들 때 사용합니다.
+        
             lesson.setPrevLsnNum(String.valueOf(lesson.getLsnSeq() - 1));
             lesson.setNextLsnNum(String.valueOf(lesson.getLsnSeq() + 1));
         }
@@ -128,5 +147,10 @@ public class ClassApplyServiceImpl implements ClassApplyService {
         }
 
         return nextSeq;
+    }
+
+    @Override
+    public List<LessonVO> getLessonListByCoures(String claNum) throws SQLException {
+        return lessonDAO.selectLessonListByClaNum(claNum);
     }
 }

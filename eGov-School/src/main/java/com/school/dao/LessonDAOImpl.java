@@ -72,4 +72,10 @@ public class LessonDAOImpl implements LessonDAO {
 		
 		return session.selectList("Lesson-Mapper.selectLessonFileList", lsnNum);
 	}
+
+	@Override
+	public List<LessonVO> selectLessonListByClaNum(String claNum) throws SQLException {
+	
+		return session.selectList("Lesson-Mapper.selectLessonListByClaNum",claNum);
+	}
 }

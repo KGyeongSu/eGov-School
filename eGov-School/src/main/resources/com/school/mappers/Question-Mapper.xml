@@ -3,37 +3,36 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-  <mapper namespace="Question-Mapper">
-  
-  	<insert id="insertQuestion" parameterType="question">
-  		
-  		insert into question (que_num, tet_num, que_seq, que_text, que_opt1, que_opt2, que_opt3, que_opt4, que_answer, que_desc, que_point)
-  		values (#{que_num}, #{tet_num}, #{que_seq}, #{que_text}, #{que_opt1}, #{que_opt2}, #{que_opt3}, #{que_opt4}, #{que_answer}, #{que_desc}, #{que_point})
-  	
-  	</insert>
-  	
-  	<select id="selectQuestionList" resultType="question">
-  	
-  		select *
-  		from question
-  		where tet_num = #{tet_num}
-  		order by que_num
-  	
-  	</select>
-  
-  	
-  	<update id="updateQuestion" parameterType="question">
-  	
-  		update question set
-  		que_text = #{que_text},
-  		que_opt1 = #{que_opt1},
-  		que_opt2 = #{que_opt2},
-  		que_opt3 = #{que_opt3},
-  		que_opt4 = #{que_opt4},
-  		que_answer = #{que_answer},
-  		que_desc = #{que_desc}
-  		where que_num = #{que_num}
+<mapper namespace="Question-Mapper">
 
-  	</update>
+    <insert id="insertQuestion" parameterType="question">
+        INSERT INTO question (que_num, tet_num, que_seq, que_text, que_opt1, que_opt2, que_opt3, que_opt4, que_answer, que_desc, que_point)
+        VALUES (#{queNum}, #{tetNum}, #{queSeq}, #{queText}, #{queOpt1}, #{queOpt2}, #{queOpt3}, #{queOpt4}, #{queAnswer}, #{queDesc}, #{quePoint})
+    </insert>
+    
+    <select id="selectQuestionList" resultType="question">
+        SELECT *
+        FROM question
+        WHERE tet_num = #{tetNum}
+        ORDER BY que_num
+    </select>
   
-  </mapper>
+    <update id="updateQuestion" parameterType="question">
+        UPDATE question SET
+            que_text = #{queText},
+            que_opt1 = #{queOpt1},
+            que_opt2 = #{queOpt2},
+            que_opt3 = #{queOpt3},
+            que_opt4 = #{queOpt4},
+            que_answer = #{queAnswer},
+            que_desc = #{queDesc}
+        WHERE que_num = #{queNum}
+    </update>
+    
+    <select id="selectQuestionsByTetNum" resultType="question">
+        SELECT * FROM QUESTION 
+        WHERE TET_NUM = #{tetNum} 
+        ORDER BY QUE_SEQ ASC
+    </select>
+  
+</mapper>

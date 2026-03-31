@@ -78,5 +78,11 @@
 <bean id="learningStatusService" class="com.school.service.LearningStatusServiceImpl" 
     c:classApplyDAO-ref="classApplyDAO"
     c:learningStatusDAO-ref="learningStatusDAO" />
+    
+   <bean id="testService" class="com.school.service.TestServiceImpl">
+      <constructor-arg index="0" ref="testDAO" />
+      <constructor-arg index="1" ref="questionDAO" />
+      <constructor-arg index="2" ref="examResultDAO" />
+   </bean>
 
 </beans>
