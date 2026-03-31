@@ -190,9 +190,18 @@ public class ClassController {
 	}
 	
 	@GetMapping("/roomManage")
-	public String roomManage (@RequestParam("claNum") String claNum, Model model) {
+	public String roomManage (@RequestParam("claNum") String claNum, Model model) throws Exception {
 		
-		
+		// 강좌 정보 가져오기
+	    ClassVO roomManage = classService.selectClassByCla_num(claNum);
+	    
+	    // 수강 중인 학생 목록 가져오기
+	    // List<UserVO> studentList = classService.selectStudentListByClaNum(claNum);
+	    
+	    model.addAttribute("roomDetail", roomManage);
+	    // model.addAttribute("studentList", studentList);
+	    
+	    return "lecterer/roomManage";
 		
 	}
 
