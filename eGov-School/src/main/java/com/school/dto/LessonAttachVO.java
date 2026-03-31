@@ -15,5 +15,9 @@ public class LessonAttachVO {
     private String lsnNum;
     private String laName;
     private String laType;
+    private String laSaveName;
+    private String laPath;
+    
+    
     
 }

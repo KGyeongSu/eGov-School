@@ -212,7 +212,7 @@ public class UserController {
 				
 				if (oldFileName != null) {
 					
-					File oldFile = new File(picturePath + oldFileName);
+					File oldFile = new File(picturePath, oldFileName);
 					
 					if (oldFile.exists()) oldFile.delete();
 					

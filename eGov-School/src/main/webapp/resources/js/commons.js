@@ -22,18 +22,51 @@ function CloseWindow() {
 
 /** 비디오 업로드 시 미리보기 */
 function previewVideo(input) {
-    const file = input.files[0];
+	
     const videoPlayer = document.getElementById('video_player');
     const placeholder = document.getElementById('preview_placeholder');
+    const deleteInput = document.getElementById('deleteFiles'); 
 
-    if (file) {
+    if (!videoPlayer) return;
+
+    // 새로운 파일이 선택되었을 때만
+    if (input.files && input.files[0]) {
+        
+        // 기존 동영상이 확인 후 삭제 리스트에 추가 
+         if (videoPlayer.src && videoPlayer.src.includes('/upload/lesson/')) {
+            
+            // URL에서 파일명만 추출 (예: uuid_filename.mp4)
+            const oldVideoSaveName = videoPlayer.src.split('/').pop();
+            
+            // 삭제 리스트(hidden input)에 중복되지 않게 추가
+            let currentDeleted = deleteInput.value;
+            if (!currentDeleted.includes(oldVideoSaveName)) {
+                deleteInput.value = currentDeleted === "" 
+                                 ? oldVideoSaveName 
+                                 : currentDeleted + "," + oldVideoSaveName;
+                
+                console.log("기존 동영상 삭제 예약:", oldVideoSaveName);
+            }
+        }
+
+        /* 새로운 파일 프리뷰 */
+        const file = input.files[0];
+
         const fileURL = URL.createObjectURL(file);
+
         videoPlayer.src = fileURL;
-        videoPlayer.style.display = 'block'; // 비디오 보이기
-        placeholder.style.display = 'none';  // 안내문구 숨기기
+        videoPlayer.style.display = 'block'; 
+        
+        if (placeholder) {
+			
+            placeholder.style.display = 'none'; 
+        }
+
         videoPlayer.load();
+
     }
 }
+
 
 
 const fileInput = document.getElementById('file_up');

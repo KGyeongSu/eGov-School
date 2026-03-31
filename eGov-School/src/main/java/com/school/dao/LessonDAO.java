@@ -3,6 +3,8 @@ package com.school.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.school.dto.LessonVO;
 
 public interface LessonDAO {
@@ -18,4 +20,6 @@ public interface LessonDAO {
 	void updateLesson(LessonVO lesson) throws SQLException;
 
 	void deleteLesson(String lsnNum) throws SQLException;
+	
+	int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException;
 }
