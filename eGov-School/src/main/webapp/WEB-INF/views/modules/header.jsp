@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-    <!-- 헤더부분 -->
+    <!-- 헤더부분 dd-->
     <header>
         <div class="inner">
             <div class="logo">
