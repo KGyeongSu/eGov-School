@@ -18,11 +18,11 @@ public class UserVO {
     private String userEmail;
     private String userName;
     private String userPhone;
-    private String userRole;
+    private String userRole;		// 단순 비교하기 위한 DB에서 꺼낸 값.(문자열)
     private String userJob;
     private String userPhoto;
     private Date userRegdate;
-    private String userStatus;
-    private Integer userFailCount;
+    private String userStatus;		// 계정상태(활성,잠금,탈퇴 등) 아직 구현x
+    private Integer userFailCount;	// 로그인 실패 횟수
     
 }

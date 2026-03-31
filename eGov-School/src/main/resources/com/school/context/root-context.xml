@@ -17,6 +17,7 @@
 	<import resource="./dataSource-context.xml"></import>
 	<import resource="./application-context.xml"></import>
 	<import resource="./mail-context.xml"></import>
+	<import resource="./security-context.xml"></import>
 	
 	
 	

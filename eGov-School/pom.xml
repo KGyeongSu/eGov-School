@@ -59,17 +59,22 @@
       	</dependency>
 
 
-		<!-- spring-security-web -->
+		<!-- 1.security 웹 필터 관련 -->
+		<!--로그인 폼, 로그아웃, 필터 처리에 쓰임.-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>${org.springframework.security-version}</version>
 		</dependency>
+		<!-- 2. security 설정 관련 -->
+		<!-- securityConfig 파일작성할때 필요 -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${org.springframework.security-version}</version>
 		</dependency>
+		<!-- 3. jsp에서 security 태그 사용 (로그인 여부, 권한 체크 등) -->
+		<!-- jsp에서 <sec:authorize>같은 태그로 로그인여부 확인할때 필요 -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
