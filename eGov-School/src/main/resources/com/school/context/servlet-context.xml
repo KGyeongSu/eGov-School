@@ -13,11 +13,9 @@
 	<view-controller path="/page/l_recruit_detail"/>
 	<view-controller path="/page/l_recruit_apply"/>
 	<view-controller path="/lecterer/mainDashBoard"/>
-	<view-controller path="/user/dashBoard" />
 	<view-controller path="/admin/admin_main" />
-	<view-controller path="/user/exam" />
-	<view-controller path="/user/test" />
-	<view-controller path="/user/myKang" />
+	<view-controller path="/user/dashBoard" view-name="user/dashBoard"/>
+
 	<view-controller path="/lecterer/testMake" />
 	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->

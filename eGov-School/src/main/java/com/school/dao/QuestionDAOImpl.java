@@ -37,6 +37,12 @@ public class QuestionDAOImpl implements QuestionDAO {
 		session.update("Question-Mapper.updateQuestion", question);
 		
 	}
+
+	@Override
+	public List<QuestionVO> selectQuestionsByTetNum(String tetNum) throws SQLException {
+		
+		return session.selectList("Question-Mapper.selectQuestionsByTetNum", tetNum);
+	}
 	
 	
 
