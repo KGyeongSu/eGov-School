@@ -20,6 +20,7 @@ public class ClassVO {
 	private String claTitle;
 	private String claContent;
 	private String claGoal;
+	private String claCategory;
 	private String claThumb;
 	private Integer userNum;
 	private Date claRegDate;

@@ -45,9 +45,8 @@
     </delete>
     
     
-    
-     <select id="selectReputaioneqNext">
-    SELECT SEQ_REPUTATION.NEXTVAL AS REP_NUM FROM DUAL
-</select>
+    <select id="selectReputaioneqNext">
+    	SELECT SEQ_REPUTATION.NEXTVAL AS REP_NUM FROM DUAL
+	</select>
 
 </mapper>

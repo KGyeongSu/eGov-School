@@ -63,11 +63,9 @@
     
     
     
-    <select id="selectProgressSeqNext">
-    SELECT SEQ_PROGRESS.NEXTVAL AS PRG_NUM FROM DUAL
-</select>
-
-
+    <select id="selectProgresseqNext">
+    	SELECT SEQ_PROGRESS.NEXTVAL AS PRG_NUM FROM DUAL
+	</select>
 
 
 </mapper>

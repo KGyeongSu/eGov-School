@@ -42,8 +42,8 @@
     </update>
     
     
-     <select id="selectExamAnswerSeqNext">
-    SELECT SEQ_EXAM_ANSWER.NEXTVAL AS EA_NUM FROM DUAL
-</select>
+    <select id="selectExamAnswerSeqNext">
+    	SELECT SEQ_EXAM_ANSWER.NEXTVAL AS EA_NUM FROM DUAL
+	</select>
 
 </mapper>

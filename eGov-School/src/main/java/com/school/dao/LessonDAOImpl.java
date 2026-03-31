@@ -3,6 +3,7 @@ package com.school.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
 import com.school.dto.LessonAttachVO;
@@ -77,5 +78,9 @@ public class LessonDAOImpl implements LessonDAO {
 	public List<LessonVO> selectLessonListByClaNum(String claNum) throws SQLException {
 	
 		return session.selectList("Lesson-Mapper.selectLessonListByClaNum",claNum);
+	public int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException {
+		
+		return session.selectOne("Lesson-Mapper.selectMaxLsnSeq", claNum);
+		
 	}
 }

@@ -36,4 +36,9 @@ public class LessonVO {
     public void setLessonFiles(List<LessonAttachVO> lessonFiles) {
         this.lessonFiles = lessonFiles;
     }
+    private String lsnContent;
+    
+    // 첨부파일 
+    private List <LessonAttachVO> lessonAttachList;
+    
 }

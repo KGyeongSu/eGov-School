@@ -64,5 +64,12 @@ public class UserDAOImpl implements UserDAO {
 	public void resetFailCount(String userEmail) throws SQLException {
 		session.update("User-Mapper.resetFailCount", userEmail);
 	}
+
+	@Override
+	public int updateLectererProfile(UserVO user) throws SQLException {
+
+		return session.update("User-Mapper.updateLectererProfile", user);
+		
+	}
 }
 

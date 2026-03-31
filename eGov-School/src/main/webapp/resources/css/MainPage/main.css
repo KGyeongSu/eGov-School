@@ -40,9 +40,11 @@ header{
 }
 .logo{
     margin-left: 200px;
+    flex-shrink: 0;
 }
 
 .btn_login{
+    margin-left: auto;
     margin-right: 235px;
     /*background-color: #fff;
     color:#1b3763;
@@ -56,6 +58,7 @@ header{
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
+    flex-shrink:0;
 }
 
 .logo img {
@@ -63,8 +66,9 @@ header{
 }
 
 .mainmenu {
-    text-align: center;
-    margin : 0 auto;
+    position: absolute; 
+    left: 50%;      
+    transform: translateX(-50%);
     display: flex;
     gap: 50px;
 }

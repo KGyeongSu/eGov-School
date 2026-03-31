@@ -7,23 +7,26 @@
 	
 	<select id="selectClassList" resultType="classs">
 	
-		select cla_num, cla_title, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_goal, cla_thumb, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
+		where c.user_num = #{userNum}
 		order by c.cla_num desc
 		
 	</select>
 	
 	<select id="selectSearchClassList" resultType="classs">
 	
-		select cla_num, cla_title, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_goal, cla_thumb, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
 		<where> 
-			<if test="keyword != null and keyword != ''">
-				cla_title like '%' || #{keyword} || '%'	
+			c.user_num = #{userNum}
+			
+			<if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+				and cla_title like '%' || #{pageMaker.keyword} || '%'	
 			</if>	
 		</where>
 		order by cla_num desc
@@ -35,8 +38,9 @@
 		select count(*)
 		from class
 		<where> 
-			<if test="keyword != null and keyword != ''">
-				cla_title like '%' || #{keyword} || '%'	
+			user_num = #{userNum}
+			<if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+				and cla_title like '%' || #{pageMaker.keyword} || '%'	
 			</if>	
 		</where>
 	
@@ -48,22 +52,22 @@
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
-		where cla_num = #{cla_num}
+		where cla_num = #{claNum}
 	
 	</select>
 	
 	<insert id="insertClass" parameterType="classs">
 	
 		insert into class(cla_num, cla_title, cla_content, cla_goal, cla_category, cla_thumb, user_num, cla_startdate, cla_enddate, cla_maxstu, cla_complete)
-		values (#{cla_num}, #{cla_title}, #{cla_content}, #{cla_goal}, #{cla_category}, #{cla_thumb}, #{user_num}, #{cla_startdate}, #{cla_enddate}, #{cla_maxstu}, #{cla_complete})
+		values (#{claNum}, #{claTitle}, #{claContent}, #{claGoal}, #{claCategory}, #{claThumb}, #{userNum}, #{claStartDate}, #{claEndDate}, #{claMaxStu}, #{claComplete})
 	
 	</insert>
 	
-	<update id="increaseViewCnt" parameterType="int">
+	<update id="increaseViewCnt" parameterType="Str">
 	
 		update class set
 		cla_views = cla_views+1
-		where cla_num = #{cla_num}
+		where cla_num = #{claNum}
 	
 	</update>
 	

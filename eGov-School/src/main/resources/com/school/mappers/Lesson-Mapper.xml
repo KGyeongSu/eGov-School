@@ -92,5 +92,80 @@
     WHERE A.CLA_NUM = #{claNum}
     ORDER BY A.LSN_SEQ ASC
 </select>
+	<select id="selectLessonSeqNext" resultType="str">
+		SELECT
+		SEQ_LESSON.NEXTVAL FROM DUAL
+	</select>
+
+	<select id="selectMaxLsnSeq" parameterType="str"
+		resultType="int">
+		SELECT NVL(MAX(LSN_SEQ), 0) FROM LESSON WHERE TRIM(CLA_NUM)
+		= TRIM(#{claNum,
+		jdbcType=VARCHAR})
+	</select>
+
+	<insert id="insertLesson" parameterType="lesson">
+		INSERT INTO
+		LESSON(LSN_NUM, CLA_NUM, LSN_SEQ, LSN_TITLE, LSN_CONTENT, LSN_TIME)
+		VALUES(#{lsnNum}, #{claNum}, #{lsnSeq, jdbcType=INTEGER}, #{lsnTitle},
+		#{lsnContent}, #{lsnTime, jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 강좌별 차시 목록 -->
+	<resultMap id="lessonMap" type="lesson">
+		<id property="lsnNum" column="LSN_NUM" />
+		<result property="claNum" column="CLA_NUM" />
+		<result property="lsnSeq" column="LSN_SEQ" />
+		<result property="lsnTitle" column="LSN_TITLE" />
+		<result property="lsnTime" column="LSN_TIME" />
+		<result property="lsnRegdate" column="LSN_REGDATE" />
+		<result property="lsnContent" column="LSN_CONTENT" />
+
+		<collection property="lessonAttachList"
+			ofType="com.school.dto.LessonAttachVO">
+			<id property="laNum" column="LA_NUM" />
+			<result property="lsnNum" column="LSN_NUM" />
+			<result property="laName" column="LA_NAME" />
+			<result property="laSaveName" column="LA_SAVE_NAME" />
+			<result property="laPath" column="LA_PATH" />
+			<result property="laType" column="LA_TYPE" />
+		</collection>
+	</resultMap>
+
+	<select id="selectLessonList" parameterType="str"
+		resultMap="lessonMap">
+		SELECT
+		L.*,
+		A.LA_NUM, A.LA_NAME, A.LA_SAVE_NAME, A.LA_PATH, A.LA_TYPE FROM LESSON L
+		LEFT OUTER JOIN LESSON_ATTACH A ON L.LSN_NUM = A.LSN_NUM
+		WHERE L.CLA_NUM = #{claNum}
+		ORDER BY L.LSN_SEQ ASC
+	</select>
+
+	<!-- 차시 단건 조회 -->
+	<select id="selectLessonByNum" parameterType="str"
+		resultType="lesson">
+		SELECT * FROM LESSON
+		WHERE LSN_NUM = #{lsnNum}
+	</select>
+
+	<!-- 차시 수정 -->
+	<update id="updateLesson" parameterType="lesson">
+		UPDATE LESSON
+		SET
+		LSN_TITLE = #{lsnTitle},
+		LSN_CONTENT = #{lsnContent},
+		LSN_SEQ =
+		#{lsnSeq},
+		LSN_TIME = #{lsnTime, jdbcType=VARCHAR}
+		WHERE LSN_NUM = #{lsnNum}
+	</update>
+
+	<!-- 차시 삭제 -->
+	<delete id="deleteLesson" parameterType="str">
+		DELETE FROM LESSON
+		WHERE
+		LSN_NUM = #{lsnNum}
+	</delete>
 
 </mapper>

@@ -18,7 +18,9 @@
                 <a href=""><i class="fa-regular fa-user"></i></a>
             </div>
             <div class="state_bar">
-                <p>My 강의실</p>
+                <p>
+					My 강의실 > <strong style="font: '나눔 고딕'; font-size: 17px;">&nbsp;&nbsp;${roomDetail.claTitle}</strong>
+				</p>
             </div>
             <div class="logout_dash">
                 <div class="mes">
@@ -32,7 +34,7 @@
             </div>
         </div>
         <div class="divider">
-            <div class="upload"><a href="">
+            <div class="upload"><a href="/lecterer/roomDetail?claNum=${roomDetail.claNum}">
                     <h2>강의 등록</h2>
                 </a></div>
             <div class="manage"><a href="">
