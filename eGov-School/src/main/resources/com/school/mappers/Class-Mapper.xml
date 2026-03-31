@@ -72,10 +72,7 @@
 	</update>
 	
 	<select id="selectClassSeqNext" resultType="int">
-	
-		select
-		class_seq.nextval as cla_num from dual
-	
+    	SELECT SEQ_CLASS.NEXTVAL AS cla_num FROM DUAL
 	</select>
 	
 </mapper>

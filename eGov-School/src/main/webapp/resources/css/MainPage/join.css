@@ -4,7 +4,7 @@
 
 .join_wrap {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 /* 왼쪽 */
@@ -65,13 +65,11 @@
 }
 
 
-
-
 /* 오른쪽 */
 .join_right {
     width: 27%;
     display: flex;
-    align-items: center;
+	align-items:flex-start;
     justify-content: center;
     background: #fff;
     min-width: 450px;

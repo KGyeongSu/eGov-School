@@ -17,7 +17,7 @@
 	<select id="selectLessonAttachList" parameterType="str" resultType="lessonAttach">
 		SELECT * FROM LESSON_ATTACH
 		WHERE LSN_NUM = #{lsnNum}
-		ORDER BY LA_NUM ASC
+		ORDER BY LA_NUM ASC 
 	</select>
  
 	<delete id="deleteLessonAttach" parameterType="str">

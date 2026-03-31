@@ -37,7 +37,7 @@
     <insert id="insertProgress" parameterType="progress">
         INSERT INTO PROGRESS (PRG_NUM, USER_NUM, CLA_NUM, LSN_NUM, PRG_COMPLETE, PRG_LASTDATE)
         SELECT 
-            SEQ_PRG.NEXTVAL, 
+            SEQ_PROGRESS.NEXTVAL, 
             #{userNum}, 
      		#{claNum}, 
             LSN_NUM, 'N', SYSDATE
@@ -58,13 +58,9 @@
     
     
     
-    	<select id="selectProgresseqNext">
-  		
-  		SELECT
-  		CERTIFICATE_SEQ.NEXTVAL AS PRG_NUM 
-  		FROM DUAL
-  	
-  	</select>
+    <select id="selectProgresseqNext">
+    	SELECT SEQ_PROGRESS.NEXTVAL AS PRG_NUM FROM DUAL
+	</select>
 
 
 </mapper>
