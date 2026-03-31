@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
 		this.encoder = encoder;
 	}
 
-	// 회원가임 -> 비밀번호 암호화해서 저장
+	// 회원가입 -> 비밀번호 암호화해서 저장
 	@Override
 	public void regist(UserVO user) throws SQLException {
 		// 1. 시퀀스 번호 받기
@@ -36,4 +36,13 @@ public class UserServiceImpl implements UserService {
 		return userDAO.selectUserByEmail(userEmail);
 	}
 	
+	// 비밀번호 변경 -> 암호화해서 저장
+	@Override
+	public void updateUserPwd(String userEmail, String newPwd) throws SQLException {
+	    // BCrypt 암호화 후 UPDATE
+	    UserVO user = new UserVO();
+	    user.setUserEmail(userEmail);
+	    user.setUserPwd(encoder.encode(newPwd)); // ← BCrypt 암호화!
+	    userDAO.updateUserPwd(user);
+	}
 }

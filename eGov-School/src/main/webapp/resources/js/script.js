@@ -56,20 +56,6 @@ $(document).ready(function () {
         });
     }
 
-
-    /* ===== 비밀번호 재설정 - 비밀번호 일치 확인 ===== */
-    var repwdForm = document.getElementById('repwdform');
-    if (repwdForm) {
-        repwdForm.addEventListener('submit', function (e) {
-            var pwd = document.querySelector('input[name="password"]').value;
-            var pwdConfirm = document.querySelector('input[name="password_confirm"]').value;
-            if (pwd !== pwdConfirm) {
-                e.preventDefault();
-                alert('비밀번호가 일치하지 않습니다.');
-            }
-        });
-    }
-
     /* ===== 수강신청 상세보기 모달 바깥 클릭 시 닫기 ===== */
     var courseModal = document.getElementById('courseModal');
     if (courseModal) {

@@ -14,4 +14,7 @@ public interface UserService {
 	
 	// 이메일로 유저 조회 (security 로그인용)
 	UserVO getUserByEmail(String userEmail) throws SQLException;
+	
+	// 비밀번호 변경
+	void updateUserPwd(String userEmail, String newPwd) throws SQLException;
 }

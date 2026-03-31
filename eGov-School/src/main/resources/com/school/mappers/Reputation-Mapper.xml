@@ -28,7 +28,7 @@
 
     <insert id="insertReputation" parameterType="reputation">
         INSERT INTO REPUTATION (REP_NUM, USER_NUM, CLA_NUM, REP_CONTENT, REP_SAT, REP_REGDATE)
-        VALUES (SEQ_REP.NEXTVAL, #{userNum}, #{claNum}, #{repContent}, #{repSat}, SYSDATE)
+        VALUES (SEQ_REPUTATION.NEXTVAL, #{userNum}, #{claNum}, #{repContent}, #{repSat}, SYSDATE)
     </insert>
 
     <update id="updateReputation" parameterType="reputation">
@@ -45,13 +45,8 @@
     </delete>
     
     
-    
-      	<select id="selectReputaioneqNext">
-  		
-  		SELECT
-  		CERTIFICATE_SEQ.NEXTVAL AS REP_NUM 
-  		FROM DUAL
-  	
-  	</select>
+    <select id="selectReputaioneqNext">
+    	SELECT SEQ_REPUTATION.NEXTVAL AS REP_NUM FROM DUAL
+	</select>
 
 </mapper>

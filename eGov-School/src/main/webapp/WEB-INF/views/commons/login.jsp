@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -28,7 +30,14 @@
         <div class="login_form">
             <h2>로그인</h2>
             <p class="lsub_text">eGov-School 계정으로 로그인하세요.</p>
-				<!-- 변경 후 → Security가 세션에 저장한 방식 -->
+
+				<c:if test="${not empty message}">
+						<div
+						style="color: green; font-size: 13px; margin-bottom: 10px; text-align: center;">
+						${message}</div>
+				</c:if>
+
+				<!-- Security가 세션에 저장한 방식 -->
 				<% String loginError = (String) session.getAttribute("loginError"); %>
 				<% if (loginError != null) { %>
 				<div
@@ -72,7 +81,7 @@
             <button class="lbtn_main" onclick="location.href='/main'">메인페이지로 돌아가기</button>
         </div>
     </div>
-
+		
 </div>
 
 </body>

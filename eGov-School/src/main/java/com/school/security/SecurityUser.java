@@ -55,7 +55,6 @@ public class SecurityUser implements UserDetails {
 	public boolean isAccountNonLocked() {
 		return true;
 		// return user.getUserFailCount() < 5; 컬럼은 있지만 아직 구현x
-		
 	}
 	
 	// 6. 계정 만료여부 -> 우리는 해당x. 항상 true

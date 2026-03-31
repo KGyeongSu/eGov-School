@@ -56,7 +56,7 @@ public class SpringSecurityConfig {
 						// 누구나 접근 가능 (로그인 안해도 됨)
 						.requestMatchers("/commons/**").permitAll() // 로그인, 회원가입
 						.requestMatchers("/resources/**").permitAll() // CSS, JS 등
-						.requestMatchers("/main").permitAll() // 메인페이지
+						.requestMatchers("/", "/main").permitAll() // 메인페이지
 						.requestMatchers("/page/**").permitAll() // 공개 페이지
 
 						// 관리자만 접근 가능
@@ -82,7 +82,7 @@ public class SpringSecurityConfig {
 
 				// 로그아웃 설정
 				.logout(logout -> logout.logoutUrl("/commons/logout") // 로그아웃 URL
-						.logoutSuccessUrl("/commons/login") // 로그아웃 후 이동
+						.logoutSuccessUrl("/main") // 로그아웃 후 이동
 						.deleteCookies("JSESSIONID") // 쿠키 삭제
 						.invalidateHttpSession(true) // 세션 초기화
 				)

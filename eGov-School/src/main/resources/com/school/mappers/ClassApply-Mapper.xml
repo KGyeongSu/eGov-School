@@ -62,13 +62,8 @@
 	</delete>
 	
 	
-	
 	<select id="selectClassApplySeqNext">
-  		
-  		SELECT
-  		CERTIFICATE_SEQ.NEXTVAL AS CA_NUM 
-  		FROM DUAL
-  	
-  	</select>
+    	SELECT SEQ_CLASSAPPLY.NEXTVAL AS CA_NUM FROM DUAL
+	</select>
 
 </mapper>

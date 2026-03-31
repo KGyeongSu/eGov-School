@@ -35,12 +35,8 @@
   	
   	
   	<select id="selectCertifiCateSeqNext">
-  		
-  		SELECT
-  		CERTIFICATE_SEQ.NEXTVAL AS CER_NUM 
-  		FROM DUAL
-  	
-  	</select>
+    	SELECT SEQ_CERTIFICATE.NEXTVAL AS CER_NUM FROM DUAL
+	</select>
   	
   
   

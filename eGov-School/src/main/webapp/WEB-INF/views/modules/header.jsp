@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
     <!-- 헤더부분 -->
     <header>
@@ -18,13 +19,14 @@
                 <ul class="menu"><a href="/page/l_recruit">강사채용</a></ul>
             </nav>
 
-			<c:choose>
-				<c:when test="${not empty sessionScope.loginUser}">
-					<button class="btn_login" onclick="location.href='/commons/logout'">로그아웃</button>
-				</c:when>
-				<c:otherwise>
-					<button class="btn_login" onclick="location.href='/commons/login'">로그인</button>
-				</c:otherwise>
-			</c:choose>
+			<sec:authorize access="isAuthenticated()">
+				<!-- 로그인 된 상태 -->
+				<button class="btn_login" onclick="location.href='/commons/logout'">로그아웃</button>
+			</sec:authorize>
+			<sec:authorize access="isAnonymous()">
+				<!-- 로그인 안된 상태 -->
+				<button class="btn_login" onclick="location.href='/commons/login'">로그인</button>
+			</sec:authorize>
+			
 		</div>
     </header>
