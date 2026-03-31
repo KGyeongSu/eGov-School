@@ -10,8 +10,8 @@
 	</select>
  
 	<insert id="insertLessonAttach" parameterType="lessonAttach">
-		INSERT INTO LESSON_ATTACH(LA_NUM, LSN_NUM, LA_NAME, LA_TYPE)
-		VALUES(#{laNum}, #{lsnNum}, #{laName}, #{laType})
+		INSERT INTO LESSON_ATTACH(LA_NUM, LSN_NUM, LA_NAME, LA_SAVE_NAME, LA_TYPE)
+		VALUES(#{laNum}, #{lsnNum}, #{laName}, #{laSaveName}, #{laType})
 	</insert>
  
 	<select id="selectLessonAttachList" parameterType="str" resultType="lessonAttach">
@@ -29,5 +29,12 @@
 		DELETE FROM LESSON_ATTACH
 		WHERE LSN_NUM = #{lsnNum}
 	</delete>
+	
+	<!-- 파일 삭제 -->
+	<delete id="deleteLessonAttachBySaveName">
+    	DELETE FROM lesson_attach
+    	WHERE la_save_name = #{laSaveName}
+	</delete>
+	
  
 </mapper>

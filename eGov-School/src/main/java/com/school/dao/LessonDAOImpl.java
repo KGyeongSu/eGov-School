@@ -3,6 +3,7 @@ package com.school.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
 import com.school.dto.LessonVO;
@@ -43,5 +44,12 @@ public class LessonDAOImpl implements LessonDAO {
 	@Override
 	public void deleteLesson(String lsnNum) throws SQLException {
 		session.delete("Lesson-Mapper.deleteLesson", lsnNum);
+	}
+
+	@Override
+	public int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException {
+		
+		return session.selectOne("Lesson-Mapper.selectMaxLsnSeq", claNum);
+		
 	}
 }

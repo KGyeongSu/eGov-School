@@ -27,5 +27,6 @@ public interface UserDAO {
 
 	void resetFailCount(String userEmail) throws SQLException;
 	
+	int updateLectererProfile (UserVO user) throws SQLException;
 	
 }

@@ -39,4 +39,11 @@ public class LessonAttachDAOImpl implements LessonAttachDAO {
 	public void deleteLessonAttachByParent(String lsnNum) throws SQLException {
 		session.delete("LessonAttach-Mapper.deleteLessonAttachByParent", lsnNum);
 	}
+
+	@Override
+	public void deleteLessonAttachBySaveName(String laSaveName) throws Exception {
+		
+		session.delete("LessonAttach-Mapper.deleteLessonAttachBySaveName", laSaveName);
+		
+	}
 }

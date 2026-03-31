@@ -54,7 +54,7 @@
 		SELECT * FROM USERS
 		ORDER BY USER_REGDATE DESC
 	</select>
-
+ 
 	<!-- 회원 상태 변경 (활성/휴면) -->
 	<update id="updateUserStatus" parameterType="user">
 		UPDATE USERS
@@ -74,6 +74,15 @@
 		UPDATE USERS
 		SET USER_FAIL_COUNT = 0
 		WHERE USER_EMAIL = #{userEmail}
+	</update>
+	
+	<!-- 강사 대시보드 : 강사 프로필 입력 -->
+	<update id="updateLectererProfile" parameterType="user">
+	
+		update users
+		set user_photo = #{userPhoto}
+		where user_num = #{userNum}
+	
 	</update>
 
 </mapper>

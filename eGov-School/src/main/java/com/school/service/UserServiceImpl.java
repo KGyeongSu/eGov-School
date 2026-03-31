@@ -1,3 +1,4 @@
+
 package com.school.service;
 
 import java.sql.SQLException;
@@ -45,4 +46,14 @@ public class UserServiceImpl implements UserService {
 	    user.setUserPwd(encoder.encode(newPwd)); // ← BCrypt 암호화!
 	    userDAO.updateUserPwd(user);
 	}
+	
+	@Override
+	public boolean updateLectererProfile(UserVO user) throws SQLException {
+		
+		int updatedRows = userDAO.updateLectererProfile(user);
+		
+		return updatedRows > 0;
+		
+	}
+
 }

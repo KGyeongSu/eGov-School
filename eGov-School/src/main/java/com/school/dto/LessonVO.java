@@ -1,6 +1,7 @@
 package com.school.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +19,9 @@ public class LessonVO {
     private String lsnTitle;
     private String lsnTime;
     private Date lsnRegdate;
+    private String lsnContent;
+    
+    // 첨부파일 
+    private List <LessonAttachVO> lessonAttachList;
+    
 }
