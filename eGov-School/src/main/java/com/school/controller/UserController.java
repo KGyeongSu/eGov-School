@@ -186,14 +186,31 @@ public class UserController {
 	// 비밀번호 변경 처리
 	@PostMapping("/commons/repwd")
 	public String repwd(@RequestParam("userPwd") String userPwd, HttpSession session, RedirectAttributes rttr)
-			throws SQLException {
-		try {
-			// 1. 인증 여부 확인
-			Boolean verified = (Boolean) session.getAttribute("emailVerified");
-			if (verified == null || !verified) {
-				return "commons/repwd"; // 인증 안됐으면 다시 폼으로
-			}
-		}
+	        throws SQLException {
+	    try {
+	        Boolean verified = (Boolean) session.getAttribute("emailVerified");
+	        if (verified == null || !verified) {
+	            return "commons/repwd";
+	        }
+
+	        String userEmail = (String) session.getAttribute("repwdEmail");
+	        if (userEmail == null) {
+	            return "commons/repwd";
+	        }
+
+	        userService.updateUserPwd(userEmail, userPwd);
+
+	        session.removeAttribute("emailVerified");
+	        session.removeAttribute("repwdEmail");
+
+	        rttr.addFlashAttribute("message", "비밀번호가 변경되었습니다. 다시 로그인해주세요.");
+	        return "redirect:/commons/login";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "commons/repwd";
+	    }
+	}
 		
 		@GetMapping("/lecterer/profile")
 		public String profileForm(HttpSession session, Model model) {
