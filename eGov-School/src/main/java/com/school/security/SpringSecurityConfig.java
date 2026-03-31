@@ -88,7 +88,7 @@ public class SpringSecurityConfig {
 				)
 
 				// 세션 관리
-				.sessionManagement(session -> session.invalidSessionUrl("/commons/login") // 세션 만료시 이동
+				.sessionManagement(session -> session
 						.maximumSessions(1) // 중복 로그인 방지 (1개만)
 						.expiredUrl("/commons/login") // 중복 로그인 감지시 이동
 						.sessionRegistry(new SessionRegistryImpl()))
