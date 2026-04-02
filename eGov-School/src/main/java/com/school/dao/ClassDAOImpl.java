@@ -100,4 +100,27 @@ public class ClassDAOImpl implements ClassDAO {
 	    session.update("ClassApply-Mapper.updateClassProgress", apply);
 	}
 
+	@Override
+	public List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException {
+		int offset = pageMaker.getStartRow() -1;
+		int limit = pageMaker.getPerpageNum();
+		RowBounds rows = new RowBounds (offset, limit);
+		
+		Map<String, Object> param = new HashMap<> ();
+		param.put("pageMaker", pageMaker);
+		param.put("sortType", pageMaker.getSearchType());
+		param.put("category", pageMaker.getKeyword2());
+		
+		return session.selectList("Class-Mapper.selectApprovedClassList", param, rows);
+	}
+
+	@Override
+	public int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException {
+		Map<String, Object> param = new HashMap<> ();
+		param.put("pageMaker", pageMaker);
+		param.put("category", pageMaker.getKeyword2());
+		
+		return session.selectOne("Class-Mapper.selectApprovedClassListCount", param);
+	}
+
 }
