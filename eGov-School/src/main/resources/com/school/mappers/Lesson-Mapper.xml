@@ -5,7 +5,7 @@
 
 <mapper namespace="Lesson-Mapper">
 
-    <resultMap id="lessonMap" type="lesson">
+    <resultMap id="lessonMap1" type="lesson">
         <id property="lsnNum" column="LSN_NUM" />
         <result property="claNum" column="CLA_NUM" />
         <result property="lsnSeq" column="LSN_SEQ" />
@@ -14,7 +14,7 @@
         <result property="claName" column="CLA_TITLE" />
     </resultMap>
 
-    <select id="selectLessonByNum" parameterType="lesson" resultMap="lessonMap">
+    <select id="selectLessonByNum" parameterType="lesson" resultMap="lessonMap1">
         SELECT
             A.LSN_NUM,
             A.CLA_NUM,
@@ -77,21 +77,7 @@
     </select>
     
     
-    
-    <select id="selectLessonListByClaNum" parameterType="str" resultMap="lessonMap">
-    SELECT
-        A.LSN_NUM,
-        A.CLA_NUM,
-        A.LSN_SEQ,
-        A.LSN_TITLE,
-        B.LA_SAVE_NAME,
-        C.CLA_TITLE
-    FROM LESSON A
-    LEFT JOIN LESSON_ATTACH B ON A.LSN_NUM = B.LSN_NUM AND B.LA_TYPE = 'VIDEO'
-    JOIN CLASS C ON A.CLA_NUM = C.CLA_NUM
-    WHERE A.CLA_NUM = #{claNum}
-    ORDER BY A.LSN_SEQ ASC
-</select>
+
 	<select id="selectLessonSeqNext" resultType="str">
 		SELECT
 		SEQ_LESSON.NEXTVAL FROM DUAL
@@ -142,8 +128,8 @@
 		ORDER BY L.LSN_SEQ ASC
 	</select>
 
-	<!-- 차시 단건 조회 -->
-	<select id="selectLessonByNum" parameterType="str"
+	<!-- 차시 단건 조회 --> 
+	<select id="selectLessonByLsnNum" parameterType="str" 
 		resultType="lesson">
 		SELECT * FROM LESSON
 		WHERE LSN_NUM = #{lsnNum}

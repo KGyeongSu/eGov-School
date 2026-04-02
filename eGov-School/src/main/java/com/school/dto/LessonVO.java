@@ -22,21 +22,15 @@ public class LessonVO {
     private Date lsnRegdate;
     
     private String claName;    
-    private String lsnContent; 
-    private String lsnVideo;   
+    private String lsnContent;  
     private String fileNum;    
     
 
     private String prevLsnNum;  
     private String nextLsnNum;  
 
-    private List<LessonAttachVO> lessonFiles;
 
     
-    public void setLessonFiles(List<LessonAttachVO> lessonFiles) {
-        this.lessonFiles = lessonFiles;
-    }
-    private String lsnContent;
     
     // 첨부파일 
     private List <LessonAttachVO> lessonAttachList;

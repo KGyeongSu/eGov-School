@@ -47,7 +47,7 @@ public class UserController {
         return "redirect:/main";
     }
     
-    //
+    
     @GetMapping("/main")
     public String mainPage(PageMaker pageMaker, Model model) throws Exception {
     	
@@ -151,7 +151,7 @@ public class UserController {
         String role = auth.getAuthorities().iterator().next().getAuthority();
         
         if ("ROLE_관리자".equals(role)) {
-            return "redirect:/admin/admin_main";
+            return "redirect:/admin/main";
         } else if ("ROLE_강사".equals(role)) {
             return "redirect:/lecterer/mainDashBoard";
         } else {

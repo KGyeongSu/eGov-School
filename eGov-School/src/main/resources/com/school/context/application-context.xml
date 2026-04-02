@@ -86,8 +86,6 @@
       <constructor-arg index="1" ref="questionDAO" />
       <constructor-arg index="2" ref="examResultDAO" />
    </bean>
-	<bean id="userService" class="com.school.service.UserServiceImpl"
-		c:userDAO-ref="userDAO" />
 		
 	<bean id="lessonService"
 		class="com.school.service.LessonServiceImpl">
