@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Progress-Mapper">
+	<select id="selectProgressList" resultType="progress">
+		SELECT
+			PRG_NUM,
+			USER_NUM,
+			CLA_NUM,
+			LSN_NUM,
+			PRG_COMPLETE,
+			PRG_LASTDATE
+			
+		FROM PROGRESS
+			
+		WHERE USER_NUM = #{userNum} AND CLA_NUM = #{claNum}
+	</select>
+	
+	<select id="selectProgressCount" resultType="progress">
+		SELECT
+			COUNT(L.LSN_NUM) AS totalCount ,
+			COUNT(P.PRG_NUM) AS completedCount
+		
+		FROM LESSON L
+		
+		LEFT OUTER JOIN PROGRESS P 
+		ON L.LSN_NUM = P.LSN_NUM
+		AND P.USER_NUM = #{userNum}
+		AND P.PRG_COMPLETE = 'Y'
+		
+		WHERE L.CLA_NUM = #{claNum}
+	
+	</select>
+	
+    <insert id="insertProgress" parameterType="progress">
+        INSERT INTO PROGRESS (PRG_NUM, USER_NUM, CLA_NUM, LSN_NUM, PRG_COMPLETE, PRG_LASTDATE)
+        SELECT 
+            SEQ_PROGRESS.NEXTVAL, 
+            #{userNum}, 
+     		#{claNum}, 
+            LSN_NUM, 'N', SYSDATE
+            
+        FROM LESSON
+        
+        WHERE CLA_NUM = #{claNum}
+    </insert>
+	
+	 <update id="updateProgress" parameterType="progress">
+        UPDATE PROGRESS
+        
+        SET PRG_COMPLETE = 'Y',
+            PRG_LASTDATE = SYSDATE
+            
+        WHERE USER_NUM = #{userNum} AND LSN_NUM = #{lsnNum}
+    </update>
+    
+    
+    
+    <select id="selectProgresseqNext">
+    	SELECT SEQ_PROGRESS.NEXTVAL AS PRG_NUM FROM DUAL
+	</select>
+
+
+</mapper>

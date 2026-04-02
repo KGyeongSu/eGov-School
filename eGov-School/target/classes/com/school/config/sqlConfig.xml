@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+  <configuration>
+  	
+  	<settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+  	
+  	
+  	<typeAliases>
+  		<typeAlias type="java.lang.String" alias="str"  />
+  		<typeAlias type="java.lang.Integer" alias="int"  />
+  		
+  		<typeAlias type="com.school.dto.TestVO" alias="test" />
+  		<typeAlias type="com.school.dto.ScheduleVO" alias="schedule" />
+  		<typeAlias type="com.school.dto.UserVO" alias="user" />
+  		<typeAlias type="com.school.dto.BonusCriteriaVO" alias="bonus" />
+  		<typeAlias type="com.school.dto.ExamNoticeAttachVO" alias="enAttach"/>
+		<typeAlias type="com.school.dto.JobNoticeAttachVO" alias="jnAttach"/>
+		<typeAlias type="com.school.dto.LecRecruitAttachVO" alias="lrAttach"/>
+		<typeAlias type="com.school.dto.LessonAttachVO" alias="lessonAttach"/>
+		<typeAlias type="com.school.dto.MessageAttachVO" alias="msgAttach"/>
+		<typeAlias type="com.school.dto.MessageVO" alias="message"/>
+		<typeAlias type="com.school.dto.LessonVO" alias="lesson"/>
+		<typeAlias type="com.school.dto.ClassVO" alias="classs"/>
+  		<typeAlias type="com.school.dto.ExamNoticeVO" alias="examNotice"/>
+  		<typeAlias type="com.school.dto.JobNoticeVO" alias="jobNotice"/>
+  		<typeAlias type="com.school.dto.LecApplicationVO" alias="lecApplication"/>
+  		<typeAlias type="com.school.dto.LecRecruitVO" alias="lecRecruit"/>
+  		<typeAlias type="com.school.dto.QuestionVO" alias="question"/>
+  		<typeAlias type="com.school.dto.CertifiCateVO" alias="certificate"/>
+		<typeAlias type="com.school.dto.ClassApplyVO" alias="classapply"/>
+		<typeAlias type="com.school.dto.ExamAnswerVO" alias="examanswer"/>
+		<typeAlias type="com.school.dto.ExamResultVO" alias="examresult"/>
+		<typeAlias type="com.school.dto.ProgressVO" alias="progress"/>
+		<typeAlias type="com.school.dto.ReputationVO" alias="reputation"/>
+  		
+  	</typeAliases>
+  
+  </configuration>

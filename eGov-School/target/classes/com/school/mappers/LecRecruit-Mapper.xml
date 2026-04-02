@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="LecRecruit-Mapper">
+  
+  	<select id="selectLecRecruitList" resultType="lecRecruit">
+  	
+  		select lt_num, lt_title, lt_regDate, lt_jobType, lt_status
+  		from lecRecruit r
+  		order by lt_num desc
+  	
+  	</select>
+  	
+  	<select id="selectSearchLecRecruitList" resultType="lecRecruit">
+  	
+  		select lt_num, lt_title, lt_regDate, lt_jobType, lt_status
+  		from lecRecruit
+  		<where>
+			<if test="keyword != null and keyword != ''" >
+				lt_title like '%' || #{keyword} || '%'
+			</if> 		
+  		</where>
+  		order by lt_num desc
+  	
+  	</select>
+  	
+  	<select id="selectSearchLecRecruitListCount" resultType="int">
+  	
+  		select count (*)
+  		from lecRecruit
+  		<where>
+			<if test="keyword != null and keyword != ''" >
+				lt_title like '%' || #{keyword} || '%'
+			</if> 		
+  		</where>
+  	
+  	</select>
+  	
+  	<select id="selectLecRecruitByLt_num" resultType="lecRecruit">
+  	
+  		select lt_num, lt_title, lt_content, lt_regDate, lt_startDate, lt_endDate, lt_jobType, lt_status, lt_views
+  		from lecRecruit
+  		where lt_num = #{lt_num}
+
+  	</select>
+  	
+  	<insert id="insertLecRecruit" parameterType="lecRecruit">
+  	
+  		insert into lecRecruit (lt_num, lt_title, lt_content, lt_regDate, lt_startDate, lt_endDate, lt_jobType, lt_status, lt_views)
+  		values (#{lt_num}, #{lt_title}, #{lt_content}, #{lt_regDate}, #{lt_startDate}, #{lt_endDate}, #{lt_jobType}, #{lt_status}, #{lt_views})
+  	
+  	</insert>
+  	
+  	<update id="updateLecRecruitStatus" parameterType="lecRecruit">
+  	
+  		update lecRecruit set
+  		lt_status = #{lt_status}
+  		where lt_num = #{lt_num}
+  	
+  	</update>
+  	
+  	<update id="increaseViewCnt" parameterType="int">
+  	
+  		update lecRecruit set
+  		lt_views = lt_views + 1
+  		where lt_num = #{lt_num}
+  	
+  	</update>
+  	
+  	<select id="selectLecRecruitSeqNext" resultType="int">
+    	SELECT SEQ_LECRECRUIT.NEXTVAL AS lt_num FROM DUAL
+	</select>
+  	
+  	
+  
+  </mapper>

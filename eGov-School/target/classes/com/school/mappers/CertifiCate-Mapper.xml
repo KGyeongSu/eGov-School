@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="CertifiCate-Mapper">
+  	<select id="selectCertifiCate" resultType="certificate">
+  		select 
+  			CER_NUM,
+  			CLA_NUM,
+  			CER_FILE,
+  			CER_REGDATE
+  		from CertifiCate
+  		where CER_NUM =#{cerNum}
+  	</select>
+  	
+  	<select id="selectCertifiCateCount" resultType="int">
+  		select count(*)
+  		from CertifiCate
+  		where CLA_NUM = #{claNum}
+  			
+  	</select>
+  	
+  	<insert id="insertCertifiCate" parameterType="certificate">
+  		insert into CertifiCate(CER_NUM,CLA_NUM,CER_FILE,CER_REGDATE)
+  		values(#{cerNum},#{claNum},#{cerFile},SYSDATE)
+  	</insert>
+  	
+  	<update id="updateCertifiCate" parameterType="certificate">
+  		update CertifiCate
+  		set CER_FILE = #{cerFile},
+  			CER_REGDATE = SYSDATE
+  		where CER_NUM = #{cerNum}
+  	</update>
+  	
+  	
+  	<select id="selectCertifiCateSeqNext">
+    	SELECT SEQ_CERTIFICATE.NEXTVAL AS CER_NUM FROM DUAL
+	</select>
+  	
+  
+  
+  </mapper>

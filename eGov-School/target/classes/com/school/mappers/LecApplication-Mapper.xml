@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="LecApplication-Mapper">
+  
+  	<select id="selectLecApplicationList" resultType="lecApplication">
+  	
+  		select la_num, user_name, lt_num, la_status, la_regdate
+  		from lecApplication l
+  		inner join users u
+  		on l.user_num = u.user_num
+  		inner join lecRecruit r
+  		on l.lt_num = r.lt_num
+  		order by l.la_num desc
+  	
+  	</select>
+	
+	<select id="selectLecApplicationByLa_num" resultType="lecApplication">
+	
+		select la_num, user_name, lt_num, la_intro, la_status, la_regdate
+  		from lecApplication l
+  		inner join users u
+  		on l.user_num = u.user_num
+  		inner join lecRecruit r
+  		on l.lt_num = r.lt_num
+  		where la_num = #{la_num}
+		
+	</select>
+	
+	<insert id="insertLecApplication" parameterType="lecApplication">
+	
+		insert into lecApplication (la_num, user_num, lt_num, la_intro, la_status, la_regdate)
+		values (#{la_num}, #{user_num}, #{lt_num}, #{la_intro}, #{la_status}, #{la_regdate})
+		
+	</insert>
+	
+	<select id="selectLecApplicationSeqNext" resultType="int">
+    	SELECT SEQ_LEC_APPLICATION.NEXTVAL AS la_num FROM DUAL
+	</select>
+	  
+  </mapper>
+  

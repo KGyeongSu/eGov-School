@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="JobNotice-Mapper">
+
+	<select id="selectJobNoticeList" resultType="jobNotice">
+	
+		select jn_num, jn_title, jn_regdate, jn_views, user_name
+		from jobNotice j
+		inner join users u
+		on j.user_num = u.user_num
+		order by j.jn_num desc	
+		
+	</select>
+	
+	<select id="selectSearchJobNoticeList" resultType="jobNotice">
+	
+		select jn_num, jn_title, jn_regdate, jn_views, user_name
+		from jobNotice j
+		inner join users u
+		on j.user_num = u.user_num
+		<where>
+			<if test="keyword != null and keyword != ''">
+				j.jn_title like '%' || #{keyword} || '%'
+			</if>
+		</where>
+		order by j.jn_num desc
+	
+	</select>
+	
+	<select id="selectSearchJobNoticeListCount" resultType="int">
+	
+		select count(*)
+		from jobNotice
+		<where>
+			<if test="keyword != null and keyword != ''">
+				jn_title like '%' || #{keyword} || '%'
+			</if>
+		</where>	
+		
+	</select>
+	
+	<select id="selectJobListByJn_num" resultType="jobNotice">
+	
+		select jn_num, jn_title, jn_content, jn_regdate, jn_views, user_name
+		from jobNotice j
+		inner join users u
+		on j.user_num = u.user_num
+		where jn_num = #{jn_num}
+		
+	</select>
+	
+	<insert id="insertJobNotice" parameterType="jobNotice">
+	
+		insert into jobNotice(jn_num, jn_title, jn_content, jn_regdate, jn_views, user_num)
+		values(#{jn_num}, #{jn_title}, #{jn_content}, #{jn_regdate}, #{jn_views}, #{user_num})
+		
+	</insert>
+	
+	<update id="increaseViewCnt" parameterType="int">
+	
+		update jobNotice set
+		jn_views = jn_views + 1
+		where jn_num = #{jn_num}
+		
+	</update>
+	
+	<select id="selectJobNoticeSeqNext" resultType="int">
+   		SELECT SEQ_JOBNOTICE.NEXTVAL AS jn_num FROM DUAL
+	</select>
+
+</mapper>
