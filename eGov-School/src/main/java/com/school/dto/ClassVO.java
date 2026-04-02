@@ -1,3 +1,4 @@
+
 package com.school.dto;
 
 import java.util.Date;
@@ -35,6 +36,12 @@ public class ClassVO {
 	
 	// class 안 lesson 들 리스트 보여주기
 	private List<LessonVO> lessonList;
+	
+	// join문으로 가져오는 user정보를 담을 그릇
+	private String userName;
+	private String userPhoto;
+	// 수강신청 인원수
+	private Integer applyCnt;
 	
 
 }

@@ -26,5 +26,11 @@ public interface ClassDAO {
 	void increaseViewCnt (String claNum) throws SQLException;
 	
 	int selectClassSeqNext() throws SQLException;
+	
+	//수강신청 페이지용 (승인완료 강좌)
+	List<ClassVO> selectApprovedClassList(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
+	// PageMaker 페이지 계산할때 쓰임.
+	int selectApprovedClassListCount(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
 
 }
+ 

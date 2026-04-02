@@ -29,5 +29,10 @@ public interface ClassService {
 	ClassVO selectClassByCla_num (String claNum) throws SQLException;
 	
 	void increaseViewCnt (String claNum) throws SQLException;
+	
+	// 수강신청 페이지용 (승인완료 강좌)
+	List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException;
+	// PageMaker 페이지 계산할때 쓰임.
+	int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException;
 
 }

@@ -69,4 +69,14 @@ public class ClassServiceImpl implements ClassService {
 
 	}
 
+	@Override
+	public List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException {
+		return classDAO.selectApprovedClassList(pageMaker);
+	}
+
+	@Override
+	public int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException {
+		return classDAO.selectApprovedClassListCount(pageMaker);
+	}
+
 }

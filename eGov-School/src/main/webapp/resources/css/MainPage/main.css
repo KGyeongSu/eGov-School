@@ -17,7 +17,11 @@ img {
     display: block;
 }
 
-
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
 /* 메인페이지 화면*/
 
@@ -91,6 +95,7 @@ content{
     display: block;
     background-color: #eee;
     padding-top: 75px;
+    flex: 1;
 }
 
 .img_slide{
@@ -169,7 +174,7 @@ content{
 
 
 .section{
-    max-width: 1500px;
+    max-width: 1200px;
     margin:0 auto;
     padding: 0 20px;
 }
@@ -213,11 +218,11 @@ content{
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 15px;
+    gap: 20px;
     padding-bottom: 30px;
 }
 .card{
-    width:280px;
+    width: calc((100% - 80px) / 5);
     margin: 0;
     background-color: #fff;
     border-radius: 10px;
