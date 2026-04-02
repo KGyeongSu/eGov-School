@@ -89,7 +89,6 @@ public class ClassApplyServiceImpl implements ClassApplyService {
         if (lesson != null) {
      
             List<LessonAttachVO> files = lessonDAO.selectLessonFileList(lesson.getLsnNum());
-            lesson.setLessonFiles(files);
 
         
             lesson.setPrevLsnNum(String.valueOf(lesson.getLsnSeq() - 1));

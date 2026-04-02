@@ -78,9 +78,16 @@ public class LessonDAOImpl implements LessonDAO {
 	public List<LessonVO> selectLessonListByClaNum(String claNum) throws SQLException {
 	
 		return session.selectList("Lesson-Mapper.selectLessonListByClaNum",claNum);
-	public int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException {
-		
-		return session.selectOne("Lesson-Mapper.selectMaxLsnSeq", claNum);
-		
 	}
+	
+	@Override
+	public int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException {
+		return session.selectOne("Lesson-Mapper.selectMaxLsnSeq", claNum);
+	}
+
+	@Override
+	public LessonVO selectLessonByLsnNum(String lsnNum) throws SQLException {
+		return session.selectOne("Lesson-Mapper.selectLessonByLsnNum", lsnNum);
+	}
+	
 }

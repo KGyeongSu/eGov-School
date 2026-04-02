@@ -36,7 +36,8 @@ public class PageController {
     // 기존 수강신청 페이지
     @GetMapping("/cregist")
     public String cregist(PageMaker pageMaker, Model model) throws Exception {
-
+    	
+    	pageMaker.setPerpageNum(10); // 페이지당 10개씩 보여주도록 설정
         List<ClassVO> classList = classService.selectApprovedClassList(pageMaker);
 
         int totalCount = classService.selectApprovedClassListCount(pageMaker);
