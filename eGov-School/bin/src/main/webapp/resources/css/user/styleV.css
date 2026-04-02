@@ -1,0 +1,195 @@
+@charset 'utf-8';
+
+
+
+
+/*강좌 동영상 */
+
+.videolet .content >.mid {
+	width: 100%;
+	height: calc(100vh - 75px);
+	background-color: #f4f7f6;
+	
+	
+}
+
+
+
+.videolet .mid .videodash{
+    width: 95%;
+    height: 90%;
+    
+    
+    margin: 0 auto;       
+    position: relative;
+    top: 55%;             
+    transform: translateY(-55%);
+
+	background-color: #ffffff;
+    border-radius: 15px;      
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+    overflow: hidden;      
+    border: 1px solid #eaeaea; 
+}
+
+
+
+.videolet .mid .videodash .letti {
+    width: 100%;
+    height: 10%;
+
+    display: flex;
+    align-items: center;
+
+
+    padding: 0 40px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #f0f0f0; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+
+	background-color: #fafafa;
+	
+}
+
+
+.videolet .mid .videodash .letti h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+
+.videolet .mid .videodash .letti a {
+    display: flex;
+    align-items: center;
+	
+	background-color: #f1f3f5;
+    padding: 10px 15px;
+    border-radius: 10px; 
+    transition: all 0.3s ease; 
+    color: #5d6d7e;
+
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 15px;
+    text-decoration: none;
+	border: 1px solid transparent;
+}
+
+
+.videolet .mid .videodash .letti .downloadbtn {
+    margin-left: auto; 
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.videolet .mid .videodash .letti .downloadbtn:hover {
+    background-color: #e9ecef;
+    color: #2980b9;
+    transform: translateY(-2px); 
+}
+
+
+.videolet .mid .videodash .letti .return {
+    margin-left: 12px;
+    background-color: #34495e; 
+    color: #ffffff;
+}
+
+.videolet .mid .videodash .letti .return:hover {
+    background-color: #2c3e50;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+.videolet .mid .videodash .letti i {
+    font-size: 16px;
+}
+
+.videolet .mid .videodash .letti span {
+    margin-left: 8px;
+   
+}
+
+
+
+
+
+
+
+
+.videolet .mid .videodash .videochair{
+	width: 90%;
+	height: 70%;
+
+	margin: 0 auto;
+
+	position: relative;
+	background-color: #595959;
+}
+
+
+
+
+
+.videolet .mid .videodash .letco {
+    width: 100%;
+    height: 20%;
+    background-color: #ffffff; 
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+
+.learning-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #2c3e50;
+}
+.learning-info ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+    color: #7f8c8d;
+    line-height: 1.6;
+}
+
+
+
+
+
+.lecture-nav {
+    display: flex;
+    gap: 12px;
+}
+.nav-btn {
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+.nav-btn.prev {
+    background-color: #f1f2f6;
+    color: #57606f;
+}
+.nav-btn.next {
+    background-color: #2f3542;
+    color: #ffffff;
+}
+.nav-btn:hover {
+    opacity: 0.8;
+}
+
+
+
+

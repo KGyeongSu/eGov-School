@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="BonusCriteria-Mapper">
+
+	<!-- pk 시퀀스 번호 -->
+	<select id="selectBonusCriteriaSeqNext" resultType="str">
+		SELECT SEQ_BONUS_CRITERIA.NEXTVAL FROM DUAL
+	</select>
+
+	<!-- 가산점 기준 등록 -->
+	<insert id="insertBonusCriteria" parameterType="bonus">
+		INSERT INTO BONUS_CRITERIA(BC_NUM, CLA_NUM, BC_CONTENT, BC_SCORE, BC_NOTE, USER_NUM)
+		VALUES(#{bcNum}, #{claNum}, #{bcContent}, #{bcScore}, #{bcNote}, #{userNum})
+	</insert>
+
+	<!-- 가산점 기준 전체 목록 조회 (강좌명 JOIN) -->
+	<select id="selectBonusCriteriaList" resultType="bonus">
+		SELECT B.*, C.CLA_TITLE
+		FROM BONUS_CRITERIA B
+		JOIN CLASS C ON B.CLA_NUM = C.CLA_NUM
+		ORDER BY B.BC_REGDATE DESC
+	</select>
+
+	<!-- 가산점 기준 단건 조회 -->
+	<select id="selectBonusCriteriaByNum" parameterType="str" resultType="bonus">
+		SELECT * FROM BONUS_CRITERIA
+		WHERE BC_NUM = #{bcNum}
+	</select>
+
+	<!-- 가산점 기준 수정 -->
+	<update id="updateBonusCriteria" parameterType="bonus">
+		UPDATE BONUS_CRITERIA
+		SET BC_CONTENT = #{bcContent},
+		    BC_SCORE = #{bcScore},
+		    BC_NOTE = #{bcNote}
+		WHERE BC_NUM = #{bcNum}
+	</update>
+
+	<!-- 가산점 기준 삭제 -->
+	<delete id="deleteBonusCriteria" parameterType="str">
+		DELETE FROM BONUS_CRITERIA
+		WHERE BC_NUM = #{bcNum}
+	</delete>
+
+	<!-- 수강생별 총 가산점 합산 조회 -->
+	<select id="selectBonusScoreByUser" parameterType="str" resultType="int">
+		SELECT NVL(SUM(B.BC_SCORE), 0)
+		FROM BONUS_CRITERIA B
+		JOIN CLASSAPPLY CA ON B.CLA_NUM = CA.CLA_NUM
+		WHERE CA.USER_NUM = #{userNum}
+	</select>
+
+</mapper>
