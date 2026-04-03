@@ -22,7 +22,7 @@ public class ClassApplyDAOImpl implements ClassApplyDAO {
     public List<ClassApplyVO> selectClassApply(String userNum, PageMaker pageMaker) throws SQLException {
        
         int offset = pageMaker.getStartRow() - 1;
-        int limit = pageMaker.getPerpageNum();
+        int limit = pageMaker.getPerPageNum();
         RowBounds rows = new RowBounds(offset, limit);
         
        

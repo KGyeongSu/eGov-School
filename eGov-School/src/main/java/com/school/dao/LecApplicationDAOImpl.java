@@ -11,7 +11,7 @@ import com.school.dto.LecApplicationVO;
 
 public class LecApplicationDAOImpl implements LecApplicationDAO{
 	
-	private SqlSession session;
+	private final SqlSession session;
 
 	public LecApplicationDAOImpl(SqlSession session) {
 		
@@ -23,7 +23,7 @@ public class LecApplicationDAOImpl implements LecApplicationDAO{
 	public List<LecApplicationVO> selectLecApplicationList(PageMaker pageMaker) throws SQLException {
 
 		int offset = pageMaker.getStartRow() - 1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds(offset, limit);
 		
 		List <LecApplicationVO> lecApplicationList = session.selectList("LecApplication-Mapper.selectLecApplicationList", pageMaker, rows);

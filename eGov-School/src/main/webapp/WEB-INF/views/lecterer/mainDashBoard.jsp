@@ -61,7 +61,7 @@
 												class="course-img">
 											<div class="course-overlay">
 												<button class="btn-play" onclick="go_roomDetail('${classs.claNum}', '${classs.claTitle}');">
-													<i class="fas fa-cloud-upload-alt"></i> 강좌 업로드
+													<i class="fa-solid fa-door-open"></i> 강의실 바로가기
 												</button>
 											</div>
 										</div>

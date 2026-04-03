@@ -1,6 +1,7 @@
 package com.school.controller;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,14 +45,14 @@ public class ClassController {
 		
 		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
 		
-		if (loginUser == null) return "redirect:/login";
+		if (loginUser == null) return "redirect:/commons/login";
 		
 		String userNum = loginUser.getUserNum();
 		
 		// 대시보드에서 3개만 보여줌
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setPage(1);
-		pageMaker.setPerpageNum(3);
+		pageMaker.setPerPageNum(3);
 		
 		// 서비스 부르기
 		List <ClassVO> classList = classService.selectClassList(pageMaker, userNum);
@@ -70,36 +71,14 @@ public class ClassController {
 		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
 		
 		// 비로그인 시
-		if (loginUser == null) return "redirect:/login";
+		if (loginUser == null) return "redirect:/commons/login";
 		
 		String userNum = loginUser.getUserNum();
 		
-		// 서비스 호출해 pageMaker, userNum 전달
-		List <ClassVO> classList;
-		int totalCount = 0;
+		List <ClassVO> classList = classService.selectClassList(pageMaker, userNum);
 		
-		// 검색어 있나 확인
-		if (pageMaker.getKeyword() != null && !pageMaker.getKeyword().trim().isEmpty()) {
-			
-			// 검색 결과 리스트 가져와
-			classList = classService.selectSearchClassList(pageMaker, userNum);
-			// 검색 결과 개수 가져오기
-			totalCount = classService.selectSearchClassListCount(pageMaker, userNum);
-			
-		} else {
-			
-			// 검색어 X
-			classList = classService.selectClassList(pageMaker, userNum);
-			totalCount= classService.selectSearchClassListCount(pageMaker, userNum);
-			
-		}
-		
-		// pageMaker에 전체 개수 넣기 -> paging
-		pageMaker.setTotalCount(totalCount);
-		
-		// model에 담아서 화면에 보여주기
-		model.addAttribute("classList", classList);
 		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("classList", classList);
 		
 		return "lecterer/myRoom";
 		
@@ -121,7 +100,6 @@ public class ClassController {
 		return "lecterer/roomDetail";
 		
 	}
-
 	
 	@Value("${savedPath.lesson.file}")
 	private String lessonFilePath;
@@ -190,18 +168,63 @@ public class ClassController {
 	}
 	
 	@GetMapping("/roomManage")
-	public String roomManage (@RequestParam("claNum") String claNum, Model model) throws Exception {
+	public String roomManage (PageMaker pageMaker, @RequestParam("claNum") String claNum, Model model) throws Exception {
 		
 		// 강좌 정보 가져오기
 	    ClassVO roomManage = classService.selectClassByCla_num(claNum);
 	    
 	    // 수강 중인 학생 목록 가져오기
-	    // List<UserVO> studentList = classService.selectStudentListByClaNum(claNum);
+	    List<UserVO> studentList = classService.selectStdentListByClaNum(pageMaker, claNum);
 	    
 	    model.addAttribute("roomDetail", roomManage);
-	    // model.addAttribute("studentList", studentList);
+	    model.addAttribute("studentList", studentList);
 	    
 	    return "lecterer/roomManage";
+		
+	}
+	
+	@GetMapping("/makeRoom")
+	public String makeRoom (HttpSession session, Model model) throws Exception {
+		
+		// 로그인 정보 가져오기
+		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+		
+		if (loginUser == null) return "redirect:/commons/login";
+		
+		model.addAttribute("loginUser", loginUser);
+		
+		return "lecterer/makeRoom";
+		 
+	}
+	
+	@PostMapping("/makeRoom")
+	public String insertClass (ClassVO classVO, HttpSession session, RedirectAttributes rttr) throws Exception {
+		
+		// 로그인한 강사 정보 가져오기
+		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+		
+		// 로그인 체크
+		if (loginUser == null) return "redirect:/commons/login";
+		
+		// 강의실에 강사번호 넣기
+		classVO.setUserNum(loginUser.getUserNum());
+		
+		// 강의실 & 레슨 타이틀 동시 저장
+		try {
+			
+			classService.insertClass(classVO);
+			rttr.addFlashAttribute("msg", "강의실 생성이 완료되었습니다.");
+			rttr.addFlashAttribute("status", "success");
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			rttr.addFlashAttribute("msg", "서버 장애로 인해 강의실 생성에 실패했습니다. \\n 다시 시도해 주세요.");
+			rttr.addFlashAttribute("status", "fail");
+			
+		}
+		
+		return "redirect:/lecterer/myRoom?userNum=" + classVO.getUserNum();
 		
 	}
 

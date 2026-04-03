@@ -11,7 +11,7 @@ import com.school.dto.LecRecruitVO;
 
 public class LecRecruitDAOImpl implements LecRecruitDAO {
 	
-	private SqlSession session;
+	private final SqlSession session;
 
 	public LecRecruitDAOImpl(SqlSession session) {
 		
@@ -23,7 +23,7 @@ public class LecRecruitDAOImpl implements LecRecruitDAO {
 	public List<LecRecruitVO> selectLecRecruitList(PageMaker pageMaker) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() - 1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds(offset, limit);
 		
 		List <LecRecruitVO> lecRecruitList = session.selectList("LecRecruit-Mapper.selectLecRecruitList", pageMaker, rows);
@@ -36,7 +36,7 @@ public class LecRecruitDAOImpl implements LecRecruitDAO {
 	public List<LecRecruitVO> selectSearchLecRecruitList(PageMaker pageMaker) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() - 1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
 		List <LecRecruitVO> searchLecRecruitList = session.selectList("LecRecruit-Mapper.selectSearchLecRecruitList", pageMaker, rows);

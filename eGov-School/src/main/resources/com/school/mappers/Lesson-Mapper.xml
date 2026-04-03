@@ -108,7 +108,7 @@
 		INSERT INTO
 		LESSON(LSN_NUM, CLA_NUM, LSN_SEQ, LSN_TITLE, LSN_CONTENT, LSN_TIME)
 		VALUES(#{lsnNum}, #{claNum}, #{lsnSeq, jdbcType=INTEGER}, #{lsnTitle},
-		#{lsnContent}, #{lsnTime, jdbcType=VARCHAR})
+		#{lsnContent, jdbcType=VARCHAR}, #{lsnTime, jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 강좌별 차시 목록 -->
@@ -142,8 +142,8 @@
 		ORDER BY L.LSN_SEQ ASC
 	</select>
 
-	<!-- 차시 단건 조회 -->
-	<select id="selectLessonByNum" parameterType="str"
+	<!-- 차시 단건 조회 --> 
+	<select id="selectLessonByLsnNum" parameterType="str" 
 		resultType="lesson">
 		SELECT * FROM LESSON
 		WHERE LSN_NUM = #{lsnNum}

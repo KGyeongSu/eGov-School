@@ -11,7 +11,7 @@ import com.school.dto.ExamNoticeVO;
 
 public class ExamNoticeDAOImpl implements ExamNoticeDAO {
 	
-	private SqlSession session;
+	private final SqlSession session;
 
 	public ExamNoticeDAOImpl(SqlSession session) {
 		
@@ -23,7 +23,7 @@ public class ExamNoticeDAOImpl implements ExamNoticeDAO {
 	public List<ExamNoticeVO> selectExamNoticeList(PageMaker pageMaker) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() -1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
 		List <ExamNoticeVO> examNoticeList = session.selectList("ExamNotice-Mapper.selectExamNoticeList", pageMaker, rows);
@@ -36,7 +36,7 @@ public class ExamNoticeDAOImpl implements ExamNoticeDAO {
 	public List<ExamNoticeVO> selectSearchExamNoticeList(PageMaker pageMaker) throws SQLException {
 		
 		int offset = pageMaker.getStartRow()-1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds(offset, limit);
 		
 		List <ExamNoticeVO> searchExamNotice = session.selectList("ExamNotice-Mapper.selectSearchExamNoticeList", pageMaker, rows);

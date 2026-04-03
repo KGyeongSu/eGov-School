@@ -15,7 +15,7 @@
             <nav class="mainmenu">
                 <ul class="menu"><a href="/inlearning">인러닝</a></ul>
                 <ul class="menu"><a href="/page/cregist">수강신청</a></ul>
-                <ul class="menu"><a href="#">공무원채용</a></ul>
+                <ul class="menu"><a href="/page/notice">공무원채용</a></ul>
                 <ul class="menu"><a href="/page/l_recruit">강사채용</a></ul>
             </nav>
 
