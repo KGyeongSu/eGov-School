@@ -7,7 +7,7 @@
 	
 	<select id="selectClassList" resultType="classs">
 	
-		select cla_num, cla_title, cla_goal, cla_thumb, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_goal, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
@@ -18,7 +18,7 @@
 	
 	<select id="selectSearchClassList" resultType="classs">
 	
-		select cla_num, cla_title, cla_goal, cla_thumb, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_goal, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
@@ -48,7 +48,7 @@
 	
 	<select id="selectClassByCla_num" resultType="classs">
 	
-		select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_thumb, cla_complete, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_complete, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
@@ -58,8 +58,8 @@
 	
 	<insert id="insertClass" parameterType="classs">
 	
-		insert into class(cla_num, cla_title, cla_content, cla_goal, cla_category, cla_thumb, user_num, cla_startdate, cla_enddate, cla_maxstu, cla_complete)
-		values (#{claNum}, #{claTitle}, #{claContent}, #{claGoal}, #{claCategory}, #{claThumb}, #{userNum}, #{claStartDate}, #{claEndDate}, #{claMaxStu}, #{claComplete})
+		insert into class(cla_num, cla_title, cla_content, cla_goal, cla_category, user_num, cla_startdate, cla_enddate, cla_maxstu, cla_complete)
+		values (#{claNum}, #{claTitle}, #{claContent}, #{claGoal}, #{claCategory}, #{userNum}, #{claStartDate}, #{claEndDate}, #{claMaxStu}, #{claComplete})
 	
 	</insert>
 	
