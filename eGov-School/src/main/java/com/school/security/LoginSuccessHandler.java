@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import com.school.dto.UserVO;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +19,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 										HttpServletResponse response,
 										Authentication auth) 
 								throws IOException, ServletException {
-	
+		
+		// 세션에 로그인 유저 정보 담기
+	    SecurityUser secUser = (SecurityUser) auth.getDetails();
+	    request.getSession().setAttribute("loginUser", secUser.getUser());
+		
 		// 로그인 성공 → 메인페이지로 이동
 	    // 역할별 분기는 인러닝 버튼 클릭 시 처리
 	    response.sendRedirect("/main");
