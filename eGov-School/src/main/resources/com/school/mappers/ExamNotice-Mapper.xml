@@ -68,7 +68,7 @@
   	</update>
   	
   	<select id="selectExamNoticeSeqNext" resultType="int">
-    	SELECT SEQ_EXAMNOTICE.NEXTVAL AS en_num FROM DUAL
-	</select>
+    SELECT SEQ_EXAMNOTICE.NEXTVAL AS en_num FROM DUAL
+</select>
   
   </mapper>

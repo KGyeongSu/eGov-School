@@ -26,5 +26,6 @@ public class QuestionVO {
 	private String queDesc;
 	private Integer quePoint;
 	
-
+	private Integer userAnswer; 
+	private String isCorrect;
 }

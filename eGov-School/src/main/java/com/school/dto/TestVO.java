@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TestVO {
     // Test 관련
-	private String tetNum;
+	  private String tetNum;
     private String claNum;
     private String userNum;
     private String tetTitle;
@@ -30,10 +30,16 @@ public class TestVO {
     private String erPass;
     private Date erDate;
     
+    // 강사 전용
     //강사가 제출한 시험문제들
     private List <QuestionVO> testQuestionList;
     //리스트에 담겨온 상위에서 quePoint 심어줘야 함
     private Integer quePoint;
+    
+    // 사용자 전용
+    private Double topPercent;
+    private Integer totalCount;
+    private String erNum;
 }
     
    

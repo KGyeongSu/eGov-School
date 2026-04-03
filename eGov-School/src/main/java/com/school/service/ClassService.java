@@ -11,6 +11,7 @@ import com.school.dto.UserVO;
 
 public interface ClassService {
 	
+  // 강사
 	// 클래스 리스트 가져오기
 	List <ClassVO> selectClassList (PageMaker pageMaker, String userNum) throws SQLException;
 	
@@ -35,5 +36,11 @@ public interface ClassService {
 		
 	// 수강중인 학생 수 세기
 	int selectStudentListCount(PageMaker pageMaker, String claNum) throws SQLException;
+  
+  // 사용자
+	// 수강신청 페이지용 (승인완료 강좌)
+	List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException;
+	// PageMaker 페이지 계산할때 쓰임.
+	int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException;
 
 }

@@ -4,9 +4,10 @@ public class PageMaker {
 	
 	private String searchType ="";
 	private String keyword="";
+	private String keyword2="";
 	
 	private int page=1;
-	private int perPageNum=10;
+	private int perPageNum=6;
 	private int totalCount;
 	private int displayPageNum=10;
 	
@@ -22,6 +23,9 @@ public class PageMaker {
 	}
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+	public void setKeyword2(String keyword2) {
+		this.keyword2 = keyword2;
 	}
 	public void setPage(int page) {
 		this.page = page;
@@ -40,6 +44,9 @@ public class PageMaker {
 	}
 	public String getKeyword() {
 		return keyword;
+	}
+	public String getKeyword2() {
+		return keyword2;
 	}
 	public int getPage() {
 		return page;

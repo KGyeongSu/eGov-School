@@ -2,6 +2,9 @@ package com.school.controller;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.school.cmd.PageMaker;
+import com.school.dto.ClassVO;
 import com.school.dto.UserVO;
 import com.school.mail.MimeAttachNotifier;
+import com.school.service.ClassService;
 import com.school.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,21 +35,36 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private MimeAttachNotifier mailNotifier;
+    @Autowired
+    private ClassService classService;
 
     
     
     @GetMapping("/")
     public String home() {
+        return "redirect:/main";
+    }
+    
+    
+    @GetMapping("/main")
+    public String mainPage(PageMaker pageMaker, Model model) throws Exception {
+    	
+    	pageMaker.setPerpageNum(15); // 메인 페이지에서는 한 페이지에 5개씩 3줄 노출.
+    	
+        List<ClassVO> classList = classService.selectApprovedClassList(pageMaker);
+
+        int totalCount = classService.selectApprovedClassListCount(pageMaker);
+        pageMaker.setTotalCount(totalCount);
+
+        model.addAttribute("classList", classList);
+        model.addAttribute("pageMaker", pageMaker);
+
         return "main";
     }
     
-    @GetMapping("/main")
-    public String mainPage() {
-        return "main";
-    }
+ 
     
     // ===== 회원가입 =====
     @GetMapping("/commons/join")
@@ -130,7 +151,7 @@ public class UserController {
         String role = auth.getAuthorities().iterator().next().getAuthority();
         
         if ("ROLE_관리자".equals(role)) {
-            return "redirect:/admin/admin_main";
+            return "redirect:/admin/main";
         } else if ("ROLE_강사".equals(role)) {
             return "redirect:/lecterer/mainDashBoard";
         } else {
@@ -186,14 +207,31 @@ public class UserController {
 	// 비밀번호 변경 처리
 	@PostMapping("/commons/repwd")
 	public String repwd(@RequestParam("userPwd") String userPwd, HttpSession session, RedirectAttributes rttr)
-			throws SQLException {
-		try {
-			// 1. 인증 여부 확인
-			Boolean verified = (Boolean) session.getAttribute("emailVerified");
-			if (verified == null || !verified) {
-				return "commons/repwd"; // 인증 안됐으면 다시 폼으로
-			}
-		}
+	        throws SQLException {
+	    try {
+	        Boolean verified = (Boolean) session.getAttribute("emailVerified");
+	        if (verified == null || !verified) {
+	            return "commons/repwd";
+	        }
+
+	        String userEmail = (String) session.getAttribute("repwdEmail");
+	        if (userEmail == null) {
+	            return "commons/repwd";
+	        }
+
+	        userService.updateUserPwd(userEmail, userPwd);
+
+	        session.removeAttribute("emailVerified");
+	        session.removeAttribute("repwdEmail");
+
+	        rttr.addFlashAttribute("message", "비밀번호가 변경되었습니다. 다시 로그인해주세요.");
+	        return "redirect:/commons/login";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "commons/repwd";
+	    }
+	}
 		
 		@GetMapping("/lecterer/profile")
 		public String profileForm(HttpSession session, Model model) {

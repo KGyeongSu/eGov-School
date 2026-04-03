@@ -1,3 +1,4 @@
+
 package com.school.dto;
 
 import java.util.Date;
@@ -33,11 +34,18 @@ public class ClassVO {
 	private String claComplete;
 	private Integer claBonus;
 	
-	// class 안 lesson 들 리스트 보여주기
-	private List<LessonVO> lessonList;
-	
-	// 테스트 버튼 활성화 여부 목적
+	// 강사
+  // 테스트 버튼 활성화 여부 목적
 	private String tetNum;
+  // class 안 lesson 들 리스트 보여주기
+	private List<LessonVO> lessonList;
+  
+	// 사용자
+  // join문으로 가져오는 user정보를 담을 그릇
+	private String userName;
+	private String userPhoto;
+	// 수강신청 인원수
+	private Integer applyCnt;
 	
 
 }

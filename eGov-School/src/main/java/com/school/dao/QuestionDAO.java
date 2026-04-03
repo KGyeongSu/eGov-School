@@ -7,14 +7,17 @@ import com.school.dto.QuestionVO;
 
 public interface QuestionDAO {
 	
+  // 강사
 	String selectQuestionSeqNext () throws SQLException;
 	
 	void insertQuestion (QuestionVO question) throws SQLException;
 	
 	void updateQuestion (QuestionVO question) throws SQLException;
 	
-	// 물어보고 삭제하기
 	List <QuestionVO> selectQuestionList (QuestionVO question) throws SQLException;
 	
-
+  // 사용자
+	void updateQuestion (QuestionVO question) throws SQLException;
+	
+	List<QuestionVO> selectQuestionsByTetNum(String tetNum) throws SQLException;
 }

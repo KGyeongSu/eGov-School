@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
 import com.school.cmd.PageMaker;
+import com.school.dto.LessonAttachVO;
 import com.school.dto.LessonVO;
 import com.school.dto.UserVO;
 
@@ -38,6 +39,11 @@ public class LessonDAOImpl implements LessonDAO {
 	@Override
 	public LessonVO selectLessonByLsnNum(String lsnNum) throws SQLException {
 		return session.selectOne("Lesson-Mapper.selectLessonByNum", lsnNum);
+  }
+  
+  @Override
+	public LessonVO selectLessonByNum(LessonVO lesson) throws SQLException {
+		return session.selectOne("Lesson-Mapper.selectLessonByNum", lesson);
 	}
 
 	@Override
@@ -51,10 +57,41 @@ public class LessonDAOImpl implements LessonDAO {
 	}
 
 	@Override
+	public String selectFirstLessonNum(String claNum) throws SQLException {
+	    // 해당 강의의 차시 중 가장 작은 번호(첫 번째 강의)를 가져옴
+	    return session.selectOne("Lesson-Mapper.selectFirstLessonNum", claNum);
+	}
+
+	@Override
+	public String selectPrevLsnNum(LessonVO lesson) throws SQLException {
+	    return session.selectOne("Lesson-Mapper.selectPrevLsnNum", lesson);
+	}
+
+	@Override
+	public String selectNextLsnNum(LessonVO lesson) throws SQLException {
+	    return session.selectOne("Lesson-Mapper.selectNextLsnNum", lesson);
+	}
+	@Override
+	public int selectTotalLessonCount(String claNum) throws SQLException {
+	    // 진도율 계산의 분모가 될 전체 차시 개수
+	    return session.selectOne("Lesson-Mapper.selectTotalLessonCount", claNum);
+	}
+
+	@Override
+	public List<LessonAttachVO> selectLessonFileList(String lsnNum) throws SQLException {
+		
+		return session.selectList("Lesson-Mapper.selectLessonFileList", lsnNum);
+	}
+
+	@Override
+	public List<LessonVO> selectLessonListByClaNum(String claNum) throws SQLException {
+	
+		return session.selectList("Lesson-Mapper.selectLessonListByClaNum",claNum);
+	}
+	
+	@Override
 	public int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException {
-		
 		return session.selectOne("Lesson-Mapper.selectMaxLsnSeq", claNum);
-		
 	}
 	
 }
