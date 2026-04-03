@@ -1,16 +1,20 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
+import com.school.cmd.PageMaker;
 import com.school.dto.LessonVO;
+import com.school.dto.UserVO;
 
 public class LessonDAOImpl implements LessonDAO {
 
-	private SqlSession session;
+	private final SqlSession session;
 
 	public LessonDAOImpl(SqlSession session) {
 		this.session = session;
@@ -32,7 +36,7 @@ public class LessonDAOImpl implements LessonDAO {
 	}
 
 	@Override
-	public LessonVO selectLessonByNum(String lsnNum) throws SQLException {
+	public LessonVO selectLessonByLsnNum(String lsnNum) throws SQLException {
 		return session.selectOne("Lesson-Mapper.selectLessonByNum", lsnNum);
 	}
 
@@ -52,4 +56,5 @@ public class LessonDAOImpl implements LessonDAO {
 		return session.selectOne("Lesson-Mapper.selectMaxLsnSeq", claNum);
 		
 	}
+	
 }

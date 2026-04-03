@@ -9,7 +9,7 @@ import com.school.dto.QuestionVO;
 
 public class QuestionDAOImpl implements QuestionDAO {
 	
-	private SqlSession session;
+	private final SqlSession session;
 
 	public QuestionDAOImpl(SqlSession session) {
 
@@ -35,6 +35,13 @@ public class QuestionDAOImpl implements QuestionDAO {
 	public void updateQuestion(QuestionVO question) throws SQLException {
 
 		session.update("Question-Mapper.updateQuestion", question);
+		
+	}
+
+	@Override
+	public String selectQuestionSeqNext() throws SQLException {
+
+		return session.selectOne("Question-Mapper.selectQuestionSeqNext");
 		
 	}
 	

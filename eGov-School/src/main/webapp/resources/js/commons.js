@@ -105,60 +105,51 @@ if (fileInput) {
 /** 커리큘럼 추가 */
 function addCurriculum() {
     const container = document.getElementById('curriculum_list');
-    const nextNum = container.getElementsByClassName('curri_item').length + 1;
-
-    const newItem = document.createElement('div');
-    newItem.className = 'curri_item';
-    newItem.innerHTML = `
-                <span class="step_badge">${nextNum}강</span>
-                <input type="text" class="input_control" placeholder="강의 주제를 입력하세요">
-                <button type="button" class="remove_btn" onclick="removeCurri(this)"><i class="fa-solid fa-xmark"></i></button>
-            `;
-
-    container.appendChild(newItem);
-    container.scrollTop = container.scrollHeight; // 추가 시 자동 스크롤 하단 이동
+	const currentIndex = container.getElementsByClassName('curri_item').length;
+	const newItem = document.createElement('div');
+	newItem.className = 'curri_item';
+		
+	newItem.innerHTML = `
+	        <span class="step_badge">${currentIndex + 1}강</span>
+	        <input type="text" name="lessonList[${currentIndex}].lsnTitle" class="input_control" placeholder="강의 주제를 입력하세요">
+	        <button type="button" class="remove_btn" onclick="removeCurri(this)">
+	            <i class="fa-solid fa-xmark"></i>
+	        </button>
+	    `;
+		
+	container.appendChild(newItem);
+	container.scrollTop = container.scrollHeight;
 }
 
 function removeCurri(btn) {
+	
     const container = document.getElementById('curriculum_list');
-    if (container.getElementsByClassName('curri_item').length > 1) {
-        btn.closest('.curri_item').remove();
-        // 번호 재정렬
-        const items = container.getElementsByClassName('step_badge');
-        Array.from(items).forEach((badge, index) => {
-            badge.innerText = (index + 1) + "강";
+    const items = container.getElementsByClassName('curri_item');
+
+    if (items.length > 1) {
+		
+	        btn.closest('.curri_item').remove();
+	        
+	        const updatedItems = container.getElementsByClassName('curri_item');
+			
+	        Array.from(updatedItems).forEach((item, index) => {
+	
+	        item.querySelector('.step_badge').innerText = (index + 1) + "강";
+            
+            const input = item.querySelector('input');
+			
+            if(input) {
+				
+                input.name = `lessonList[${index}].lsnTitle`;
+				
+            }
         });
+		
     } else {
+		
         alert("최소 1강 이상 입력해야 합니다.");
+		
     }
-}
-
-// 강의실 생성 제출 시 달력 아이콘 누르면 나오는 미니달력
-const dateInput = document.getElementById('datePicker');
-const dateIcon = document.getElementById('calendarIcon');
-
-if (dateInput && dateIcon) {
-
-    const fp = flatpickr(dateInput, {
-
-        locale: "ko",
-        dateFormat: "Y.m.d",
-        disableMobile: true,
-        static: false,
-        onOpen: function(selectedDates, dateStr, instance) {
-
-            const rect = dateIcon.getBoundingClientRect();
-
-            setTimeout(() => {
-                instance.calendarContainer.style.setProperty("top", (window.pageYOffset + rect.bottom + 5) + "px", "important");
-                instance.calendarContainer.style.setProperty("left", (window.pageXOffset + rect.left - 230) + "px", "important");
-            }, 0);
-        }
-    });
-
-    dateIcon.addEventListener('click', function() {
-        fp.open();
-    });
 }
 
 // 강사 프로필 등록 시 사진 미리보기 (DOMContentLoaded: js 내장객체로 document 를 선구성한 후 html 잘읽게 해줌)

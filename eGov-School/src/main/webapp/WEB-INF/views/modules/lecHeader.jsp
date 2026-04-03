@@ -20,14 +20,14 @@
 <body>	
 <header>
 		<div class="logo">
-			<a href=""><img src="../../../resources/images/dashboardLogo.png" /></a>
+			<a href="mainDashBoard"><img src="../../../resources/images/dashboardLogo.png" /></a>
 		</div>
 
 		<nav class="menu">
 			<ul>
-				<li onclick="OpenWindow('profile', 'My 프로필', 700, 900);"><a href=""><span>My 프로필</span></a></li>
-				<li><span>My 강의실</span></li>
-				<li><span>평&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;가</span></li>
+				<li onclick="OpenWindow('profile', 'My 프로필', 700, 900);" style="cursor: pointer;"><span>My 프로필</span></li>
+				<li onclick="location.href='myRoom';" style="cursor: pointer;"><span>My 강의실</span></li>
+				<li onclick="location.href='resultManage';" style="cursor: pointer;"><span>My &nbsp; 평가</span></li>
 			</ul>
 		</nav>
 </header>

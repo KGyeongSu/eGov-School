@@ -10,10 +10,11 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
+import com.school.dto.UserVO;
 
 public class ClassDAOImpl implements ClassDAO {
 	
-	private SqlSession session;
+	private final SqlSession session;
 
 	public ClassDAOImpl(SqlSession session) {
 		
@@ -22,13 +23,9 @@ public class ClassDAOImpl implements ClassDAO {
 	}
 
 	@Override
-	public List<ClassVO> selectClassList(PageMaker pageMaker, String userNum) throws SQLException {
+	public List<ClassVO> selectClassList(PageMaker pageMaker, String userNum, RowBounds rows) throws SQLException {
 		
-		int offset = pageMaker.getStartRow() -1;
-		int limit = pageMaker.getPerpageNum();
-		RowBounds rows = new RowBounds (offset, limit);
-		
-		Map<String, Object> classList = new HashMap<> ();
+		Map<String, Object> classList = new HashMap<>();
 		classList.put("pageMaker", pageMaker);
 		classList.put("userNum", userNum);
 		
@@ -40,7 +37,7 @@ public class ClassDAOImpl implements ClassDAO {
 	public List<ClassVO> selectSearchClassList(PageMaker pageMaker, String userNum) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() -1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
 		Map<String, Object> classSearchList = new HashMap<> ();
@@ -84,9 +81,31 @@ public class ClassDAOImpl implements ClassDAO {
 	}
 
 	@Override
-	public int selectClassSeqNext() throws SQLException {
+	public String selectClassSeqNext() throws SQLException {
 
 		return session.selectOne("Class-Mapper.selectClassSeqNext");
+		
+	}
+
+	@Override
+	public List<UserVO> selectStudentListByClaNum(PageMaker pageMaker, String claNum, RowBounds rows) throws SQLException {
+		
+		Map<String, Object> studentList = new HashMap<>();
+		studentList.put("pageMaker", pageMaker);
+		studentList.put("claNum", claNum);
+		
+		return session.selectList("Class-Mapper.selectStudentListByClaNum", studentList, rows);
+		
+	}
+
+	@Override
+	public int selectStudentListCount(PageMaker pageMaker, String claNum) throws SQLException {
+		
+		Map <String, Object> studentCount = new HashMap<> ();
+		studentCount.put("pageMaker", pageMaker);
+		studentCount.put("claNum", claNum);
+
+		return session.selectOne("Class-Mapper.selectStudentListCount", studentCount);
 		
 	}
 

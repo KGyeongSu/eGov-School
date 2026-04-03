@@ -62,19 +62,26 @@
 		class="com.school.dao.MessageAttachDAOImpl" c:session-ref="sqlSession" />
 
 
-
-
 	<!-- service -->
 	<bean id="userService" class="com.school.service.UserServiceImpl"
 		c:userDAO-ref="userDAO" />
 
 	<bean id="classService"
-		class="com.school.service.ClassServiceImpl" c:classDAO-ref="classDAO" />
+		class="com.school.service.ClassServiceImpl" >
+		<constructor-arg index="0" ref="classDAO" />
+		<constructor-arg index="1" ref="lessonDAO" />
+	</bean>
 
 	<bean id="lessonService"
 		class="com.school.service.LessonServiceImpl">
 		<constructor-arg index="0" ref="lessonDAO" />
 		<constructor-arg index="1" ref="lessonAttachDAO" />
+	</bean>
+	
+	<bean id="TestService"
+		class="com.school.service.TestServiceImpl">
+		<constructor-arg index="0" ref="testDAO" />
+		<constructor-arg index="1" ref="questionDAO" />
 	</bean>
 
 		<!-- utils -->

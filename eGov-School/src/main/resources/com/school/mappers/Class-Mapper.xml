@@ -6,19 +6,36 @@
 <mapper namespace="Class-Mapper">
 	
 	<select id="selectClassList" resultType="classs">
-	
-		select cla_num, cla_title, cla_goal, cla_thumb, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
-		from class c
-		inner join users u
-		on c.user_num = u.user_num
-		where c.user_num = #{userNum}
-		order by c.cla_num desc
-		
+	    SELECT 
+	        c.cla_num, 
+	        c.cla_title, 
+	        c.cla_goal, 
+	        u.user_name, 
+	        c.cla_status, 
+	        c.cla_startdate, 
+	        c.cla_enddate, 
+	        c.cla_maxstu, 
+	        c.cla_views,
+	        t.tet_num  FROM class c
+	    	INNER JOIN users u ON c.user_num = u.user_num
+	    	LEFT OUTER JOIN test t ON c.cla_num = t.cla_num 
+    	<where> 
+    	
+	        c.user_num = #{userNum}
+	        
+	        <if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+	            AND c.cla_title LIKE '%' || #{pageMaker.keyword} || '%'    
+	        </if>
+	            
+	    </where>
+	    
+	    ORDER BY c.cla_num ASC
+	    
 	</select>
 	
 	<select id="selectSearchClassList" resultType="classs">
 	
-		select cla_num, cla_title, cla_goal, cla_thumb, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_goal, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
@@ -48,7 +65,7 @@
 	
 	<select id="selectClassByCla_num" resultType="classs">
 	
-		select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_thumb, cla_complete, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_complete, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
@@ -58,8 +75,12 @@
 	
 	<insert id="insertClass" parameterType="classs">
 	
-		insert into class(cla_num, cla_title, cla_content, cla_goal, cla_category, cla_thumb, user_num, cla_startdate, cla_enddate, cla_maxstu, cla_complete)
-		values (#{claNum}, #{claTitle}, #{claContent}, #{claGoal}, #{claCategory}, #{claThumb}, #{userNum}, #{claStartDate}, #{claEndDate}, #{claMaxStu}, #{claComplete})
+		<selectKey keyProperty="claNum" resultType="str" order="BEFORE">
+        	SELECT seq_class.nextval FROM dual
+    	</selectKey>
+	
+		insert into class(cla_num, cla_title, cla_content, cla_goal, cla_category, user_num, cla_startdate, cla_enddate, cla_maxstu, cla_complete)
+		values (#{claNum}, #{claTitle}, #{claContent}, #{claGoal, jdbcType=VARCHAR}, #{claCategory}, #{userNum}, #{claStartDate, jdbcType=DATE}, #{claEndDate, jdbcType=DATE}, #{claMaxStu, jdbcType=INTEGER}, #{claComplete, jdbcType=VARCHAR})
 	
 	</insert>
 	
@@ -71,11 +92,49 @@
 	
 	</update>
 	
-	<select id="selectClassSeqNext" resultType="int">
+	<select id="selectClassSeqNext" resultType="str">
 	
 		select
-		class_seq.nextval as cla_num from dual
+		seq_class.nextval as cla_num from dual
 	
+	</select>
+	
+	<select id="selectStudentListByClaNum" resultType="user">
+	
+    	SELECT 
+       	 	u.* FROM users u
+    		INNER JOIN classapply ca ON u.user_num = ca.user_num
+   		WHERE ca.cla_num = #{claNum}
+    
+    		<if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+        		AND (
+           	 		u.user_name LIKE '%' || #{pageMaker.keyword} || '%' 
+            	OR 
+            		u.user_email LIKE '%' || #{pageMaker.keyword} || '%'
+        			)
+   	 		</if>
+    
+   		 ORDER BY u.user_name ASC
+   		 
+	</select>
+	
+	<select id="selectStudentListCount" resultType="int">
+	
+    		SELECT COUNT(*) FROM users u
+    		inner join classapply ca
+    		on u.user_num = ca.user_num
+   	 		WHERE ca.cla_num = #{claNum}
+    
+    	<if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+    
+        	AND (
+            	u.user_name LIKE '%' || #{pageMaker.keyword} || '%' 
+            	OR 
+            	u.user_email LIKE '%' || #{pageMaker.keyword} || '%'
+        	)
+        
+    	</if>
+    
 	</select>
 	
 </mapper>

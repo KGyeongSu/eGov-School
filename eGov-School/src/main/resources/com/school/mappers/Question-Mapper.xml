@@ -5,10 +5,15 @@
   
   <mapper namespace="Question-Mapper">
   
+  	<!-- pk 시퀀스 번호 -->
+	<select id="selectQuestionSeqNext" resultType="str">
+		SELECT SEQ_QUESTION.NEXTVAL FROM DUAL
+	</select>
+  
   	<insert id="insertQuestion" parameterType="question">
   		
   		insert into question (que_num, tet_num, que_seq, que_text, que_opt1, que_opt2, que_opt3, que_opt4, que_answer, que_desc, que_point)
-  		values (#{que_num}, #{tet_num}, #{que_seq}, #{que_text}, #{que_opt1}, #{que_opt2}, #{que_opt3}, #{que_opt4}, #{que_answer}, #{que_desc}, #{que_point})
+  		values (#{queNum}, #{tetNum}, #{queSeq}, #{queText}, #{queOpt1}, #{queOpt2}, #{queOpt3}, #{queOpt4}, #{queAnswer}, #{queDesc}, #{quePoint})
   	
   	</insert>
   	
@@ -25,14 +30,14 @@
   	<update id="updateQuestion" parameterType="question">
   	
   		update question set
-  		que_text = #{que_text},
-  		que_opt1 = #{que_opt1},
-  		que_opt2 = #{que_opt2},
-  		que_opt3 = #{que_opt3},
-  		que_opt4 = #{que_opt4},
-  		que_answer = #{que_answer},
-  		que_desc = #{que_desc}
-  		where que_num = #{que_num}
+  		que_text = #{queText},
+  		que_opt1 = #{queOpt1},
+  		que_opt2 = #{queOpt2},
+  		que_opt3 = #{queOpt3},
+  		que_opt4 = #{queOpt4},
+  		que_answer = #{queAnswer},
+  		que_desc = #{queDesc}
+  		where que_num = #{queNum}
 
   	</update>
   

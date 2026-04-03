@@ -40,7 +40,7 @@
 				</a>
 			</div>
 			<div class="manage">
-				<a href="">
+				<a href="/lecterer/roomManage?claNum=${roomDetail.claNum}">
 					<h2>사용자 관리</h2>
 				</a>
 			</div>
@@ -133,7 +133,7 @@
 
 												<div class="lesson_info"
 													style="display: flex; align-items: center;">
-													<span style="font-weight: bold; margin-right: 8px;">${lesson.lsnSeq}.</span>
+													<span style="font-weight: bold; margin-right: 8px;">${lesson.lsnSeq}</span>
 													<span>${lesson.lsnTitle}</span>
 												</div>
 											</li>
@@ -411,7 +411,20 @@ function go_modify() {
     if (msg) {
     	
         alert(msg);
-        history.replaceState({}, null, location.pathname);
+        
+        const url = new URL(window.location.href);
+        const claNum = url.searchParams.get("claNum");
+        
+        if (claNum) {
+        	
+        	history.replaceState({}, null, location.pathname + "?claNum=" + claNum);
+        	
+        } else {
+        	
+            history.replaceState({}, null, location.pathname);
+            
+        }
+        
         
     }
     

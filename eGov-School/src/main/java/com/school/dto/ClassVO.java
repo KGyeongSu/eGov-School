@@ -22,7 +22,7 @@ public class ClassVO {
 	private String claGoal;
 	private String claCategory;
 	private String claThumb;
-	private Integer userNum;
+	private String userNum;
 	private Date claRegDate;
 	private Date appDate;
 	private String claStatus;
@@ -35,6 +35,9 @@ public class ClassVO {
 	
 	// class 안 lesson 들 리스트 보여주기
 	private List<LessonVO> lessonList;
+	
+	// 테스트 버튼 활성화 여부 목적
+	private String tetNum;
 	
 
 }

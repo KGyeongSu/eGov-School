@@ -11,7 +11,7 @@ import com.school.dto.JobNoticeVO;
 
 public class JobNoticeDAOImpl implements JobNoticeDAO {
 	
-	private SqlSession session;
+	private final SqlSession session;
 
 	public JobNoticeDAOImpl(SqlSession session) {
 
@@ -23,7 +23,7 @@ public class JobNoticeDAOImpl implements JobNoticeDAO {
 	public List<JobNoticeVO> selectJobNoticeList(PageMaker pageMaker) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() - 1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
 		List <JobNoticeVO> jobNoticeList = session.selectList("JobNotice-Mapper.selectJobNoticeList", pageMaker, rows);
@@ -36,7 +36,7 @@ public class JobNoticeDAOImpl implements JobNoticeDAO {
 	public List<JobNoticeVO> selectSearchJobNoticeList(PageMaker pageMaker) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() - 1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds(offset, limit);
 		
 		List <JobNoticeVO> searchJobNoticeList = session.selectList("JobNotice-Mapper.selectSearchJobNoticeList", pageMaker, rows);
