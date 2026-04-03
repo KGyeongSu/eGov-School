@@ -31,7 +31,7 @@ public class PageMaker {
 		this.page = page;
 		calcData();
 	}
-	public void setPerpageNum(int perpageNum) {
+	public void setPerPageNum(int perpageNum) {
 		this.perPageNum = perpageNum;
 	}
 	public void setTotalCount(int totalCount) {
@@ -51,7 +51,7 @@ public class PageMaker {
 	public int getPage() {
 		return page;
 	}
-	public int getPerpageNum() {
+	public int getPerPageNum() {
 		return perPageNum;
 	}
 	public int getTotalCount() {
@@ -78,10 +78,11 @@ public class PageMaker {
 	
 	private void calcData() {
 		
+		realEndPage = (int) (Math.ceil(totalCount / (double) perPageNum));
+		
 		endPage = (int) (Math.ceil(page / (double) displayPageNum) * displayPageNum);
 		startPage = (endPage - displayPageNum) + 1;
 		
-		realEndPage = (int) (Math.ceil(totalCount / (double) perPageNum));
 		
 		if (startPage < 1) startPage=1;
 		

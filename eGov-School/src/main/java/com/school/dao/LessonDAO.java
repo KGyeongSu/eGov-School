@@ -6,7 +6,9 @@ import java.util.List;
 import com.school.dto.LessonAttachVO;
 import org.apache.ibatis.annotations.Param;
 
+import com.school.cmd.PageMaker;
 import com.school.dto.LessonVO;
+import com.school.dto.UserVO;
 
 public interface LessonDAO {
 
@@ -20,8 +22,9 @@ public interface LessonDAO {
     String selectNextLsnNum(LessonVO lesson) throws SQLException;
     int selectTotalLessonCount(String claNum) throws SQLException;
     List<LessonAttachVO> selectLessonFileList(String lsnNum) throws SQLException;
-	List<LessonVO> selectLessonListByClaNum(String claNum)throws SQLException;
-	int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException;
+    List<LessonVO> selectLessonListByClaNum(String claNum)throws SQLException;
+    List<LessonVO> selectLessonList(String claNum) throws SQLException;
+    int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException;
 	
 	
 	

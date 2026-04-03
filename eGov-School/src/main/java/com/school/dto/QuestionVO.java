@@ -16,7 +16,7 @@ public class QuestionVO {
 	
 	private String queNum;
 	private String tetNum;
-	private String queSeq;
+	private Integer queSeq;
 	private String queText;
 	private String queOpt1;
 	private String queOpt2;

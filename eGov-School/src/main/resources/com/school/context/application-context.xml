@@ -66,9 +66,16 @@
 		class="com.school.dao.MessageAttachDAOImpl" c:session-ref="sqlSession" />
 
 
-
-
 	<!-- service -->
+	<bean id="userService" class="com.school.service.UserServiceImpl"
+		c:userDAO-ref="userDAO" />
+
+	<bean id="classService"
+		class="com.school.service.ClassServiceImpl" >
+		<constructor-arg index="0" ref="classDAO" />
+		<constructor-arg index="1" ref="lessonDAO" />
+	</bean>
+
 <bean id="userService" class="com.school.service.UserServiceImpl"
     c:userDAO-ref="userDAO" />
 <bean id="classApplyService" class="com.school.service.ClassApplyServiceImpl">
@@ -92,9 +99,6 @@
 		<constructor-arg index="0" ref="lessonDAO" />
 		<constructor-arg index="1" ref="lessonAttachDAO" />
 	</bean>
-	
-	<bean id="classService"
-		class="com.school.service.ClassServiceImpl" c:classDAO-ref="classDAO" />
 	<bean id="jobNoticeService" class="com.school.service.JobNoticeServiceImpl"
 	    c:jobNoticeDAO-ref="jobNoticeDAO" /> 
 	<bean id="examNoticeService" class="com.school.service.ExamNoticeServiceImpl"

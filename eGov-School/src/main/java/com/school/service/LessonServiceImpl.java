@@ -13,8 +13,8 @@ import com.school.dto.LessonVO;
 
 public class LessonServiceImpl implements LessonService {
 	
-	private LessonDAO lessonDAO;
-	private LessonAttachDAO lessonAttachDAO;
+	private final LessonDAO lessonDAO;
+	private final LessonAttachDAO lessonAttachDAO;
 	
 	public LessonServiceImpl (LessonDAO lessonDAO, LessonAttachDAO lessonAttachDAO) {
 		

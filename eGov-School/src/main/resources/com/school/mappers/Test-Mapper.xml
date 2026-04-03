@@ -15,6 +15,40 @@
 		INSERT INTO TEST(TET_NUM, CLA_NUM, USER_NUM, TET_TITLE, TET_TIMELIMIT)
 		VALUES(#{tetNum}, #{claNum}, #{userNum}, #{tetTitle}, #{tetTimelimit})
 	</insert>
+	
+	<resultMap id="testWithQuestionsMap" type="test">
+		<id property="tetNum" column="TET_NUM" />
+		<result property="claNum" column="CLA_NUM" />
+		<result property="userNum" column="USER_NUM" />
+		<result property="tetTitle" column="TET_TITLE" />
+		<result property="tetTimelimit" column="TET_TIMELIMIT" />
+		<result property="tetRegdate" column="TET_REGDATE" />
+		
+		<collection property="testQuestionList" ofType="question">
+			<id property="queNum" column="QUE_NUM" />
+			<result property="tetNum" column="TET_NUM" />
+			<result property="queSeq" column="QUE_SEQ" />
+			<result property="queText" column="QUE_TEXT" />
+			<result property="queOpt1" column="QUE_OPT1" />
+			<result property="queOpt2" column="QUE_OPT2" />
+			<result property="queOpt3" column="QUE_OPT3" />
+			<result property="queOpt4" column="QUE_OPT4" />
+			<result property="queAnswer" column="QUE_ANSWER" />
+			<result property="queDesc" column="QUE_DESC" />
+			<result property="quePoint" column="QUE_POINT" />
+		</collection>
+	</resultMap>
+
+	<select id="selectTestWithQuestions" parameterType="str" resultMap="testWithQuestionsMap">
+		SELECT 
+		    T.*, 
+		    Q.QUE_NUM, Q.QUE_SEQ, Q.QUE_TEXT, Q.QUE_OPT1, Q.QUE_OPT2, 
+		    Q.QUE_OPT3, Q.QUE_OPT4, Q.QUE_ANSWER, Q.QUE_DESC, Q.QUE_POINT
+		FROM TEST T
+		LEFT OUTER JOIN QUESTION Q ON T.TET_NUM = Q.TET_NUM
+		WHERE T.CLA_NUM = #{claNum}
+		ORDER BY Q.QUE_SEQ ASC
+	</select>
 
 	
 	<select id="selectTestByNum" parameterType="str" resultType="test">
