@@ -76,22 +76,21 @@ public class LessonDAOImpl implements LessonDAO {
 	    // 진도율 계산의 분모가 될 전체 차시 개수
 	    return session.selectOne("Lesson-Mapper.selectTotalLessonCount", claNum);
 	}
-
 	@Override
 	public List<LessonAttachVO> selectLessonFileList(String lsnNum) throws SQLException {
-		
 		return session.selectList("Lesson-Mapper.selectLessonFileList", lsnNum);
 	}
-
 	@Override
 	public List<LessonVO> selectLessonListByClaNum(String claNum) throws SQLException {
-	
 		return session.selectList("Lesson-Mapper.selectLessonListByClaNum",claNum);
 	}
-	
 	@Override
 	public int selectMaxLsnSeq(@Param("claNum") String claNum) throws SQLException {
 		return session.selectOne("Lesson-Mapper.selectMaxLsnSeq", claNum);
+	}
+	@Override
+	public LessonVO selectLessonByLsnNum(String lsnNum) throws SQLException {
+		return session.selectOne("Lesson-Mapper.selectLessonByLsnNum", lsnNum);
 	}
 	
 }

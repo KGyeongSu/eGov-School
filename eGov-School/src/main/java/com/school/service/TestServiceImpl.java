@@ -1,11 +1,13 @@
 package com.school.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import com.school.dao.ExamResultDAO;
 import com.school.dao.QuestionDAO;
 import com.school.dao.TestDAO;
+import com.school.dto.ExamAnswerVO;
 import com.school.dto.ExamResultVO;
 import com.school.dto.QuestionVO;
 import com.school.dto.TestVO;
@@ -17,12 +19,14 @@ public class TestServiceImpl implements TestService{
 	private ExamResultDAO examResultDAO;
 	
 	
+	
 
 	public TestServiceImpl(TestDAO testDAO, QuestionDAO quesTionDAO, ExamResultDAO examResultDAO) {
 		
 		this.testDAO = testDAO;
 		this.quesTionDAO = quesTionDAO;
 		this.examResultDAO = examResultDAO;
+		
 	}
   // 사용자 전용
 	@Override
@@ -33,40 +37,62 @@ public class TestServiceImpl implements TestService{
 
 	@Override
 	public ExamResultVO evaluateTest(List<QuestionVO> userAnswers, String userNum, String tetNum) throws SQLException {
-		
-		List<QuestionVO>realQuestions = quesTionDAO.selectQuestionsByTetNum(tetNum);
-		
-		int totalScore  = 0;
-		
-		for(QuestionVO real : realQuestions) {
-			for(QuestionVO user : userAnswers) {
-				if(real.getQueNum().equals(user.getQueNum())) {
-					if(real.getQueAnswer().equals(user.getQueAnswer())) {
-						totalScore += real.getQuePoint();
-					}
-					break;
-				}
-			}
-		}
-		//합격여부
-		String passYn = (totalScore >= 60) ? "Y":"N";
-		
-		//결과저장
-		ExamResultVO result = new ExamResultVO();
-		int nextSeq = examResultDAO.selectExamResultSeqNext();
-		
-		result.setErNum(String.valueOf(nextSeq));
-		result.setTetNum(tetNum);
-		result.setUserNum(userNum);
-		result.setErScore(totalScore);
-		result.setErPass(passYn);
-		result.setErAttempt(1);
-		
-		
-		//DB저장
-		examResultDAO.insertExamResult(result);
-		
-		return result;
+	    
+	    TestVO testCondition = testDAO.selectTestCondition(tetNum);
+	    int passScore = 60;
+
+	    if (testCondition != null && testCondition.getClaComplete() != null) {
+	        String completeStr = testCondition.getClaComplete();
+	     
+	        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("test\\s*(\\d+)");
+	        java.util.regex.Matcher matcher = pattern.matcher(completeStr);
+	        if (matcher.find()) {
+	            passScore = Integer.parseInt(matcher.group(1));
+	        }
+	    }
+
+	    List<QuestionVO> realQuestions = quesTionDAO.selectQuestionsByTetNum(tetNum);
+	    int totalScore = 0;
+	    List<ExamAnswerVO> answerList = new ArrayList<>();
+	    
+	    for(QuestionVO real : realQuestions) {
+	        ExamAnswerVO answerDetail = new ExamAnswerVO();
+	        answerDetail.setQueNum(real.getQueNum());
+	        answerDetail.setQueText(real.getQueText());
+	        answerDetail.setQueAnswer(real.getQueAnswer());
+	        answerDetail.setQueDesc(real.getQueDesc());
+	        
+	        for(QuestionVO user : userAnswers) {
+	            if(real.getQueNum().equals(user.getQueNum())) {
+	                answerDetail.setEaSelected(user.getQueAnswer());
+	                if(real.getQueAnswer().equals(user.getQueAnswer())) {
+	                    totalScore += real.getQuePoint();
+	                    answerDetail.setEaCorrect("Y");
+	                } else {
+	                    answerDetail.setEaCorrect("N");
+	                }
+	                break;
+	            }
+	        }
+	        answerList.add(answerDetail);
+	    }
+
+	    String passYn = (totalScore >= passScore) ? "Y" : "N";
+	    
+	    ExamResultVO result = new ExamResultVO();
+	    int nextSeq = examResultDAO.selectExamResultSeqNext();
+	    
+	    result.setErNum(String.valueOf(nextSeq));
+	    result.setTetNum(tetNum);
+	    result.setUserNum(userNum);
+	    result.setErScore(totalScore);
+	    result.setErPass(passYn);
+	    result.setErAttempt(1);
+	    result.setAnswerList(answerList);
+	    
+	    examResultDAO.insertExamResult(result);
+	    
+	    return result;
 	}
 
 	@Override
@@ -84,7 +110,7 @@ public class TestServiceImpl implements TestService{
 	@Override
 	public List<TestVO> getPendingTestList(String userNum) throws Exception {
 		
-		return testDAO.selectCompletedTestList(userNum);
+		return testDAO.selectPendingTestList(userNum);
 	}
 
 	@Override
@@ -166,6 +192,24 @@ public class TestServiceImpl implements TestService{
 			
 		}
 		
+	}
+
+	@Override
+	public TestVO getTestDetail(String tetNum) throws SQLException {
+		
+		return testDAO.selectTestByNum(tetNum);
+	}
+
+	@Override
+	public TestVO getTestCondition(String tetNum) throws SQLException {
+		
+		TestVO test = testDAO.selectTestCondition(tetNum);
+		
+		if (test == null) {
+	        throw new SQLException("해당 시험 정보를 찾을 수 없습니다: " + tetNum);
+	    }
+		
+		return test;
 	}
 
 }

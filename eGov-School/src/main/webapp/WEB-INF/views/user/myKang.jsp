@@ -4,33 +4,52 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user/stylek.css" />
     <%@include file="../modules/userHeader.jsp" %>
+    <style>
+        .card_wrap { display: none; }
+        .card_wrap.active { display: block; }
+        /* 진행률 100% 시 버튼 스타일 */
+        .btn-disabled-custom { 
+            background-color: #6c757d !important; 
+            color: white !important; 
+            cursor: default !important; 
+            pointer-events: none; 
+            opacity: 0.8; 
+            border: none; 
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+        }
+        .badge-status { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 10px; display: inline-block; }
+        .bg-pass { background-color: #e8f5e9; color: #2e7d32; }
+        .bg-fail { background-color: #ffebee; color: #c62828; }
+        .btn-main-action { width: 100%; padding: 10px; font-weight: bold; }
+    </style>
 </head>
 <body style="display: flex; height: 100vh; overflow: hidden; margin: 0;">   
     <div class="content" style="display: flex; flex-direction: column; flex: 1; height: 100vh; min-width: 0;">
         <div class="mid" style="flex: 1; overflow-y: auto; padding: 30px 40px;">
             <div class="container-fluid">
-                <div class="tabs">
-                    <span class="tab active" onclick="showTab('ing')">수강 중인 강좌</span> 
-                    <span class="tab" onclick="showTab('end')">수강 종료 강좌</span>
+                
+                <div class="tabs" style="margin-bottom: 25px;">
+                    <span class="tab active" id="tab_ing" onclick="showTab('ing')">수강 중인 강좌</span> 
+                    <span class="tab" id="tab_end" onclick="showTab('end')">수강 종료 강좌</span>
                 </div>
-                <div class="card_wrap ing">
+
+                <div id="ing_wrap" class="card_wrap active">
                     <div class="row">
                         <c:if test="${empty result.applyList}">
-                            <div class="col-12 text-center" style="padding: 100px 0; color: #888;">
-                                수강 중인 강좌 내역이 없습니다.
-                            </div>
+                            <div class="col-12 text-center" style="padding: 100px 0; color: #888;">수강 중인 강좌가 없습니다.</div>
                         </c:if>
                         <c:forEach items="${result.applyList}" var="apply">
-                            <div class="col-md-4">
-                                <div class="course-card-custom hover-reveal">
+                            <div class="col-md-4 mb-4">
+                                <div class="course-card-custom hover-reveal" data-clanum="${apply.claNum}">
                                     <div class="card-thumb-area">
-                                        <div class="inner-rect">D-DAY</div>
+                                        <div class="inner-rect">ING</div>
                                         <img src="${pageContext.request.contextPath}/resources/images/psyduck.png" class="thumb-img">
-                                        <div class="thumb-overlay">
-                                            <span class="view-text">상세보기</span>
-                                        </div>
+                                        <div class="thumb-overlay"><span class="view-text">상세보기</span></div>
                                     </div>
                                     <div class="card-body-area">
                                         <h3 class="course-name">${apply.claName}</h3>
@@ -39,106 +58,142 @@
                                                 <span>진도율</span><strong><fmt:formatNumber value="${apply.progress}" pattern="0" />%</strong>
                                             </div>
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-striped bg-primary"
-                                                    style="width: ${apply.progress}%;"><fmt:formatNumber value="${apply.progress}" pattern="0" />%</div>
+                                                <div class="progress-bar progress-bar-striped bg-primary" style="width: ${apply.progress}%;"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="button-area">
-                                        <button class="btn-learn-full btn-main-action" data-clanum="${apply.claNum}">
-                                            학습하기 | 이어하기
-                                        </button>
+                                    <div class="button-area" style="padding: 15px;">
+                                        <c:choose>
+                                            <c:when test="${apply.progress >= 100}">
+                                                <button class="btn-disabled-custom">시험응시가능</button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button class="btn btn-primary btn-main-action" data-clanum="${apply.claNum}">
+                                                    ${apply.progress > 0 ? '이어보기' : '학습하기'}
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
                     </div>
                 </div>
-                <div class="pagination-wrap">
-                    <%@ include file="/WEB-INF/views/modules/pagination.jsp"%>
+
+                <div id="end_wrap" class="card_wrap">
+                    <div class="row">
+                        <c:if test="${empty result.endList}">
+                            <div class="col-12 text-center" style="padding: 100px 0; color: #888;">종료된 강좌가 없습니다.</div>
+                        </c:if>
+                        <c:forEach items="${result.endList}" var="end">
+                            <div class="col-md-4 mb-4">
+                                <div class="course-card-custom">
+                                    <div class="card-body-area" style="padding: 20px;">
+                                        <h3 class="course-name" style="margin-bottom: 15px;">${end.claName}</h3>
+                                        <div class="status-action-area">
+                                            <c:choose>
+                                                <%-- 불합격 (60점 미만) --%>
+                                                <c:when test="${end.erScore < 60}">
+                                                    <div class="badge-status bg-fail">불합격 (${end.erScore}점)</div>
+                                                    <button class="btn btn-danger w-100" onclick="retakeExam('${end.claNum}')">재수강 하기</button>
+                                                </c:when>
+                                                <%-- 합격 & 피드백 미작성 --%>
+                                                <c:when test="${end.erScore >= 60 && end.feedbackYN == 'N'}">
+                                                    <div class="badge-status bg-pass">시험 합격 (${end.erScore}점)</div>
+                                                    <button class="btn btn-success w-100" onclick="openFeedbackModal('${end.claNum}')">피드백 작성</button>
+                                                </c:when>
+                                                <%-- 수료 완료 (합격 & 피드백 작성완료) --%>
+                                                <c:otherwise>
+                                                    <div class="badge-status bg-dark text-white">수료 완료</div>
+                                                    <div class="d-flex" style="gap: 5px;">
+                                                        <button class="btn btn-outline-dark flex-fill" style="pointer-events: none;">수료완료</button>
+                                                        <button class="btn btn-primary flex-fill" onclick="printCert('${end.claNum}')">수료증 출력</button>
+                                                    </div>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
 
     <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 8px; border: none;">
+            <div class="modal-content">
                 <div class="modal-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px solid #f4f4f4;">
-                        <div><h2 id="mTitle" style="font-size: 22px; font-weight: bold; color: #0e506e; margin: 0;"></h2></div>
-                        <button type="button" class="close" data-dismiss="modal" style="font-size: 28px;">&times;</button>
+                        <h2 id="mTitle" style="font-size: 22px; font-weight: bold; color: #0e506e; margin: 0;"></h2>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-                    <div style="margin-bottom: 10px;">
-                        <h5 style="font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px;">
-                            <i class="fa-solid fa-layer-group mr-2"></i>전체 강좌 구성
-                        </h5>
-                        <div style="max-height: 500px; overflow-y: auto;" class="lecture-scroll">
-                            <ul class="list-group list-group-flush" id="lList"></ul>
-                        </div>
-                    </div>
+                    <ul class="list-group list-group-flush" id="lList"></ul>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+    function showTab(type) {
+        $('.tab').removeClass('active');
+        $('.card_wrap').removeClass('active');
+        if (type === 'ing') {
+            $('#tab_ing').addClass('active');
+            $('#ing_wrap').addClass('active');
+        } else {
+            $('#tab_end').addClass('active');
+            $('#end_wrap').addClass('active');
+        }
+    }
+
     $(document).ready(function() {
+        // 카드 클릭 시 상세보기 (학습 버튼 제외)
         $(document).on('click', '.course-card-custom', function(e) {
-            if($(e.target).closest('.button-area').length > 0) return;
-            
+            if($(e.target).closest('.button-area, .status-action-area').length > 0) return;
             const title = $(this).find('.course-name').text();
-            const claNum = $(this).find('.btn-main-action').data('clanum');
+            const claNum = $(this).data('clanum');
             $('#mTitle').text(title);
             
             $.ajax({
                 url: '${pageContext.request.contextPath}/user/getLessonList',
                 type: 'GET',
                 data: { "claNum": claNum },
-                dataType: 'json',
                 success: function(data) {
                     let html = '';
-                    if(data.length > 0) {
-                        data.forEach(function(item) {
-                            html += `<li class="list-group-item d-flex justify-content-between align-items-center" 
-                                        style="padding: 18px 20px; border: 1px solid #eee; margin-bottom: 8px; cursor: pointer; border-radius: 6px;"
-                                        onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=\${item.claNum}&lsnSeq=\${item.lsnSeq}'">
-                                    <span style="font-size:16px; font-weight:500;">\${item.lsnSeq}차시 : \${item.lsnTitle}</span>
-                                    <div class="d-flex align-items-center">
-                                        <span style="font-size: 13px; color: #888; margin-right: 15px;">학습하기</span>
-                                        <i class="fa-regular fa-circle-play" style="font-size:22px; color:#0e506e;"></i>
-                                    </div>
-                                </li>`;
-                        });
-                    } else {
-                        html = '<li class="text-center py-4">등록된 강좌가 없습니다.</li>';
-                    }
-                    $('#lList').html(html);
+                    data.forEach(item => {
+                        html += `<li class="list-group-item d-flex justify-content-between align-items-center" style="padding:15px; border-bottom:1px solid #eee;">
+                                    <span>\${item.lsnSeq}차시 : \${item.lsnTitle}</span>
+                                    <button class="btn btn-sm btn-primary" onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=\${item.claNum}&lsnSeq=\${item.lsnSeq}'">학습</button>
+                                 </li>`;
+                    });
+                    $('#lList').html(html || '<li class="text-center py-3">강의가 없습니다.</li>');
                     $('#courseModal').modal('show');
-                },
-                error: function() {
-                    alert("강좌 목록을 불러오는데 실패했습니다.");
                 }
             });
         });
 
+        // 학습하기/이어보기 버튼 클릭 시
         $(document).on('click', '.btn-main-action', function(e) {
-            e.stopPropagation(); 
-            const claNum = $(this).data('clanum');
-            location.href = "${pageContext.request.contextPath}/user/videolect?claNum=" + claNum;
+            e.stopPropagation();
+            location.href = "${pageContext.request.contextPath}/user/videolect?claNum=" + $(this).data('clanum');
         });
     });
 
-    window.showTab = function(type) {
-        $('.tab').removeClass('active');
-        if (type === 'ing') {
-            $('.tab:eq(0)').addClass('active');
-            $('.btn-main-action').text('학습하기 | 이어하기');
-        } else {
-            $('.tab:eq(1)').addClass('active');
-            $('.btn-main-action').text('수강완료');
+    function retakeExam(claNum) {
+        if(confirm("재수강을 신청하시겠습니까?")) {
+            location.href = "${pageContext.request.contextPath}/user/retake?claNum=" + claNum;
         }
     }
+    function openFeedbackModal(claNum) {
+        location.href = "${pageContext.request.contextPath}/user/feedbackForm?claNum=" + claNum;
+    }
+    function printCert(claNum) {
+        window.open("${pageContext.request.contextPath}/user/certPrint?claNum=" + claNum, "cert", "width=800,height=600");
+    }
     </script>
-</body> 
+</body>
 </html>

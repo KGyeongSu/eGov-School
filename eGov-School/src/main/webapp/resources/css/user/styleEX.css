@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+/* 기존 대시보드 레이아웃 유지 */
 .mid {
 	padding: 30px 40px;
 }
@@ -44,39 +45,20 @@
 .search-wrapper {
 	display: flex;
 	align-items: center;
-	background: #ffffff;
+	background: #fff;
 	border: 1.5px solid #e1e4e8;
-	border-radius: 30px; /* 더 둥글게 수정 */
+	border-radius: 30px;
 	padding: 2px 18px;
 	margin-bottom: 12px;
-	transition: all 0.3s ease;
-	width: 280px; /* 적절한 너비 고정 */
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-}
-
-.search-wrapper:hover {
-	border-color: #cbd5e1;
-}
-
-.search-wrapper:focus-within {
-	border-color: #0e506e;
-	box-shadow: 0 0 0 3px rgba(14, 80, 110, 0.1);
-	width: 320px; /* 포커스 시 살짝 길어지는 효과 */
+	width: 280px;
 }
 
 .search-input {
 	border: none;
 	outline: none;
 	font-size: 14px;
-	font-weight: 500;
-	color: #334155;
 	flex: 1;
 	padding: 8px 5px;
-	background: transparent;
-}
-
-.search-input::placeholder {
-	color: #94a3b8;
 }
 
 .search-btn {
@@ -84,23 +66,9 @@
 	background: none;
 	color: #64748b;
 	cursor: pointer;
-	padding: 5px;
-	transition: color 0.2s;
-	font-size: 15px;
 }
 
-.search-btn:hover {
-	color: #0e506e;
-}
-
-.top-interface {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-	margin-bottom: 25px;
-	border-bottom: 1px solid #dee2e6;
-}
-
+/* 테이블 리스트 스타일 */
 .main-content-wrap {
 	width: 100%;
 	background-color: #fff;
@@ -114,145 +82,140 @@
 	border-collapse: collapse;
 }
 
-.listwrap thead tr {
-	background-color: #f8f9fa;
-	border-bottom: 1.5px solid #dee2e6;
-}
-
-
 .listwrap th {
-    padding: 15px 20px;
-    font-weight: 700;
-    color: #495057;
-    font-size: 14px;
-    background-color: #f8f9fa;
-    border-bottom: 2px solid #dee2e6;
-    text-align: center;
+	padding: 15px 20px;
+	font-weight: 700;
+	color: #495057;
+	background-color: #f8f9fa;
+	border-bottom: 2px solid #dee2e6;
+	text-align: center;
 }
-
 
 .listwrap td {
-    padding: 15px 20px;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f1f1;
-    font-size: 14px;
-    text-align: center; 
+	padding: 15px 20px;
+	border-bottom: 1px solid #f1f1f1;
+	text-align: center;
+	font-size: 14px;
 }
 
-
-.col-no { color: #94a3b8; font-weight: 600; }
-
-
-.col-title { 
-    padding-left: 0; 
-}
-
-.course-title {
- 
-    color: #212529;
-    display: inline-block; 
-}
-
-
-.col-period { 
-    color: #64748b; 
-    letter-spacing: -0.5px; 
-}
-
-.col-action {
-    display: table-cell;
-}
-
-
+/* 버튼 스타일 */
 .btn-main-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 105px;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-width: 105px;
+	padding: 8px 15px;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: 0.2s;
 }
-
 
 .is-feedback {
-    border: 1px solid #0e506e;
-    background: #fff;
-    color: #0e506e;
-}
-
-.is-feedback:hover {
-    background: #0e506e;
-    color: #fff;
-}
-
-
-.is-completed {
-    background: #0e506e;
-    color: #fff;
-    border: 1px solid #0e506e;
-}
-
-.is-completed:hover {
-    background: #0a3d54;
-}
-
-.status-label {
-	color: #28a745;
-	font-weight: 700;
-	margin-right: 15px;
-}
-
-.result-modal-content {
-	border: none;
-	border-radius: 20px;
-	overflow: hidden;
-}
-
-.result-header {
-	background: linear-gradient(135deg, #0e506e 0%, #1c7ba6 100%);
-	padding: 40px 20px;
-	text-align: center;
-	color: white;
-}
-
-.score-value {
-	font-size: 60px;
-	font-weight: 900;
+	border: 1px solid #0e506e;
+	background: #fff;
 	color: #0e506e;
 }
 
-.progress-bar-bg {
-	background: #f1f1f1;
-	height: 12px;
-	border-radius: 10px;
+.is-feedback:hover {
+	background: #0e506e;
+	color: #fff;
 }
 
-.progress-bar-fill {
-	background: #f39c12;
-	width: 92%;
-	height: 100%;
+.is-completed {
+	background: #0e506e;
+	color: #fff;
+	border: 1px solid #0e506e;
 }
 
-.result-badge {
-	background: #fff9ee;
-	padding: 15px;
-	border-radius: 12px;
-	border: 1px dashed #f39c12;
+/* [변경] 공무원 성적 통지서 스타일 모달 */
+.result-modal-content {
+	border-radius: 0;
+	border: 2px solid #333;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.btn-round {
-	padding: 10px 40px;
-	border-radius: 30px;
+.report-paper {
+	padding: 40px;
+	background: #fff;
+}
+
+.report-header {
+	text-align: center;
+	margin-bottom: 30px;
+	border-bottom: 2px double #000;
+	padding-bottom: 15px;
+}
+
+.report-header h2 {
+	font-size: 30px;
+	font-weight: 900;
+	color: #000;
+	letter-spacing: 5px;
+	margin: 0;
+}
+
+.score-report-table {
+	width: 100%;
+	border-top: 2px solid #000;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+.score-report-table th {
+	background: #f4f4f4;
+	border: 1px solid #ccc;
+	padding: 12px;
+	width: 25%;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.score-report-table td {
+	border: 1px solid #ccc;
+	padding: 12px;
+	text-align: center;
+	font-size: 15px;
+}
+
+.result-stamp-box {
+	text-align: center;
+	margin: 30px 0;
+	padding: 25px;
+	border: 1px solid #eee;
+	background: #fafafa;
+	font-size: 17px;
+	font-weight: bold;
+	line-height: 1.6;
+}
+
+.status-pass {
+	color: #d32f2f;
 	font-weight: bold;
 }
 
-.pagination-container {
-	padding: 30px 0;
-	display: flex;
-	justify-content: center;
+.status-fail {
+	color: #666;
+	font-weight: bold;
+}
+
+.btn-report-close {
+	background: #666;
+	color: #fff;
+	border: none;
+	padding: 10px 30px;
+	font-weight: bold;
+	cursor: pointer;
+	margin-right: 5px;
+}
+
+.btn-report-print {
+	background: #0e506e;
+	color: #fff;
+	border: none;
+	padding: 10px 30px;
+	font-weight: bold;
+	cursor: pointer;
 }

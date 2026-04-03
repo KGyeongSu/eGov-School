@@ -49,7 +49,6 @@
 		c:session-ref="sqlSession"/>
 
 
-
 	<!-- Attach DAO -->
 	<bean id="examNoticeAttachDAO"
 		class="com.school.dao.ExamNoticeAttachDAOImpl"
@@ -82,6 +81,7 @@
     <constructor-arg index="0" ref="classApplyDAO" />
     <constructor-arg index="1" ref="lessonDAO" />
     <constructor-arg index="2" ref="learningStatusDAO" />
+    <constructor-arg index="3" ref="lessonAttachDAO" />
 </bean>
     
 <bean id="learningStatusService" class="com.school.service.LearningStatusServiceImpl" 
@@ -93,7 +93,10 @@
       <constructor-arg index="1" ref="questionDAO" />
       <constructor-arg index="2" ref="examResultDAO" />
    </bean>
-		
+
+	<bean id="classService"
+		class="com.school.service.ClassServiceImpl" c:classDAO-ref="classDAO" />
+
 	<bean id="lessonService"
 		class="com.school.service.LessonServiceImpl">
 		<constructor-arg index="0" ref="lessonDAO" />
@@ -110,5 +113,6 @@
 		<!-- utils -->
 		<bean id="fileUploadUtils"
 			class="com.school.utils.FileUploadUtils" />
+
 
 </beans>

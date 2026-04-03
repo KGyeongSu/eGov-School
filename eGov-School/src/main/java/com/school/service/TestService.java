@@ -35,4 +35,8 @@ public interface TestService {
 	List<TestVO> getPendingTestList(String userNum) throws Exception;
 	
 	List<TestVO> getCompletedTestList(String userNum) throws Exception;
+
+	public TestVO getTestDetail(String tetNum) throws SQLException;
+
+	public TestVO getTestCondition(String tetNum)throws SQLException;
 }

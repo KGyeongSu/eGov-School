@@ -15,6 +15,7 @@ public interface LessonDAO {
     String selectLessonSeqNext() throws SQLException;
     void insertLesson(LessonVO lesson) throws SQLException;
     List<LessonVO> selectLessonList(String claNum) throws SQLException;
+    LessonVO selectLessonByNum(LessonVO lesson) throws SQLException;
     void updateLesson(LessonVO lesson) throws SQLException;
     void deleteLesson(String lsnNum) throws SQLException;
     String selectFirstLessonNum(String claNum) throws SQLException;
@@ -28,7 +29,7 @@ public interface LessonDAO {
 	
 	
 	
-	LessonVO selectLessonByNum(LessonVO lesson) throws SQLException; //메서드 : 상우 사용중
+	  LessonVO selectLessonByNum(LessonVO lesson) throws SQLException; //메서드 : 상우 사용중
 	
-	LessonVO selectLessonByLsnNum(String lsnNum) throws SQLException; // 메서드 : 은영 사용중
+	  LessonVO selectLessonByLsnNum(String lsnNum) throws SQLException; // 메서드 : 은영 사용중
 }

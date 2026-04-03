@@ -3,169 +3,186 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>${test.tetName} - 평가 시스템</title>
+    <title>${test.tetTitle}</title>
     <%@include file="../modules/userHeader.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user/teststyle.css" />
 </head>
 <body>
-
     <div class="mid">
         <div class="eval">
-            <div class="title">
-                <span id="displayCourseTitle">${test.tetName}</span>
-                <button class="submitbtn" onclick="submitTest()">제출</button>
+            <div class="title" id="headerTitle" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid #333; padding-bottom:15px;">
+                <span id="displayCourseTitle" style="font-size:1.5em; font-weight:bold; color:#333;">${test.tetTitle}</span>
+                <button class="nav-btn" id="submitBtn" style="background:#004085; color:#fff; border:none;" onclick="submitTest()">제출</button>
             </div>
-            <div id="questionArea">
-                <div class="litmus" id="qText"></div>
+            <div id="mainDisplay">
+                <div class="litmus" id="qText" style="font-size:1.3em; margin-bottom:25px; font-weight:500;"></div>
                 <div id="qOptions"></div>
-            </div>
-            <div class="page-nav">
-                <button class="nav-btn" onclick="prevQuestion()"><i class="fa-solid fa-chevron-left"></i> 이전 문제</button>
-                <button class="nav-btn" onclick="nextQuestion()">다음 문제 <i class="fa-solid fa-chevron-right"></i></button>
+                <div class="page-nav" style="margin-top:40px; display:flex; justify-content:center; gap:15px;">
+                    <button class="nav-btn" onclick="prevQuestion()">이전 문제</button>
+                    <button class="nav-btn" onclick="nextQuestion()">다음 문제</button>
+                </div>
             </div>
         </div>
-
         <div class="answer">
-            <div class="timer"><span class="timer-display">30:00</span></div>
-            <div class="omr-card" id="omrContainer"></div>
+            <div class="timer" id="timerBox">40:00</div>
+            <div id="omrContainer"></div>
         </div>
     </div>
 
     <script>
-    let time = 1800;
-    let timerInterval;
-    let currentQuestion = 1;
-    let userAnswers = new Array(${questionList.size() + 1}).fill(0);
+    var currentQuestion = 1;
+    var userAnswers = new Array(${questionList.size() + 1}).fill(0);
+    var resultData = null;
+    var timeLeft = 40 * 60;
+    var timerInterval = null;
+    var isTimerRunning = false;
 
-    const questions = [
+    var questions = [
         {},
         <c:forEach var="que" items="${questionList}" varStatus="status">
         { 
             queNum: "${que.queNum}", 
             q: "${que.queText}", 
-            a: ["${que.queOpt1}", "${que.queOpt2}", "${que.queOpt3}", "${que.queOpt4}"],
+            opts: ["${que.queOpt1}", "${que.queOpt2}", "${que.queOpt3}", "${que.queOpt4}"],
             seq: ${que.queSeq} 
         }${!status.last ? ',' : ''}
         </c:forEach>
     ];
 
-    function initTest() {
-        let omrHtml = "";
-        for(let i=1; i<questions.length; i++) {
-            omrHtml += '<div class="omr-row" id="omr-row-'+i+'" onclick="loadQuestion('+i+')">' +
-                       '<div class="q-no">'+(i<10?'0'+i:i)+'</div>' +
-                       '<div class="q-options">' +
-                       '<span class="option" id="omr-'+i+'-1" onclick="event.stopPropagation(); selectFromOmr('+i+', 1)">1</span>' +
-                       '<span class="option" id="omr-'+i+'-2" onclick="event.stopPropagation(); selectFromOmr('+i+', 2)">2</span>' +
-                       '<span class="option" id="omr-'+i+'-3" onclick="event.stopPropagation(); selectFromOmr('+i+', 3)">3</span>' +
-                       '<span class="option" id="omr-'+i+'-4" onclick="event.stopPropagation(); selectFromOmr('+i+', 4)">4</span>' +
-                       '</div></div>';
+    window.onpageshow = function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            location.reload();
         }
-        document.getElementById('omrContainer').innerHTML = omrHtml;
-        loadQuestion(1);
-        startTimer();
-    }
+    };
 
     function startTimer() {
-        const display = document.querySelector('.timer-display');
-        timerInterval = setInterval(() => {
-            let min = Math.floor(time / 60);
-            let sec = time % 60;
-            display.innerText = (min < 10 ? '0' + min : min) + ":" + (sec < 10 ? '0' + sec : sec);
-            if (time <= 0) { clearInterval(timerInterval); submitTest(); }
-            else { time--; }
+        if (isTimerRunning) return;
+        isTimerRunning = true;
+        timerInterval = setInterval(function() {
+            if (resultData) { clearInterval(timerInterval); return; }
+            var min = Math.floor(timeLeft / 60);
+            var sec = timeLeft % 60;
+            document.getElementById('timerBox').innerText = (min < 10 ? "0"+min : min) + ":" + (sec < 10 ? "0"+sec : sec);
+            if (timeLeft-- <= 0) { clearInterval(timerInterval); submitTest(); }
         }, 1000);
+    }
+
+    function renderOMR() {
+        var html = "";
+        for(var i=1; i<questions.length; i++) {
+            html += '<div class="omr-row">' +
+                    '<span class="omr-no" onclick="loadQuestion(' + i + ')">' + i + '번</span>' +
+                    '<div class="omr-mark-area">';
+            
+            for(var val=1; val<=4; val++) {
+                var circleClass = "omr-circle";
+                if (resultData) {
+                    var ans = resultData.answerList[i-1];
+                    if (val == ans.queAnswer) circleClass += " correct";
+                    else if (val == userAnswers[i] && ans.eaCorrect === 'N') circleClass += " wrong";
+                } else {
+                    if (userAnswers[i] == val) circleClass += " selected";
+                }
+                html += '<span class="' + circleClass + '" onclick="selectChoiceFromOMR(' + i + ',' + val + ')">' + val + '</span>';
+            }
+            html += '</div></div>';
+        }
+        document.getElementById('omrContainer').innerHTML = html;
     }
 
     function loadQuestion(num) {
         currentQuestion = num;
-        const data = questions[num];
-        if(!data || !data.q) return;
-
-        document.getElementById('qText').innerHTML = '<strong>' + data.seq + '번 문제</strong><br><br>' + data.q;
+        var data = questions[num];
+        document.getElementById('qText').innerHTML = '<strong style="color:#004085;">' + data.seq + '번. </strong>' + data.q;
         
-        let optHtml = "";
-        data.a.forEach((txt, i) => {
-            let selIdx = i + 1;
-            let activeClass = (userAnswers[num] === selIdx) ? 'active' : '';
-            optHtml += '<div class="choice-box ' + activeClass + '" onclick="selectChoice(this, ' + selIdx + ')">' +
-                       '<div class="num">' + selIdx + '</div><div class="text">' + txt + '</div></div>';
-        });
-        document.getElementById('qOptions').innerHTML = optHtml;
+        var html = "";
+        for(var i=0; i<data.opts.length; i++) {
+            var val = i + 1;
+            var txt = data.opts[i];
+            var statusClass = "";
+            var icon = "";
+            
+            if (resultData) {
+                var ans = resultData.answerList[num - 1];
+                if (val == ans.queAnswer) {
+                    statusClass = "res-correct";
+                    icon = " <span style='float:right; font-weight:bold;'>✅ 정답</span>";
+                } else if (val == userAnswers[num] && ans.eaCorrect === 'N') {
+                    statusClass = "res-wrong";
+                    icon = " <span style='float:right; font-weight:bold;'>❌ 내 오답</span>";
+                }
+            } else {
+                if (userAnswers[num] == val) statusClass = "active";
+            }
 
-        $('.omr-row').css('background', 'transparent').removeClass('current-focus');
-        const $row = $('#omr-row-' + num);
-        $row.addClass('current-focus');
-
-        const container = document.getElementById('omrContainer');
-        if (container && $row.length) {
-            container.scrollTo({ top: $row[0].offsetTop - (container.offsetHeight / 2), behavior: 'smooth' });
+            html += '<div class="choice-box ' + statusClass + '" onclick="selectChoice(' + val + ')">' +
+                    '<div style="width:35px; font-weight:bold;">' + val + '.</div><div style="flex:1;">' + txt + icon + '</div></div>';
         }
+        
+        if(resultData) {
+            var desc = resultData.answerList[num-1].queDesc;
+            if(!desc || desc === 'null') desc = "해설 정보가 없습니다.";
+            html += '<div class="commentary-box"><strong>💡 해설</strong><p style="margin-top:10px;">' + desc + '</p></div>';
+        }
+        document.getElementById('qOptions').innerHTML = html;
+        renderOMR(); 
     }
 
-    function selectChoice(el, num) {
-        $('.choice-box').removeClass('active');
-        $(el).addClass('active');
-        userAnswers[currentQuestion] = num;
-        $('#omr-row-' + currentQuestion + ' .option').removeClass('active');
-        $('#omr-' + currentQuestion + '-' + num).addClass('active');
+    function selectChoice(val) {
+        if (resultData) return;
+        if (!isTimerRunning) startTimer();
+        userAnswers[currentQuestion] = val;
+        loadQuestion(currentQuestion);
     }
 
-    function selectFromOmr(qNum, optNum) {
-        loadQuestion(qNum);
-        userAnswers[qNum] = optNum;
-        $('#omr-row-' + qNum + ' .option').removeClass('active');
-        $('#omr-' + qNum + '-' + optNum).addClass('active');
-        const targetIdx = optNum - 1;
-        $('.choice-box').eq(targetIdx).addClass('active');
-    }
-
-    function prevQuestion() {
-        if (currentQuestion > 1) loadQuestion(currentQuestion - 1);
-        else alert("첫 번째 문제입니다.");
-    }
-
-    function nextQuestion() {
-        if (currentQuestion < questions.length - 1) loadQuestion(currentQuestion + 1);
-        else alert("마지막 문제입니다.");
+    function selectChoiceFromOMR(qIdx, val) {
+        if (resultData) { loadQuestion(qIdx); return; }
+        if (!isTimerRunning) startTimer();
+        userAnswers[qIdx] = val;
+        loadQuestion(qIdx);
     }
 
     function submitTest() {
-        if (userAnswers.slice(1).includes(0)) {
-            if(!confirm("풀지 않은 문제가 있습니다. 제출하시겠습니까?")) return;
-        } else {
-            if(!confirm("최종 제출하시겠습니까?")) return;
+        if(!resultData && !confirm("시험을 제출하시겠습니까?")) return;
+        var ansArray = [];
+        for(var i=1; i<questions.length; i++) {
+            ansArray.push({ queNum: questions[i].queNum, queAnswer: userAnswers[i] });
         }
-
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '${pageContext.request.contextPath}/test/evaluate';
-
-        const tetInput = document.createElement('input');
-        tetInput.type = 'hidden';
-        tetInput.name = 'tetNum';
-        tetInput.value = '${tetNum}';
-        form.appendChild(tetInput);
-
-        for (let i = 1; i < questions.length; i++) {
-            const qNumInput = document.createElement('input');
-            qNumInput.type = 'hidden';
-            qNumInput.name = 'userAnswers[' + (i-1) + '].queNum';
-            qNumInput.value = questions[i].queNum;
-            form.appendChild(qNumInput);
-
-            const qAnsInput = document.createElement('input');
-            qAnsInput.type = 'hidden';
-            qAnsInput.name = 'userAnswers[' + (i-1) + '].queAnswer';
-            qAnsInput.value = userAnswers[i];
-            form.appendChild(qAnsInput);
-        }
-
-        document.body.appendChild(form);
-        form.submit();
+        var data = { tetNum: '${tetNum}', userAnswers: ansArray };
+        
+        $.ajax({
+            url: '${pageContext.request.contextPath}/user/evaluate',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function(res) {
+                resultData = res;
+                showResultUI();
+            },
+            error: function() { alert("제출 중 오류가 발생했습니다."); }
+        });
     }
 
-    window.onload = initTest;
+    function showResultUI() {
+        clearInterval(timerInterval);
+        document.getElementById('timerBox').innerText = "평가 종료";
+        document.getElementById('timerBox').style.background = "#6c757d";
+        document.getElementById('submitBtn').style.display = "none";
+        
+        var headerHtml = '<span>최종 점수: <b style="color:red; font-size:1.3em;">' + resultData.erScore + '</b>점</span>' +
+                         '<button class="nav-btn" style="margin-left:20px; background:#e9ecef;" onclick="location.href=\'${pageContext.request.contextPath}/user/main\'">목록으로</button>';
+        document.getElementById('headerTitle').innerHTML = headerHtml;
+        
+        loadQuestion(1);
+    }
+
+    function prevQuestion() { if(currentQuestion > 1) loadQuestion(currentQuestion - 1); }
+    function nextQuestion() { if(currentQuestion < questions.length - 1) loadQuestion(currentQuestion + 1); }
+
+    window.onload = function() { 
+        renderOMR(); 
+        loadQuestion(1); 
+    };
     </script>
 </body>
 </html>

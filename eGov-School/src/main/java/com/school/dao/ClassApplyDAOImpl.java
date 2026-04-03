@@ -74,4 +74,11 @@ public class ClassApplyDAOImpl implements ClassApplyDAO {
 		
 		return session.selectOne("Lesson-Mapper.selectLastLsnSeq",searchVO);
 	}
+
+	@Override
+	public List<ClassApplyVO> selectCompletedClassList(ClassApplyVO apply) throws SQLException {
+	
+		return session.selectList("ClassApply-Mapper.selectCompletedClassList", apply);
+	}
+
 }

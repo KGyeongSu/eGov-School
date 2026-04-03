@@ -30,6 +30,9 @@ public class TestVO {
     private String erPass;
     private Date erDate;
     
+    private String claComplete; //수료조건
+   
+    
     // 강사 전용
     //강사가 제출한 시험문제들
     private List <QuestionVO> testQuestionList;

@@ -16,6 +16,7 @@ public interface TestDAO {
 	
 	List<TestVO> selectCompletedTestList(String userNum) throws SQLException;
 	
+	TestVO selectTestCondition(String tetNum) throws SQLException;
 	// 강사용
 	// 등록
 	void insertTest(TestVO test) throws SQLException;

@@ -1,6 +1,7 @@
 package com.school.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.school.cmd.ClassApplyListCommand;
 import com.school.cmd.PageMaker;
+import com.school.dto.ClassApplyVO;
 import com.school.dto.LessonVO;
 import com.school.dto.UserVO;
 import com.school.service.ClassApplyService;
@@ -38,6 +40,8 @@ public class ClassApplyController {
         String userNum = String.valueOf(loginUser.getUserNum());
         
         ClassApplyListCommand result = classApplyService.getClassApplyList(userNum, pageMaker);
+     // 2. 대시보드에는 종료 강좌를 안 보여줄 거니까 빈 리스트를 넣어줌 (에러 방지용)
+        result.setEndList(new ArrayList<ClassApplyVO>());
         model.addAttribute("result", result);
         
         return "user/dashBoard";
@@ -47,8 +51,13 @@ public class ClassApplyController {
     public String list(PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
         UserVO loginUser = (UserVO) session.getAttribute("loginUser");
         if (loginUser == null) return "redirect:/commons/login";
+        
         String userNum = String.valueOf(loginUser.getUserNum());
-        ClassApplyListCommand result = classApplyService.getClassApplyList(userNum, pageMaker);
+        
+        ClassApplyListCommand result = classApplyService.getClassApplyList(userNum, pageMaker); //수강중인거 가져오기
+        List<ClassApplyVO> endList = classApplyService.getCompletedClassList(userNum); //종료된 목록 가져오기
+        result.setEndList(endList); 
+        
         model.addAttribute("result", result);
         model.addAttribute("pageMaker", result.getPageMaker());
         return "user/myKang";
