@@ -37,8 +37,8 @@
 	</insert>
 	
 	<select id="selectLecApplicationSeqNext" resultType="int">
-    	SELECT SEQ_LEC_APPLICATION.NEXTVAL AS la_num FROM DUAL
-	</select>
+    SELECT SEQ_LEC_APPLICATION.NEXTVAL AS la_num FROM DUAL
+</select>
 	  
   </mapper>
   

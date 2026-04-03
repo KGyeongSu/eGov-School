@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<c:if test="${not empty pageMaker and pageMaker.endPage gt 0}">
 <nav aria-label="Navigation" style="margin-top: 40px;">
 	<ul class="pagination justify-content-center m-0">
 		<li class="page-item">
@@ -10,24 +10,26 @@
 			</a>
 		</li>
 		<li class="page-item">
-			<a class="page-link" href="javascript:search_list(${pageMaker.prev ? pageMaker.startPage-1 : pageMaker.page });">
+			<a class="page-link" href="javascript:search_list(${pageMaker.prev ? pageMaker.startPage-1 : 1});">
 				<i class="fas fa-angle-left"></i>
 			</a>
 		</li>
-		<c:forEach var="pageNum" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
-			<li class="page-item ${pageMaker.page == pageNum ? 'active' : '' }">
-				<a class="page-link" href="javascript:search_list(${pageNum });">
-					${pageNum } 
+		
+		<c:forEach var="pageNum" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+			<li class="page-item ${pageMaker.page == pageNum ? 'active' : ''}">
+				<a class="page-link" href="javascript:search_list(${pageNum});">
+					${pageNum} 
 				</a>
 			</li>
 		</c:forEach>
+
 		<li class="page-item">
-			<a class="page-link" href="javascript:search_list(${pageMaker.next ? pageMaker.endPage+1 : pageMaker.page });">
+			<a class="page-link" href="javascript:search_list(${pageMaker.next ? pageMaker.endPage+1 : pageMaker.page});">
 				<i class="fas fa-angle-right"></i>
 			</a>
 		</li>
 		<li class="page-item">
-			<a class="page-link" href="javascript:search_list(${pageMaker.realEndPage });"> 
+			<a class="page-link" href="javascript:search_list(${pageMaker.realEndPage});"> 
 				<i class="fas fa-angle-double-right"></i>
 			</a>
 		</li>
@@ -35,28 +37,17 @@
 </nav>
 
 <form id="jobForm" style="display: none;">
-	<input type='text' name="page" value="1" /> 
-	<input type='text' name="perPageNum" value="" /> 
-	<input type='text' name="searchType" value="" /> 
-	<input type='text' name="keyword" value="" />
+	<input type='hidden' name="page" value="${pageMaker.page}" /> 
+	<input type='hidden' name="perageNum" value="${pageMaker.perpageNum}" /> 
 </form>
 
-
-<!-- REQUIRED SCRIPTS -->
 <script>
 	function search_list(page) {
-		//alert("page : " +page);
-		let perPageNum = document.querySelector('select[name="perPageNum"]').value;
-		let searchType = document.querySelector('select[name="searchType"]').value;
-		let keyword = document.querySelector('input[name="keyword"]').value;
-
+		if(!page) page = 1;
 		let form = document.querySelector("#jobForm");
-		form.perPageNum.value = perPageNum;
-		form.searchType.value = searchType;
-		form.keyword.value = keyword;
 		form.page.value = page;
-
-		//console.log($(form).serialize());
+		form.action = "myKang";
 		form.submit();
 	}
 </script>
+</c:if>

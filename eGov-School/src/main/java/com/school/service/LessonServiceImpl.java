@@ -75,10 +75,10 @@ public class LessonServiceImpl implements LessonService {
 	}
 
 	@Override
-	public LessonVO selectLessonByNum(String lsnNum) throws Exception {
+	public LessonVO selectLessonByLsnNum(String lsnNum) throws Exception {
 		
 		// 강의 기본 정보 가져오기
-		LessonVO lesson = lessonDAO.selectLessonByNum(lsnNum);
+		LessonVO lesson = lessonDAO.selectLessonByLsnNum(lsnNum);
 		
 		// 첨부파일도 같이 가져오기
 		if (lesson != null) {

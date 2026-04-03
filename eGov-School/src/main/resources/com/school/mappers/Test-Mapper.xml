@@ -5,24 +5,24 @@
 
 <mapper namespace="Test-Mapper">
 
-	<!-- pk 시퀀스 번호 -->
+
 	<select id="selectTestSeqNext" resultType="str">
 		SELECT SEQ_TEST.NEXTVAL FROM DUAL
 	</select>
 
-	<!-- 시험 등록 (강사) -->
+
 	<insert id="insertTest" parameterType="test">
 		INSERT INTO TEST(TET_NUM, CLA_NUM, USER_NUM, TET_TITLE, TET_TIMELIMIT)
 		VALUES(#{tetNum}, #{claNum}, #{userNum}, #{tetTitle}, #{tetTimelimit})
 	</insert>
 
-	<!-- 시험 단건 조회 -->
+	
 	<select id="selectTestByNum" parameterType="str" resultType="test">
 		SELECT * FROM TEST
 		WHERE TET_NUM = #{tetNum}
 	</select>
 
-	<!-- 시험 수정 -->
+	
 	<update id="updateTest" parameterType="test">
 		UPDATE TEST
 		SET TET_TITLE = #{tetTitle},
@@ -30,7 +30,7 @@
 		WHERE TET_NUM = #{tetNum}
 	</update>
 
-	<!-- 평가 예정 강좌 목록 (수강률 100% + 미응시) -->
+	
 	<select id="selectPendingTestList" parameterType="str" resultType="test">
 		SELECT T.*, C.CLA_TITLE, C.CLA_STARTDATE, C.CLA_ENDDATE
 		FROM TEST T
@@ -58,15 +58,21 @@
 		ORDER BY T.TET_REGDATE DESC
 	</select>
 
-	<!-- 평가 종료 강좌 목록 (이미 응시한 시험) -->
-	<select id="selectCompletedTestList" parameterType="str" resultType="test">
-		SELECT T.*, C.CLA_TITLE, C.CLA_STARTDATE, C.CLA_ENDDATE,
-		       ER.ER_SCORE, ER.ER_PASS, ER.ER_DATE
-		FROM TEST T
-		JOIN CLASS C ON T.CLA_NUM = C.CLA_NUM
-		JOIN EXAM_RESULT ER ON T.TET_NUM = ER.TET_NUM
-		WHERE ER.USER_NUM = #{userNum}
-		ORDER BY ER.ER_DATE DESC
-	</select>
-
+<select id="selectCompletedTestList" parameterType="str" resultType="test">
+    SELECT 
+        T.TET_NUM, 
+        T.TET_TITLE,
+        ER.ER_NUM,    
+        ER.ER_SCORE,
+        ER.ER_PASS,
+        ER.ER_DATE,
+       
+        (SELECT ROUND((COUNT(CASE WHEN ER_SCORE > ER.ER_SCORE THEN 1 END) / COUNT(*)) * 100, 1) 
+         FROM EXAM_RESULT 
+         WHERE TET_NUM = T.TET_NUM) AS topPercent
+    FROM TEST T
+    JOIN EXAM_RESULT ER ON T.TET_NUM = ER.TET_NUM
+    WHERE ER.USER_NUM = #{userNum}
+    ORDER BY ER.ER_DATE DESC
+</select>
 </mapper>

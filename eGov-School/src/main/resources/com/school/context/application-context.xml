@@ -45,6 +45,8 @@
 		c:session-ref="sqlSession" />
 	<bean id="examNoticeDAO" class="com.school.dao.ExamNoticeDAOImpl"
 		c:session-ref="sqlSession" />
+	<bean id="learningStatusDAO" class="com.school.dao.LearningStatusDAOImpl"
+		c:session-ref="sqlSession"/>
 
 
 
@@ -67,8 +69,23 @@
 
 
 	<!-- service -->
-	<bean id="userService" class="com.school.service.UserServiceImpl"
-		c:userDAO-ref="userDAO" />
+<bean id="userService" class="com.school.service.UserServiceImpl"
+    c:userDAO-ref="userDAO" />
+<bean id="classApplyService" class="com.school.service.ClassApplyServiceImpl">
+    <constructor-arg index="0" ref="classApplyDAO" />
+    <constructor-arg index="1" ref="lessonDAO" />
+    <constructor-arg index="2" ref="learningStatusDAO" />
+</bean>
+    
+<bean id="learningStatusService" class="com.school.service.LearningStatusServiceImpl" 
+    c:classApplyDAO-ref="classApplyDAO"
+    c:learningStatusDAO-ref="learningStatusDAO" />
+    
+   <bean id="testService" class="com.school.service.TestServiceImpl">
+      <constructor-arg index="0" ref="testDAO" />
+      <constructor-arg index="1" ref="questionDAO" />
+      <constructor-arg index="2" ref="examResultDAO" />
+   </bean>
 		
 	<bean id="lessonService"
 		class="com.school.service.LessonServiceImpl">

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Reputation-Mapper">
+    
+    <select id="selectReputationList" resultType="reputation">
+        SELECT
+            REP_NUM,
+            USER_NUM,
+            CLA_NUM,
+            REP_CONTENT,
+            REP_SAT, 
+            REP_REGDATE
+        FROM REPUTATION
+        WHERE CLA_NUM = #{claNum}
+        ORDER BY REP_REGDATE DESC
+    </select>
+
+    <select id="selectReputationCount" resultType="reputation">
+        SELECT 
+            COUNT(REP_NUM) AS totalCount,
+            SUM(REP_SAT) AS sumScore 
+        FROM REPUTATION
+        WHERE CLA_NUM = #{claNum}
+    </select>
+
+    <insert id="insertReputation" parameterType="reputation">
+        INSERT INTO REPUTATION (REP_NUM, USER_NUM, CLA_NUM, REP_CONTENT, REP_SAT, REP_REGDATE)
+        VALUES (SEQ_REP.NEXTVAL, #{userNum}, #{claNum}, #{repContent}, #{repSat}, SYSDATE)
+    </insert>
+
+    <update id="updateReputation" parameterType="reputation">
+        UPDATE REPUTATION
+        SET REP_CONTENT = #{repContent},
+            REP_SAT = #{repSat}, 
+            REP_REGDATE = SYSDATE
+        WHERE REP_NUM = #{repNum}
+    </update>
+
+    <delete id="deleteReputation">
+        DELETE FROM REPUTATION
+        WHERE REP_NUM = #{repNum}
+    </delete>
+    
+    
+    
+      	<select id="selectReputaioneqNext">
+  		
+  		SELECT
+  		CERTIFICATE_SEQ.NEXTVAL AS REP_NUM 
+  		FROM DUAL
+  	
+  	</select>
+
+</mapper>

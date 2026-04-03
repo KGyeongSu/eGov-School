@@ -14,7 +14,7 @@ public interface LessonService {
 	List <LessonVO> selectLessonList (String claNum) throws Exception;
 	
 	// 각 레슨 조회
-	LessonVO selectLessonByNum (String lsnNum) throws Exception;
+	LessonVO selectLessonByLsnNum (String lsnNum) throws Exception;
 	
 	// 강의 수정
 	void updateLesson (LessonVO lesson, List<LessonAttachVO> attachList, String deleteFiles) throws Exception;

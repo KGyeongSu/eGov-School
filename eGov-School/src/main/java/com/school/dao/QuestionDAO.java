@@ -12,5 +12,6 @@ public interface QuestionDAO {
 	List <QuestionVO> selectQuestionList (QuestionVO question) throws SQLException;
 	
 	void updateQuestion (QuestionVO question) throws SQLException;
-
+	
+	List<QuestionVO> selectQuestionsByTetNum(String tetNum) throws SQLException;
 }

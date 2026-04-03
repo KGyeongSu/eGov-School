@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
+import com.school.dto.LessonVO;
 
 public class ClassApplyDAOImpl implements ClassApplyDAO {
     
@@ -59,5 +60,18 @@ public class ClassApplyDAOImpl implements ClassApplyDAO {
 	public int selectClassApplySeqNext() throws SQLException {
 		
 		return session.selectOne("ClassApply-Mapper.selectClassApplySeqNext");
+	}
+	
+	@Override
+	public void updateClassProgress(ClassApplyVO apply) throws SQLException {
+	    session.update("ClassApply-Mapper.updateClassProgress", apply);
+	}
+
+
+
+	@Override
+	public Integer selectLastLsnSeq(LessonVO searchVO) {
+		
+		return session.selectOne("Lesson-Mapper.selectLastLsnSeq",searchVO);
 	}
 }

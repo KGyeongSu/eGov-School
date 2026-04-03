@@ -28,6 +28,12 @@ public class TestVO {
     private Integer erScore;
     private String erPass;
     private Date erDate;
+    
+    
+    
+    private Double topPercent;
+    private Integer totalCount;
+    private String erNum;
 }
     
    

@@ -9,6 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.school.cmd.PageMaker;
+import com.school.dto.ClassApplyVO;
 import com.school.dto.ClassVO;
 
 public class ClassDAOImpl implements ClassDAO {
@@ -88,6 +89,15 @@ public class ClassDAOImpl implements ClassDAO {
 
 		return session.selectOne("Class-Mapper.selectClassSeqNext");
 		
+	}
+	@Override
+	public void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException {
+	    ClassApplyVO apply = new ClassApplyVO();
+	    apply.setUserNum(userNum);
+	    apply.setClaNum(claNum);
+	    apply.setProgress((double)progressPercent); // VO의 progress 타입에 맞춰 형변환
+
+	    session.update("ClassApply-Mapper.updateClassProgress", apply);
 	}
 
 	@Override

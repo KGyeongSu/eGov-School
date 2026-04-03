@@ -47,7 +47,7 @@ public class UserController {
         return "redirect:/main";
     }
     
-    //
+    
     @GetMapping("/main")
     public String mainPage(PageMaker pageMaker, Model model) throws Exception {
     	

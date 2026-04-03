@@ -32,5 +32,7 @@ public interface ClassDAO {
 	// PageMaker 페이지 계산할때 쓰임.
 	int selectApprovedClassListCount(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
 
+	void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException;
+
 }
  
