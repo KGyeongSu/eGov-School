@@ -11,7 +11,7 @@
 		class="com.school.mail.MimeAttachNotifier"
 		c:mailSender-ref="mailSender" />
 		
-	<!-- JavaMailSender 설정 (Naver SMTP) -->
+	<!-- JavaMailSender 설정 (Naver SMTP) dd-->
 	<bean id="mailSender"
 		  class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="javaMailProperties">

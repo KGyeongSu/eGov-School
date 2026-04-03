@@ -13,10 +13,11 @@
 	<context:property-placeholder location="classpath:com/school/properties/*.properties" />
 	
 	
-	<!-- import시킬 context -->
+	<!-- import시킬 context dd-->
 	<import resource="./dataSource-context.xml"></import>
 	<import resource="./application-context.xml"></import>
 	<import resource="./mail-context.xml"></import>
+	<import resource="./security-context.xml"></import>
 	
 	
 	

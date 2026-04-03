@@ -68,9 +68,9 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public TestVO selectTestbyTetNum(String tetNum) throws SQLException {
+	public TestVO selectTestWithQuestions(String claNum) throws SQLException {
 
-		return testDAO.selectTestbyTetNum(tetNum);
+		return testDAO.selectTestbyTetNum(claNum);
 		
 	}
 
