@@ -120,7 +120,6 @@
 	
 	<select id="selectStudentListCount" resultType="int">
 	
-    	SELECT SEQ_CLASS.NEXTVAL AS cla_num FROM DUAL
     		SELECT COUNT(*) FROM users u
     		inner join classapply ca
     		on u.user_num = ca.user_num

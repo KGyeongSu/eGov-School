@@ -157,6 +157,7 @@ public class ClassServiceImpl implements ClassService {
 		RowBounds rows = new RowBounds(offset, limit);
 		
 		return classDAO.selectClassList(pageMaker, userNum, rows);
+	}
 		
 	public List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException {
 		return classDAO.selectApprovedClassList(pageMaker);

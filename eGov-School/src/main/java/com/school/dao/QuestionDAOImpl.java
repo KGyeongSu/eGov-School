@@ -43,6 +43,7 @@ public class QuestionDAOImpl implements QuestionDAO {
   public String selectQuestionSeqNext() throws SQLException {
 
 		return session.selectOne("Question-Mapper.selectQuestionSeqNext");
+	}
 		
 	// 사용자
   public List<QuestionVO> selectQuestionsByTetNum(String tetNum) throws SQLException {

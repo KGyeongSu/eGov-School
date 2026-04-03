@@ -20,15 +20,16 @@ public class LessonVO {
     private String lsnTitle;
     private String lsnTime;
     private Date lsnRegdate;
+    private String lsnVideo;
     
     private String claName;    
     private String lsnContent;  
     private String fileNum;    
     
-
     private String prevLsnNum;  
     private String nextLsnNum;  
 
+    private List<LessonAttachVO> lessonFiles;
 
     
     public void setLessonFiles(List<LessonAttachVO> lessonFiles) {

@@ -15,7 +15,7 @@ import com.school.dto.TestVO;
 public class TestServiceImpl implements TestService{
 	
 	private TestDAO testDAO;
-	private QuestionDAO quesTionDAO;
+	private QuestionDAO questionDAO;
 	private ExamResultDAO examResultDAO;
 	
 	
@@ -24,7 +24,7 @@ public class TestServiceImpl implements TestService{
 	public TestServiceImpl(TestDAO testDAO, QuestionDAO quesTionDAO, ExamResultDAO examResultDAO) {
 		
 		this.testDAO = testDAO;
-		this.quesTionDAO = quesTionDAO;
+		this.questionDAO = quesTionDAO;
 		this.examResultDAO = examResultDAO;
 		
 	}
@@ -32,7 +32,7 @@ public class TestServiceImpl implements TestService{
 	@Override
 	public List<QuestionVO> getTestPaper(String tetNum) throws SQLException {
 		
-		return quesTionDAO.selectQuestionsByTetNum(tetNum);
+		return questionDAO.selectQuestionsByTetNum(tetNum);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class TestServiceImpl implements TestService{
 	        }
 	    }
 
-	    List<QuestionVO> realQuestions = quesTionDAO.selectQuestionsByTetNum(tetNum);
+	    List<QuestionVO> realQuestions = questionDAO.selectQuestionsByTetNum(tetNum);
 	    int totalScore = 0;
 	    List<ExamAnswerVO> answerList = new ArrayList<>();
 	    
