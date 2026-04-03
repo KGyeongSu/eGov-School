@@ -89,11 +89,11 @@ public class TestLectererController {
 		
 	}
 	
-	@GetMapping("/testEdit")
-	public String testEdit (HttpSession session, @RequestParam("calNum") String calNum) {
-		
-		
-		
-	}
+//	@GetMapping("/testEdit")
+//	public String testEdit (HttpSession session, @RequestParam("calNum") String calNum) {
+//		
+//		
+//		
+//	}
 
 }

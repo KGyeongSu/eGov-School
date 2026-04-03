@@ -9,22 +9,7 @@
 	<select id="selectQuestionSeqNext" resultType="str">
 		SELECT SEQ_QUESTION.NEXTVAL FROM DUAL
 	</select>
-  
-  	<insert id="insertQuestion" parameterType="question">
-  		
-  		insert into question (que_num, tet_num, que_seq, que_text, que_opt1, que_opt2, que_opt3, que_opt4, que_answer, que_desc, que_point)
-  		values (#{queNum}, #{tetNum}, #{queSeq}, #{queText}, #{queOpt1}, #{queOpt2}, #{queOpt3}, #{queOpt4}, #{queAnswer}, #{queDesc}, #{quePoint})
-  	
-  	</insert>
-  	
-  	<select id="selectQuestionList" resultType="question">
-  	
-  		select *
-  		from question
-  		where tet_num = #{tet_num}
-  		order by que_num
-  	
-  	</select>
+ 
   
   	
   	<update id="updateQuestion" parameterType="question">
@@ -38,6 +23,8 @@
   		que_answer = #{queAnswer},
   		que_desc = #{queDesc}
   		where que_num = #{queNum}
+  	
+  	</update>
 
     <insert id="insertQuestion" parameterType="question">
         INSERT INTO question (que_num, tet_num, que_seq, que_text, que_opt1, que_opt2, que_opt3, que_opt4, que_answer, que_desc, que_point)
@@ -50,18 +37,7 @@
         WHERE tet_num = #{tetNum}
         ORDER BY que_num
     </select>
-  
-    <update id="updateQuestion" parameterType="question">
-        UPDATE question SET
-            que_text = #{queText},
-            que_opt1 = #{queOpt1},
-            que_opt2 = #{queOpt2},
-            que_opt3 = #{queOpt3},
-            que_opt4 = #{queOpt4},
-            que_answer = #{queAnswer},
-            que_desc = #{queDesc}
-        WHERE que_num = #{queNum}
-    </update>
+
     
     <select id="selectQuestionsByTetNum" resultType="question">
         SELECT * FROM QUESTION 

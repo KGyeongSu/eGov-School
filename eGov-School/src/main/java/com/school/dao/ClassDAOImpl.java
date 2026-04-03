@@ -100,7 +100,7 @@ public class ClassDAOImpl implements ClassDAO {
 	@Override
 	public List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException {
 		int offset = pageMaker.getStartRow() -1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
 		Map<String, Object> param = new HashMap<> ();

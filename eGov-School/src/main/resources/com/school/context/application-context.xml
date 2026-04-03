@@ -74,28 +74,24 @@
 		<constructor-arg index="0" ref="classDAO" />
 		<constructor-arg index="1" ref="lessonDAO" />
 	</bean>
-
-<bean id="userService" class="com.school.service.UserServiceImpl"
-    c:userDAO-ref="userDAO" />
-<bean id="classApplyService" class="com.school.service.ClassApplyServiceImpl">
-    <constructor-arg index="0" ref="classApplyDAO" />
-    <constructor-arg index="1" ref="lessonDAO" />
-    <constructor-arg index="2" ref="learningStatusDAO" />
-    <constructor-arg index="3" ref="lessonAttachDAO" />
-</bean>
+	<bean id="classApplyService" class="com.school.service.ClassApplyServiceImpl">
+	    <constructor-arg index="0" ref="classApplyDAO" />
+	    <constructor-arg index="1" ref="lessonDAO" />
+	    <constructor-arg index="2" ref="learningStatusDAO" />
+	    <constructor-arg index="3" ref="lessonAttachDAO" />
+	</bean>
     
-<bean id="learningStatusService" class="com.school.service.LearningStatusServiceImpl" 
-    c:classApplyDAO-ref="classApplyDAO"
-    c:learningStatusDAO-ref="learningStatusDAO" />
-    
+	<bean id="learningStatusService" class="com.school.service.LearningStatusServiceImpl" 
+	    c:classApplyDAO-ref="classApplyDAO"
+	    c:learningStatusDAO-ref="learningStatusDAO" />
+	    
    <bean id="testService" class="com.school.service.TestServiceImpl">
       <constructor-arg index="0" ref="testDAO" />
       <constructor-arg index="1" ref="questionDAO" />
       <constructor-arg index="2" ref="examResultDAO" />
    </bean>
 
-	<bean id="classService"
-		class="com.school.service.ClassServiceImpl" c:classDAO-ref="classDAO" />
+	
 
 	<bean id="lessonService"
 		class="com.school.service.LessonServiceImpl">
