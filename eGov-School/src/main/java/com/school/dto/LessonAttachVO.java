@@ -17,6 +17,9 @@ public class LessonAttachVO {
     private String lsnNum;
     private String laName;
     private String laType;
+   
+    
+    
     
     
  // DB의 LA_SAVE_NAME과 LA_PATH를 담기 위해 추가 필요

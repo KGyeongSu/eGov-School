@@ -86,6 +86,19 @@
       <constructor-arg index="1" ref="questionDAO" />
       <constructor-arg index="2" ref="examResultDAO" />
    </bean>
-   
+
+	<bean id="classService"
+		class="com.school.service.ClassServiceImpl" c:classDAO-ref="classDAO" />
+
+	<bean id="lessonService"
+		class="com.school.service.LessonServiceImpl">
+		<constructor-arg index="0" ref="lessonDAO" />
+		<constructor-arg index="1" ref="lessonAttachDAO" />
+	</bean>
+
+		<!-- utils -->
+		<bean id="fileUploadUtils"
+			class="com.school.utils.FileUploadUtils" />
+
 
 </beans>

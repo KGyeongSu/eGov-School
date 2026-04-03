@@ -1,7 +1,9 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -21,42 +23,50 @@ public class ClassDAOImpl implements ClassDAO {
 	}
 
 	@Override
-	public List<ClassVO> selectClassList(PageMaker pageMaker) throws SQLException {
+	public List<ClassVO> selectClassList(PageMaker pageMaker, String userNum) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() -1;
 		int limit = pageMaker.getPerpageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
-		List <ClassVO> classList = session.selectList("Class-Mapper.selectClassList", pageMaker, rows);
+		Map<String, Object> classList = new HashMap<> ();
+		classList.put("pageMaker", pageMaker);
+		classList.put("userNum", userNum);
 		
-		return classList;
+		return session.selectList("Class-Mapper.selectClassList", classList, rows);
 		
 	}
 	
 	@Override
-	public List<ClassVO> selectSearchClassList(PageMaker pageMaker) throws SQLException {
+	public List<ClassVO> selectSearchClassList(PageMaker pageMaker, String userNum) throws SQLException {
 		
 		int offset = pageMaker.getStartRow() -1;
 		int limit = pageMaker.getPerpageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
-		List <ClassVO> classList = session.selectList("Class-Mapper.selectSearchClassList", pageMaker, rows);
+		Map<String, Object> classSearchList = new HashMap<> ();
+		classSearchList.put("pageMaker", pageMaker);
+		classSearchList.put("userNum", userNum);
 		
-		return classList;
+		return session.selectList("Class-Mapper.selectSearchClassList", classSearchList, rows);
 		
 	}
 
 	@Override
-	public ClassVO selectClassByCla_num(String cla_num) throws SQLException {
+	public ClassVO selectClassByCla_num(String claNum) throws SQLException {
 		
-		return session.selectOne("Class-Mapper.selectClassByCla_num", cla_num);
+		return session.selectOne("Class-Mapper.selectClassByCla_num", claNum);
 		
 	}
 	
 	@Override
-	public int selectSearchClassListCount(PageMaker pageMaker) throws SQLException {
+	public int selectSearchClassListCount(PageMaker pageMaker, String userNum) throws SQLException {
 		
-		return session.selectOne("Class-Mapper.selectSearchClassListCount", pageMaker);
+		Map<String, Object> searchCount = new HashMap<> ();
+		searchCount.put("pageMaker", pageMaker);
+		searchCount.put("userNum", userNum);
+		
+		return session.selectOne("Class-Mapper.selectSearchClassListCount", searchCount);
 		
 	}
 
@@ -68,9 +78,9 @@ public class ClassDAOImpl implements ClassDAO {
 	}
 
 	@Override
-	public void increaseViewCnt(String cla_num) throws SQLException {
+	public void increaseViewCnt(String claNum) throws SQLException {
 		
-		session.update("Class-Mapper.increaseViewCnt", cla_num);
+		session.update("Class-Mapper.increaseViewCnt", claNum);
 		
 	}
 
