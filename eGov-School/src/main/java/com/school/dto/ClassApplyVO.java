@@ -36,5 +36,7 @@ public class ClassApplyVO {
 	private String claName; // JSP ${apply.claName} 매핑용
 	private double progress;   // JSP ${apply.progress} 매핑용
 	
+	private String feedbackYN;//null인지 아닌지 담는그릇
+	
 	
 }

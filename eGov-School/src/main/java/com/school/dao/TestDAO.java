@@ -20,5 +20,6 @@ public interface TestDAO {
 	
 	List<TestVO> selectCompletedTestList(String userNum) throws SQLException;
 	
+	TestVO selectTestCondition(String tetNum) throws SQLException;
 
 }

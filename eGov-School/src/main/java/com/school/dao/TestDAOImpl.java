@@ -46,4 +46,11 @@ public class TestDAOImpl implements TestDAO {
 		return session.selectList("Test-Mapper.selectCompletedTestList", userNum);
 	}
 
+
+	@Override
+	public TestVO selectTestCondition(String tetNum) throws SQLException {
+		
+		return session.selectOne("Test-Mapper.selectTestCondition",tetNum);
+	}
+
 }

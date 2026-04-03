@@ -5,7 +5,7 @@
 
 <mapper namespace="Lesson-Mapper">
 
-    <resultMap id="lessonMap" type="lesson">
+    <resultMap id="lessonMap1" type="lesson">
         <id property="lsnNum" column="LSN_NUM" />
         <result property="claNum" column="CLA_NUM" />
         <result property="lsnSeq" column="LSN_SEQ" />
@@ -14,7 +14,7 @@
         <result property="claName" column="CLA_TITLE" />
     </resultMap>
 
-    <select id="selectLessonByNum" parameterType="lesson" resultMap="lessonMap">
+    <select id="selectLessonByNum" parameterType="lesson" resultMap="lessonMap1">
         SELECT
             A.LSN_NUM,
             A.CLA_NUM,
@@ -78,7 +78,7 @@
     
     
     
-    <select id="selectLessonListByClaNum" parameterType="str" resultMap="lessonMap">
+    <select id="selectLessonListByClaNum" parameterType="str" resultMap="lessonMap1">
     SELECT
         A.LSN_NUM,
         A.CLA_NUM,

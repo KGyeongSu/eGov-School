@@ -29,7 +29,8 @@ public class TestVO {
     private String erPass;
     private Date erDate;
     
-    
+    private String claComplete; //수료조건
+   
     
     private Double topPercent;
     private Integer totalCount;

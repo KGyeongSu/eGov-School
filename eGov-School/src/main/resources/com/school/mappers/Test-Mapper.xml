@@ -32,32 +32,31 @@
 
 	
 	<select id="selectPendingTestList" parameterType="str" resultType="test">
-		SELECT T.*, C.CLA_TITLE, C.CLA_STARTDATE, C.CLA_ENDDATE
-		FROM TEST T
-		JOIN CLASS C ON T.CLA_NUM = C.CLA_NUM
-		WHERE T.CLA_NUM IN (
-		    SELECT CA.CLA_NUM
-		    FROM CLASSAPPLY CA
-		    WHERE CA.USER_NUM = #{userNum}
-		    AND NOT EXISTS (
-		        SELECT 1 FROM LESSON L
-		        WHERE L.CLA_NUM = CA.CLA_NUM
-		        AND NOT EXISTS (
-		            SELECT 1 FROM PROGRESS P
-		            WHERE P.LSN_NUM = L.LSN_NUM
-		            AND P.USER_NUM = CA.USER_NUM
-		            AND P.PRG_COMPLETE = 'Y'
-		        )
-		    )
-		)
-		AND NOT EXISTS (
-		    SELECT 1 FROM EXAM_RESULT ER
-		    WHERE ER.TET_NUM = T.TET_NUM
-		    AND ER.USER_NUM = #{userNum}
-		)
-		ORDER BY T.TET_REGDATE DESC
-	</select>
-
+    SELECT T.TET_NUM, T.TET_TITLE, T.TET_TIMELIMIT, C.CLA_TITLE, C.CLA_STARTDATE, C.CLA_ENDDATE
+    FROM TEST T
+    JOIN CLASS C ON T.CLA_NUM = C.CLA_NUM
+    WHERE T.CLA_NUM IN (
+        SELECT CA.CLA_NUM
+        FROM CLASSAPPLY CA
+        WHERE CA.USER_NUM = #{userNum}
+        AND NOT EXISTS (
+            SELECT 1 FROM LESSON L
+            WHERE L.CLA_NUM = CA.CLA_NUM
+            AND NOT EXISTS (
+                SELECT 1 FROM PROGRESS P
+                WHERE P.LSN_NUM = L.LSN_NUM
+                AND P.USER_NUM = CA.USER_NUM
+                AND P.PRG_COMPLETE = 'Y'
+            )
+        )
+    )
+    AND NOT EXISTS (
+        SELECT 1 FROM EXAM_RESULT ER
+        WHERE ER.TET_NUM = T.TET_NUM
+        AND ER.USER_NUM = #{userNum}
+    )
+    ORDER BY T.TET_NUM DESC
+</select>
 <select id="selectCompletedTestList" parameterType="str" resultType="test">
     SELECT 
         T.TET_NUM, 
@@ -66,13 +65,32 @@
         ER.ER_SCORE,
         ER.ER_PASS,
         ER.ER_DATE,
-       
         (SELECT ROUND((COUNT(CASE WHEN ER_SCORE > ER.ER_SCORE THEN 1 END) / COUNT(*)) * 100, 1) 
          FROM EXAM_RESULT 
          WHERE TET_NUM = T.TET_NUM) AS topPercent
     FROM TEST T
     JOIN EXAM_RESULT ER ON T.TET_NUM = ER.TET_NUM
     WHERE ER.USER_NUM = #{userNum}
+      AND ER.ER_NUM IN (
+          SELECT MAX(ER_NUM) 
+          FROM EXAM_RESULT 
+          WHERE USER_NUM = #{userNum} 
+          GROUP BY TET_NUM
+      )
     ORDER BY ER.ER_DATE DESC
+</select>
+
+
+
+<select id="selectTestCondition" resultType="test">
+    SELECT 
+        T.TET_NUM,
+        T.TET_TITLE,
+        C.CLA_TITLE,
+        C.CLA_COMPLETE, 
+        T.TET_TIMELIMIT
+    FROM TEST T
+    JOIN CLASS C ON T.CLA_NUM = C.CLA_NUM
+    WHERE T.TET_NUM = #{tetNum}
 </select>
 </mapper>

@@ -24,5 +24,7 @@ public interface ClassApplyDAO {
     
     void updateClassProgress(ClassApplyVO apply) throws SQLException;
 
-	Integer selectLastLsnSeq(LessonVO searchVO);
+	Integer selectLastLsnSeq(LessonVO searchVO)throws SQLException;
+
+	List<ClassApplyVO> selectCompletedClassList(ClassApplyVO apply)throws SQLException;
 }

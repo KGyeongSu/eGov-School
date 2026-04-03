@@ -46,7 +46,7 @@
 </select>
   	
   	
-  	 <select id="selectExamResultSeqNext">
+  	 <select id="selectExamResultSeqNext" resultType="int">
     SELECT SEQ_EXAM_RESULT.NEXTVAL AS ER_NUM FROM DUAL
 </select>
   	

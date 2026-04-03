@@ -23,4 +23,5 @@ public class ExamAnswerVO {
     private Integer queAnswer; // 실제 정답 번호
     private String queDesc;    // 문제 해설
     private Integer quePoint;  // 문제 배점
-}
+
+	}
