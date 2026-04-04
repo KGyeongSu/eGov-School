@@ -101,10 +101,10 @@
 	
 	<select id="selectStudentListByClaNum" resultType="user">
 	
-    	SELECT 
+    		SELECT 
        	 	u.* FROM users u
     		INNER JOIN classapply ca ON u.user_num = ca.user_num
-   		WHERE ca.cla_num = #{claNum}
+   			WHERE ca.cla_num = #{claNum}
     
     		<if test="pageMaker.keyword != null and pageMaker.keyword != ''">
         		AND (
