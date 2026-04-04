@@ -9,6 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.school.cmd.PageMaker;
+import com.school.dto.ClassApplyVO;
 import com.school.dto.ClassVO;
 import com.school.dto.UserVO;
 
@@ -85,6 +86,38 @@ public class ClassDAOImpl implements ClassDAO {
 
 		return session.selectOne("Class-Mapper.selectClassSeqNext");
 		
+	}
+	@Override
+	public void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException {
+	    ClassApplyVO apply = new ClassApplyVO();
+	    apply.setUserNum(userNum);
+	    apply.setClaNum(claNum);
+	    apply.setProgress((double)progressPercent); // VO의 progress 타입에 맞춰 형변환
+
+	    session.update("ClassApply-Mapper.updateClassProgress", apply);
+	}
+
+	@Override
+	public List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException {
+		int offset = pageMaker.getStartRow() -1;
+		int limit = pageMaker.getPerPageNum();
+		RowBounds rows = new RowBounds (offset, limit);
+		
+		Map<String, Object> param = new HashMap<> ();
+		param.put("pageMaker", pageMaker);
+		param.put("sortType", pageMaker.getSearchType());
+		param.put("category", pageMaker.getKeyword2());
+		
+		return session.selectList("Class-Mapper.selectApprovedClassList", param, rows);
+	}
+
+	@Override
+	public int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException {
+		Map<String, Object> param = new HashMap<> ();
+		param.put("pageMaker", pageMaker);
+		param.put("category", pageMaker.getKeyword2());
+		
+		return session.selectOne("Class-Mapper.selectApprovedClassListCount", param);
 	}
 
 	@Override

@@ -39,10 +39,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 	}
 
 	@Override
-	public String selectQuestionSeqNext() throws SQLException {
+	// 강사
+  public String selectQuestionSeqNext() throws SQLException {
 
 		return session.selectOne("Question-Mapper.selectQuestionSeqNext");
+	}
 		
+	// 사용자
+  public List<QuestionVO> selectQuestionsByTetNum(String tetNum) throws SQLException {
+		
+		return session.selectList("Question-Mapper.selectQuestionsByTetNum", tetNum);
 	}
 	
 	

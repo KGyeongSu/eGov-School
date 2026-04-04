@@ -68,10 +68,7 @@
 	</update>
 	
 	<select id="selectJobNoticeSeqNext" resultType="int">
-	
-		select
-		jobNotice_seq.nextval as jn_num from dual
-	
-	</select>
+    SELECT SEQ_JOBNOTICE.NEXTVAL AS jn_num FROM DUAL
+</select>
 
 </mapper>

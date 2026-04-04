@@ -28,7 +28,7 @@ public class ClassServiceImpl implements ClassService {
 		this.lessonDAO = lessonDAO;
 		
 	}
-
+  // 
 	@Override
 	public List<ClassVO> selectClassList(PageMaker pageMaker, String userNum) throws SQLException {
 		
@@ -157,7 +157,15 @@ public class ClassServiceImpl implements ClassService {
 		RowBounds rows = new RowBounds(offset, limit);
 		
 		return classDAO.selectClassList(pageMaker, userNum, rows);
+	}
 		
+	public List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException {
+		return classDAO.selectApprovedClassList(pageMaker);
+	}
+  // 
+	@Override
+	public int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException {
+		return classDAO.selectApprovedClassListCount(pageMaker);
 	}
 
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class QuestionVO {
 	
 	private String queNum;
@@ -26,5 +27,6 @@ public class QuestionVO {
 	private String queDesc;
 	private Integer quePoint;
 	
-
+	private Integer userAnswer; 
+	private String isCorrect;
 }

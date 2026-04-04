@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    /* ===== 이미지 슬라이드 (메인페이지) ===== */
+    /* ===== 이미지 슬라이드 (메인페이지) dd===== */
     if ($('.img_slide').length) {
         let current = 0;
         const total = 3;
@@ -53,20 +53,6 @@ $(document).ready(function () {
     if (termsModal) {
         termsModal.addEventListener('click', function (e) {
             if (e.target === this) closeTermsModal();
-        });
-    }
-
-
-    /* ===== 비밀번호 재설정 - 비밀번호 일치 확인 ===== */
-    var repwdForm = document.getElementById('repwdform');
-    if (repwdForm) {
-        repwdForm.addEventListener('submit', function (e) {
-            var pwd = document.querySelector('input[name="password"]').value;
-            var pwdConfirm = document.querySelector('input[name="password_confirm"]').value;
-            if (pwd !== pwdConfirm) {
-                e.preventDefault();
-                alert('비밀번호가 일치하지 않습니다.');
-            }
         });
     }
 

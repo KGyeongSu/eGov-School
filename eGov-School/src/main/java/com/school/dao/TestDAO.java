@@ -3,6 +3,7 @@ package com.school.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.school.dto.QuestionVO;
 import com.school.dto.TestVO;
 
 public interface TestDAO {
@@ -15,6 +16,7 @@ public interface TestDAO {
 	
 	List<TestVO> selectCompletedTestList(String userNum) throws SQLException;
 	
+	TestVO selectTestCondition(String tetNum) throws SQLException;
 	// 강사용
 	// 등록
 	void insertTest(TestVO test) throws SQLException;
@@ -25,4 +27,5 @@ public interface TestDAO {
 	// 수정
 	void updateTest(TestVO test) throws SQLException;
 	
+
 }

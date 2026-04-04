@@ -6,40 +6,46 @@
 <mapper namespace="ClassApply-Mapper">
 
 	<select id="selectClassApply" resultType="classapply">
-		SELECT
-		A.CA_NUM,
-		A.CA_DATE,
-		C.CLA_TITLE,
-		C.CLA_CONTENT,
-		C.CLA_CATEGORY,
-		C.CLA_STARTDATE,
-		C.CLA_ENDDATE,
-		C.CLA_MAXSTU,
-		E.ER_PASS,
-		E.ER_SCORE,
-		R.REP_NUM
-		FROM ClassApply A
-		JOIN Class C ON A.CLA_NUM = C.CLA_NUM
-		LEFT OUTER JOIN Exam_Result E ON (A.USER_NUM = E.USER_NUM AND A.CLA_NUM =
-		E.CLA_NUM)
-		LEFT OUTER JOIN REPUTATION R ON (A.USER_NUM = R.USER_NUM AND A.CLA_NUM =
-		R.CLA_NUM)
-		WHERE A.USER_NUM = #{userNum}
-		ORDER BY A.CA_DATE DESC
-	</select>
-
+    SELECT
+        A.CA_NUM,
+        A.CA_DATE,
+        NVL(P.AVG_PROGRESS, 0) AS PROGRESS,
+        C.CLA_NUM,
+        C.CLA_TITLE AS claName,
+        E.ER_PASS,
+        E.ER_SCORE,
+        CASE WHEN R.REP_NUM IS NOT NULL THEN 'Y' ELSE 'N' END AS feedbackYN
+    FROM ClassApply A
+    JOIN Class C ON A.CLA_NUM = C.CLA_NUM
+    LEFT OUTER JOIN (
+        SELECT USER_NUM, CLA_NUM, 
+               ROUND(COUNT(CASE WHEN PRG_COMPLETE = 'Y' THEN 1 END) / COUNT(*) * 100) AS AVG_PROGRESS
+        FROM PROGRESS GROUP BY USER_NUM, CLA_NUM
+    ) P ON (A.USER_NUM = P.USER_NUM AND A.CLA_NUM = P.CLA_NUM)
+    LEFT OUTER JOIN (
+        SELECT ER.USER_NUM, T.CLA_NUM, ER.ER_PASS, ER.ER_SCORE, ER.ER_NUM -- ER_NUM 추가
+        FROM EXAM_RESULT ER
+        JOIN TEST T ON ER.TET_NUM = T.TET_NUM
+    ) E ON (A.USER_NUM = E.USER_NUM AND A.CLA_NUM = E.CLA_NUM)
+    LEFT OUTER JOIN REPUTATION R ON (A.USER_NUM = R.USER_NUM AND A.CLA_NUM = R.CLA_NUM)
+    WHERE A.USER_NUM = #{userNum}
+    AND E.ER_SCORE IS NULL 
+    ORDER BY A.CA_DATE DESC
+</select>
+	
 	<select id="selectClassApplyListCount" resultType="int">
-		SELECT COUNT(*)
+		SELECT
+			COUNT(*)
 		FROM ClassApply
 		WHERE USER_NUM = #{userNum}
 	</select>
 
 	<select id="selectClassByCaNum" resultType="classapply">
 		SELECT
-		A.CA_NUM,
-		A.CA_DATE,
-		C.CLA_NUM,
-		C.CLA_TITLE
+			A.CA_NUM,
+			A.CA_DATE,
+			C.CLA_NUM,
+			C.CLA_TITLE
 		FROM ClassApply A
 		JOIN Class C ON A.CLA_NUM = C.CLA_NUM
 		WHERE A.CA_NUM = #{caNum}
@@ -60,15 +66,45 @@
 		DELETE FROM ClassApply
 		WHERE CA_NUM = #{caNum}
 	</delete>
-	
-	
-	
+
 	<select id="selectClassApplySeqNext">
-  		
-  		SELECT
-  		CERTIFICATE_SEQ.NEXTVAL AS CA_NUM 
-  		FROM DUAL
-  	
-  	</select>
+		SELECT SEQ_CLASSAPPLY.NEXTVAL AS CA_NUM FROM DUAL
+	</select>
+
+	<update id="updateClassProgress" parameterType="classApply">
+		UPDATE PROGRESS
+		SET PRG_COMPLETE = 'Y', PRG_LASTDATE = SYSDATE
+		WHERE USER_NUM = #{userNum}
+		AND CLA_NUM = #{claNum}
+		AND LSN_NUM = #{lsnNum}
+	</update>
+
+	<select id="selectCompletedClassList" parameterType="string" resultType="classapply">
+    SELECT
+        A.CA_NUM,
+        A.USER_NUM,
+        A.CLA_NUM,
+        NVL(P.AVG_PROGRESS, 0) AS PROGRESS,
+        C.CLA_TITLE,
+        C.CLA_TITLE AS claName,
+        E.ER_SCORE, 
+        E.ER_PASS,
+        CASE WHEN R.REP_NUM IS NOT NULL THEN 'Y' ELSE 'N' END AS feedbackYN
+    FROM ClassApply A
+    JOIN Class C ON A.CLA_NUM = C.CLA_NUM
+    LEFT OUTER JOIN (
+        SELECT USER_NUM, CLA_NUM, 
+               ROUND(COUNT(CASE WHEN PRG_COMPLETE = 'Y' THEN 1 END) / COUNT(*) * 100) AS AVG_PROGRESS
+        FROM PROGRESS GROUP BY USER_NUM, CLA_NUM
+    ) P ON (A.USER_NUM = P.USER_NUM AND A.CLA_NUM = P.CLA_NUM)
+    LEFT OUTER JOIN (
+        SELECT ER.USER_NUM, T.CLA_NUM, ER.ER_PASS, ER.ER_SCORE
+        FROM EXAM_RESULT ER
+        JOIN TEST T ON ER.TET_NUM = T.TET_NUM
+    ) E ON (A.USER_NUM = E.USER_NUM AND A.CLA_NUM = E.CLA_NUM)
+    LEFT OUTER JOIN REPUTATION R ON (A.USER_NUM = R.USER_NUM AND A.CLA_NUM = R.CLA_NUM)
+    WHERE A.USER_NUM = #{userNum}
+    AND E.ER_SCORE IS NOT NULL
+</select>
 
 </mapper>

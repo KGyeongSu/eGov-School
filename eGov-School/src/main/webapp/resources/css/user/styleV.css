@@ -1,195 +1,142 @@
 @charset 'utf-8';
 
-
-
-
-/*강좌 동영상 */
-
-.videolet .content >.mid {
-	width: 100%;
-	height: calc(100vh - 75px);
-	background-color: #f4f7f6;
-	
-	
+/* 전체 배경 및 높이 설정 */
+.videolet .content > .mid {
+    width: 100%;
+    height: calc(100vh - 75px);
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-
-
-.videolet .mid .videodash{
+/* 메인 대시보드 박스 */
+.videolet .mid .videodash {
     width: 95%;
+    max-width: 1400px;
     height: 90%;
-    
-    
-    margin: 0 auto;       
-    position: relative;
-    top: 55%;             
-    transform: translateY(-55%);
-
-	background-color: #ffffff;
-    border-radius: 15px;      
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
-    overflow: hidden;      
-    border: 1px solid #eaeaea; 
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: column;
 }
 
-
-
+/* 상단바 */
 .videolet .mid .videodash .letti {
     width: 100%;
-    height: 10%;
-
+    height: 70px;
     display: flex;
     align-items: center;
-
-
-    padding: 0 40px;
-    box-sizing: border-box;
-    border-bottom: 2px solid #f0f0f0; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-
-	background-color: #fafafa;
-	
+    padding: 0 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eee;
 }
-
 
 .videolet .mid .videodash .letti h3 {
     font-size: 22px;
     font-weight: 700;
     color: #2c3e50;
     margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px; 
 }
-
-
-.videolet .mid .videodash .letti a {
-    display: flex;
-    align-items: center;
-	
-	background-color: #f1f3f5;
-    padding: 10px 15px;
-    border-radius: 10px; 
-    transition: all 0.3s ease; 
-    color: #5d6d7e;
-
-    margin-left: 10px;
-    font-weight: 500;
-    font-size: 15px;
-    text-decoration: none;
-	border: 1px solid transparent;
-}
-
 
 .videolet .mid .videodash .letti .downloadbtn {
-    margin-left: auto; 
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
+    color: #5d6d7e;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: 0.2s;
 }
 
 .videolet .mid .videodash .letti .downloadbtn:hover {
     background-color: #e9ecef;
-    color: #2980b9;
-    transform: translateY(-2px); 
 }
-
 
 .videolet .mid .videodash .letti .return {
-    margin-left: 12px;
-    background-color: #34495e; 
+    background-color: #34495e;
     color: #ffffff;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
 }
 
-.videolet .mid .videodash .letti .return:hover {
-    background-color: #2c3e50;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+/* 1. 비디오가 담기는 바구니 크기 고정 */
+.videolet .mid .videodash .videochair {
+    flex: 1; 
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden; /* 중요: 영상이 바구니 밖으로 못 나가게 차단 */
+    min-height: 0;    /* 중요: flex 레이아웃에서 자식 때문에 늘어나는 것 방지 */
 }
 
-
-.videolet .mid .videodash .letti i {
-    font-size: 16px;
+/* 2. 비디오 태그 자체의 크기 조절 (가장 중요) */
+#lectureVideo {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 영상 비율을 깨지 않으면서 영역 안에 꽉 채움 */
 }
 
-.videolet .mid .videodash .letti span {
-    margin-left: 8px;
-   
-}
-
-
-
-
-
-
-
-
-.videolet .mid .videodash .videochair{
-	width: 90%;
-	height: 70%;
-
-	margin: 0 auto;
-
-	position: relative;
-	background-color: #595959;
-}
-
-
-
-
-
+/* 3. 하단 정보창 확인 (기존 코드 유지하되 높이 명시) */
 .videolet .mid .videodash .letco {
     width: 100%;
-    height: 20%;
-    background-color: #ffffff; 
+    height: 100px; /* 고정 높이 */
+    min-height: 100px; /* flex 안에서 찌그러지지 않게 방어 */
+    background-color: #fafafa;
     border-top: 1px solid #e0e0e0;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
-    padding: 0 30px;
-    box-sizing: border-box;
+    padding: 0 40px;
 }
-
 
 .learning-info h4 {
-    margin: 0 0 8px 0;
-    font-size: 18px;
+    margin: 0 0 5px 0;
+    font-size: 16px;
     color: #2c3e50;
+    font-weight: 700;
 }
-.learning-info ul {
-    margin: 0;
-    padding-left: 20px;
-    font-size: 14px;
-    color: #7f8c8d;
-    line-height: 1.6;
-}
-
-
-
-
 
 .lecture-nav {
     display: flex;
     gap: 12px;
 }
+
 .nav-btn {
     text-decoration: none;
-    padding: 10px 18px;
-    border-radius: 6px;
+    padding: 12px 24px;
+    border-radius: 8px;
     font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s;
+    font-weight: 700;
+    transition: 0.3s;
 }
+
 .nav-btn.prev {
-    background-color: #f1f2f6;
-    color: #57606f;
+    background-color: #edf0f2;
+    color: #4a5568;
 }
+
 .nav-btn.next {
-    background-color: #2f3542;
+    background-color: #0e506e;
     color: #ffffff;
 }
-.nav-btn:hover {
-    opacity: 0.8;
+
+.nav-btn.next:hover {
+    background-color: #0a3d54;
 }
 
-
-
-
+.nav-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}

@@ -5,6 +5,93 @@
 
 <mapper namespace="Lesson-Mapper">
 
+    <resultMap id="lessonMap1" type="lesson">
+        <id property="lsnNum" column="LSN_NUM" />
+        <result property="claNum" column="CLA_NUM" />
+        <result property="lsnSeq" column="LSN_SEQ" />
+        <result property="lsnTitle" column="LSN_TITLE" />
+        <result property="lsnVideo" column="LA_SAVE_NAME" />
+        <result property="claName" column="CLA_TITLE" />
+    </resultMap>
+
+    <select id="selectLessonByNum" parameterType="lesson" resultMap="lessonMap1">
+        SELECT
+            A.LSN_NUM,
+            A.CLA_NUM,
+            A.LSN_SEQ,
+            A.LSN_TITLE,
+            B.LA_SAVE_NAME,
+            C.CLA_TITLE
+        FROM LESSON A
+        LEFT JOIN LESSON_ATTACH B ON A.LSN_NUM = B.LSN_NUM AND B.LA_TYPE = 'VIDEO'
+        JOIN CLASS C ON A.CLA_NUM = C.CLA_NUM
+        WHERE A.CLA_NUM = #{claNum}
+          AND A.LSN_SEQ = #{lsnSeq}
+    </select>
+
+    <select id="selectLessonFileList" parameterType="str" resultType="lessonAttach">
+        SELECT
+            LA_NUM,
+            LSN_NUM,
+            LA_NAME,
+            LA_SAVE_NAME,
+            LA_PATH,
+            LA_TYPE
+        FROM LESSON_ATTACH
+        WHERE LSN_NUM = #{lsnNum}
+          AND LA_TYPE = 'FILE'
+    </select>
+
+    <select id="selectPrevLsnSeq" parameterType="lesson" resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT MAX(LSN_SEQ) 
+        FROM LESSON 
+        WHERE CLA_NUM = #{claNum} AND LSN_SEQ < #{lsnSeq}
+        ]]>
+    </select>
+
+    <select id="selectNextLsnSeq" parameterType="lesson" resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT MIN(LSN_SEQ) 
+        FROM LESSON 
+        WHERE CLA_NUM = #{claNum} AND LSN_SEQ > #{lsnSeq}
+        ]]>
+    </select>
+
+    <select id="selectFirstLessonSeq" parameterType="str" resultType="java.lang.Integer">
+        SELECT MIN(LSN_SEQ)
+        FROM LESSON
+        WHERE CLA_NUM = #{claNum}
+    </select>
+
+    <select id="selectLastLsnSeq" parameterType="lesson" resultType="java.lang.Integer">
+        SELECT MIN(LSN_SEQ)
+        FROM PROGRESS
+        WHERE USER_NUM = #{userNum}
+          AND CLA_NUM = #{claNum}
+          AND PRG_COMPLETE = 'N'
+    </select>
+
+    <select id="selectTotalLessonCount" parameterType="str" resultType="int">
+        SELECT COUNT(*) FROM LESSON WHERE CLA_NUM = #{claNum}
+    </select>
+    
+    
+    
+    <select id="selectLessonListByClaNum" parameterType="str" resultMap="lessonMap1">
+    SELECT
+        A.LSN_NUM,
+        A.CLA_NUM,
+        A.LSN_SEQ,
+        A.LSN_TITLE,
+        B.LA_SAVE_NAME,
+        C.CLA_TITLE
+    FROM LESSON A
+    LEFT JOIN LESSON_ATTACH B ON A.LSN_NUM = B.LSN_NUM AND B.LA_TYPE = 'VIDEO'
+    JOIN CLASS C ON A.CLA_NUM = C.CLA_NUM
+    WHERE A.CLA_NUM = #{claNum}
+    ORDER BY A.LSN_SEQ ASC
+</select>
 	<select id="selectLessonSeqNext" resultType="str">
 		SELECT
 		SEQ_LESSON.NEXTVAL FROM DUAL
@@ -55,8 +142,8 @@
 		ORDER BY L.LSN_SEQ ASC
 	</select>
 
-	<!-- 차시 단건 조회 -->
-	<select id="selectLessonByNum" parameterType="str"
+	<!-- 차시 단건 조회 --> 
+	<select id="selectLessonByLsnNum" parameterType="str" 
 		resultType="lesson">
 		SELECT * FROM LESSON
 		WHERE LSN_NUM = #{lsnNum}

@@ -22,5 +22,9 @@ private Integer	erAttempt;
 private Integer	erScore;
 private String	erPass;
 private Date	erDate;
+
+
+//[추가] 각 문제의 응시 기록(정답, 제출답안, 해설 등) 리스트
+private java.util.List<ExamAnswerVO> answerList;
 }
 

@@ -15,11 +15,27 @@ import lombok.Setter;
 public class LessonVO {
     private String lsnNum;
     private String claNum;
+    private String userNum;
     private Integer lsnSeq;
     private String lsnTitle;
     private String lsnTime;
     private Date lsnRegdate;
-    private String lsnContent;
+    private String lsnVideo;
+    
+    private String claName;    
+    private String lsnContent;  
+    private String fileNum;    
+    
+    private String prevLsnNum;  
+    private String nextLsnNum;  
+
+    private List<LessonAttachVO> lessonFiles;
+
+    
+    public void setLessonFiles(List<LessonAttachVO> lessonFiles) {
+        this.lessonFiles = lessonFiles;
+    }
+    
     
     // 첨부파일 
     private List <LessonAttachVO> lessonAttachList;
