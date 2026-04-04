@@ -9,7 +9,7 @@ import com.school.dto.QuestionVO;
 
 public class QuestionDAOImpl implements QuestionDAO {
 	
-	private SqlSession session;
+	private final SqlSession session;
 
 	public QuestionDAOImpl(SqlSession session) {
 
@@ -36,6 +36,19 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 		session.update("Question-Mapper.updateQuestion", question);
 		
+	}
+
+	@Override
+	// 강사
+  public String selectQuestionSeqNext() throws SQLException {
+
+		return session.selectOne("Question-Mapper.selectQuestionSeqNext");
+	}
+		
+	// 사용자
+  public List<QuestionVO> selectQuestionsByTetNum(String tetNum) throws SQLException {
+		
+		return session.selectList("Question-Mapper.selectQuestionsByTetNum", tetNum);
 	}
 	
 	

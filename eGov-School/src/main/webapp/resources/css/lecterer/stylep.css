@@ -1,206 +1,178 @@
 @charset 'utf-8';
 
+/* 1. 기본 초기화 */
 * {
-
     margin: 0;
     padding: 0;
-
     font-size: 16px;
     font-family: '나눔 고딕', sans-serif;
-
     box-sizing: border-box; 
-    
 }
 
-a {
-
-    text-decoration: none;
-
-}
-
-ul,
-li {
-
-    list-style: none;
-
+button {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
 }
 
 .window {
-
     width: 100%;
     min-height: 100vh; 
-    
 }
 
-/** header **/
-
+/** 2. 헤더 영역 (레이아웃 핵심) **/
 .window header {
-
     width: 100%;
     height: 200px;
-
     display: flex;
-
     align-items: center;
-
+    /* 양 끝 여백을 60px로 설정 (취향에 따라 조절하세요) */
+    padding: 0 60px; 
     border-bottom: solid 4px #145A7D;
-
 }
 
-
 .window header .title {
-
-    width: 50%;
-    height: 100%;
-
+    /* 타이틀은 왼쪽 끝에 고정됩니다 */
 }
 
 .window header .title h1 {
-
-    position: relative;
-
     font-size: 40px;
-    font-weight: 600;
-    line-height: 200px;
-
+    font-weight: 800;
     color: #145A7D;
-
-    left: 130px;
-
-    cursor: pointer;
-
-
 }
 
+/* ★ 버튼들을 오른쪽 끝으로 밀어내는 핵심 설정 ★ */
 .window header .modify {
-
-    margin-left: auto;
-    margin-right: 0px;
-
+    /* 왼쪽의 모든 빈 공간을 차지해서 버튼들을 오른쪽 끝으로 보냅니다 */
+    margin-left: auto; 
+    
+    background-color: #ffffff; 
+    color: #607D8B;
+    border: 1px solid #D1D9E0;
+    margin-right: 10px; /* 등록 버튼과의 간격 */
 }
 
-.window header .regist {
-
-    margin-right: 130px;
-
-}
-
+/* 버튼 공통 스타일 (크기 고정) */
 .window header .modify,
-.regist {
-
-    width: 5%;
-    height: 25%;
-
-    font-size: 13px;
-    font-weight: 500;
-
+.window header .regist {
+    width: 80px;   /* 버튼 너비 */
+    height: 50px;  /* 버튼 높이 */
+    font-size: 15px;
+    font-weight: 600;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-
     transition: background-color 0.2s ease;
-
 }
 
-.window header .modify {
-    background-color: #ffffff; 
-    color: #607D8B;
-    border: 1px solid #D1D9E0;
-    margin-left: auto;
-    margin-right: 8px;
-}
 .window header .modify:hover {
     background-color: #ECEFF1;
 }
 
+/* 등록 버튼 스타일 */
 .window header .regist {
     background-color: #145A7D;
     color: #ffffff;
     border: 1px solid #145A7D;
-    margin-right: 130px;
 }
 
 .window header .regist:hover {
     background-color: #0D435F;
 }
 
+/** 3. 메인 컨텐츠 영역 **/
 .window .wrap {
-
     width: 100%;
-    height: calc(100vh - 200px);
-    
-    padding-top: 10px;
-
+    padding-top: 20px;
 }
 
+/* 프로필 이미지 박스 */
 .window .wrap .pimg {
-
-    width: 35%;
-    height: 40%;
+    width: 300px;
+    height: 300px;
     margin: 20px auto;
-    margin-top: 10px;
-
     background-color: #ffffff;
     border: 2px dashed #145A7D;
-    opacity: 0.8;
-    
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-
 }
 
-.window .wrap .pimg:hover {
+/* 이미지 박스 내부의 컨테이너들을 꽉 채우기 */
+.pimg .upload-container,
+.pimg .upload-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    background-color: #f1f3f5;
-
+.pimg .upload-placeholder {
+	
+	display: flex;          
+    flex-direction: column; 
+    align-items: center;   
+    justify-content: center;
+    width: 100%;           
+    height: 100%;
+	
 }
 
 .upload-placeholder p {
+    font-size: 14px;
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 8px;    
+    text-align: center;   
+}
 
+.upload-placeholder span {
+    font-size: 12px;
+    color: #adb5bd;
+    text-align: center;
+}
+
+.upload-input.real {
+    color: transparent;
+    width: 90px;        
+    overflow: hidden;
+}
+
+/* 새로 생성되는 이미지 태그 설정 */
+.pimg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+}
+
+.upload-placeholder p {
     font-size: 14px;
     color: #495057;
     font-weight: 600;
     margin-bottom: 5px;
-
 }
 
 .upload-placeholder span {
-
     font-size: 12px;
     color: #adb5bd;
-    
 }
 
-.divider{
-
-    width:100%;
-    height:4px;
-    background:#145A7D;
-    position: relative;
-
-    margin:10px 0;
-}
-
+/* 정보 입력창 (너비 700px 고정) */
 .window .wrap .info {
-
-    width: 70%;
-    height: auto;
-    min-height: 200px;
-    margin: 20px auto;
-    margin-top: 50px;
+    width: 700px;
+    margin: 40px auto;
     background-color: #ffffff;
     border: 1px solid #D1D9E0;
     border-top: 4px solid #145A7D;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     padding: 30px;
     border-radius: 5px;
-    
 }
 
 .form-container {
@@ -231,18 +203,6 @@ li {
     padding: 6px 12px;
     font-size: 14px;
     color: #495057;
-    background-color: #fff;
     border: 1px solid #ced4da;
     border-radius: 4px;
-    transition: border-color 0.15s ease-in-out;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.form-input[type="file"] {
-    padding: 3px;
 }

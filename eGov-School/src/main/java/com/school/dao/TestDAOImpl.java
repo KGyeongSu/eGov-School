@@ -21,21 +21,12 @@ public class TestDAOImpl implements TestDAO {
 		return session.selectOne("Test-Mapper.selectTestSeqNext");
 	}
 
-	@Override
-	public void insertTest(TestVO test) throws SQLException {
-		session.insert("Test-Mapper.insertTest", test);
-	}
 
 	@Override
 	public TestVO selectTestByNum(String tetNum) throws SQLException {
 		return session.selectOne("Test-Mapper.selectTestByNum", tetNum);
 	}
-
-	@Override
-	public void updateTest(TestVO test) throws SQLException {
-		session.update("Test-Mapper.updateTest", test);
-	}
-
+	
 	@Override
 	public List<TestVO> selectPendingTestList(String userNum) throws SQLException {
 		return session.selectList("Test-Mapper.selectPendingTestList", userNum);
@@ -44,6 +35,31 @@ public class TestDAOImpl implements TestDAO {
 	@Override
 	public List<TestVO> selectCompletedTestList(String userNum) throws SQLException {
 		return session.selectList("Test-Mapper.selectCompletedTestList", userNum);
+	}
+	
+	@Override
+	public void insertTest(TestVO test) throws SQLException {
+		session.insert("Test-Mapper.insertTest", test);
+	}
+
+	@Override
+	public TestVO selectTestbyTetNum(String tetNum) throws SQLException {
+		
+		return session.selectOne("Test-Mapper.selectTestByNum", tetNum);
+		
+	}
+	
+	@Override
+	public void updateTest(TestVO test) throws SQLException {
+		session.update("Test-Mapper.updateTest", test);
+	}
+
+
+
+	@Override
+	public TestVO selectTestCondition(String tetNum) throws SQLException {
+		
+		return session.selectOne("Test-Mapper.selectTestCondition",tetNum);
 	}
 
 }

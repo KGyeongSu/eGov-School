@@ -7,18 +7,17 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-	<view-controller path="/main"/>
-	<view-controller path="/commons/repwd"/>
-	<view-controller path="/page/cregist"/>
 	<view-controller path="/page/l_recruit"/>
 	<view-controller path="/page/l_recruit_detail"/>
 	<view-controller path="/page/l_recruit_apply"/>
 	<view-controller path="/lecterer/mainDashBoard"/>
-	<view-controller path="/user/dashBoard" />
-	<view-controller path="/admin/admin_main" />
-	<view-controller path="/user/exam" />
-	<view-controller path="/user/test" />
-	<view-controller path="/user/myKang" />
+	<view-controller path="/admin/main" />
+	<view-controller path="/admin/feedback" />
+	<view-controller path="/admin/cv" />
+	<view-controller path="/admin/curriculum" />
+	<view-controller path="/admin/curriculum_detail" />
+	
+	<view-controller path="/user/dashBoard" view-name="user/dashBoard"/>
 	<view-controller path="/lecterer/testMake" />
 	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
@@ -29,6 +28,9 @@
 	<!-- css,js 이미지 파일 접근 허용 -->
 	<resources mapping="/resources/**" location="/resources/" />
 	
+	<!-- 강의 수정 시 업로드 허용 -->
+	<resources mapping="/upload/lesson/**" location="file:///C:/lesson/file/upload/" />
+	
 	<!-- 파일 업로드 처리 -->
 	<beans:bean id="multipartResolver" 
 	class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
@@ -38,6 +40,9 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
+	
+	<context:property-placeholder location="classpath:com/school/properties/*.properties" />
+	<resources mapping="/display/**" location="file:///c:/lecterer/picture/upload/" />
 	
 	<context:component-scan base-package="com.school.controller" />
 	

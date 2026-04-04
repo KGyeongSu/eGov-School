@@ -139,7 +139,7 @@
                     <p>수집항목: 이메일, 이름, 전화번호<br>수집목적: 회원관리, 교육과정 제공<br>보유기간: 회원 탈퇴 시까지...</p>
                 </div>
             </div>
-            <!-- 개별 약관 3 -->
+            <!-- 개별 약관 3 dd-->
             <div class="terms_item">
                 <div class="term_row" onclick="this.querySelector('input').click()">
                     <input type="checkbox" class="term_check" data-required="false" onchange="checkAgree()">

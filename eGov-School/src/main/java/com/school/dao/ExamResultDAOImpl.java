@@ -39,4 +39,10 @@ public class ExamResultDAOImpl implements ExamResultDAO{
 		return session.selectOne("ExamResult-Mapper.selectExamResultSeqNext");
 	}
 
+	@Override
+	public ExamResultVO selectExamResultByTetAndUser(ExamResultVO examresult) throws SQLException {
+		
+		return session.selectOne("ExamResult-Mapper.selectExamResultByTetAndUser",examresult);
+	}
+
 }

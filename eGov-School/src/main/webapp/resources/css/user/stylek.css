@@ -1,13 +1,5 @@
 @charset 'utf-8';
 
-
-
-
-
-
-
-
-
 .mid {
 	padding: 30px 40px;
 }
@@ -161,66 +153,20 @@
 }
 
 .lecture-scroll::-webkit-scrollbar {
-    width: 6px;
+	width: 6px;
 }
+
 .lecture-scroll::-webkit-scrollbar-track {
-    background: #f1f1f1;
+	background: #f1f1f1;
 }
+
 .lecture-scroll::-webkit-scrollbar-thumb {
-    background: #0e506e;
-    border-radius: 10px;
+	background: #0e506e;
+	border-radius: 10px;
 }
+
 .list-group-item:hover {
-    background-color: #f0f7fa !important;
-    border-color: #0e506e !important;
-    transform: translateX(5px);
-}
-
-
-/* 별점 영역 박스화 */
-.star-rating {
-    display: flex;
-    flex-direction: row-reverse; 
-    justify-content: center;
-    gap: 5px;
-    margin: 10px 0;
-    width: 100%; 
-}
-
-.star-rating input { 
-    display: none !important; 
-}
-
-.star-rating label {
-    font-size: 35px;
-    color: #ddd;
-    cursor: pointer;
-    transition: color 0.2s;
-    line-height: 1; 
-    margin: 0;      
-}
-
-/* 체크된 별과 그 왼쪽(reverse 기준 오른쪽) 별들을 색칠 */
-.star-rating input:checked ~ label {
-    color: #f39c12 !important;
-}
-
-/* 호버 시 효과 */
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: #f1c40f !important;
-}
-
-/* 피드백 텍스트박스 깨짐 방지 */
-#feedbackContent {
-    width: 100%;
-    min-height: 120px;
-    padding: 12px;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    resize: vertical; /* 위아래로만 조절 가능하게 */
-    font-size: 15px;
-    box-sizing: border-box; /* 패딩 때문에 너비가 안 넘치게 고정 */
-    display: block;        /* 블록 요소로 확실히 지정 */
-    margin-top: 10px;
+	background-color: #f0f7fa !important;
+	border-color: #0e506e !important;
+	transform: translateX(5px);
 }

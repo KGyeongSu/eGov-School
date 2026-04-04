@@ -39,14 +39,16 @@
   		VALUES (#{erNum},#{tetNum},#{userNum},#{erAttempt},#{erScore},#{erPass},SYSDATE)
   	</insert>
   	
+  	<select id="selectExamResultByTetAndUser" parameterType="examResult" resultType="examResult">
+    SELECT * FROM EXAM_RESULT 
+    WHERE TET_NUM = #{tetNum} 
+      AND USER_NUM = #{userNum}
+</select>
   	
-  	 	<select id="selectExamResultSeqNext">
-  		
-  		SELECT
-  		CERTIFICATE_SEQ.NEXTVAL AS ER_NUM 
-  		FROM DUAL
   	
-  	</select>
+  	 <select id="selectExamResultSeqNext" resultType="int">
+    SELECT SEQ_EXAM_RESULT.NEXTVAL AS ER_NUM FROM DUAL
+</select>
   	
   	
   </mapper>

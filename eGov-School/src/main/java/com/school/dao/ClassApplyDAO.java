@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
+import com.school.dto.LessonVO;
 
 public interface ClassApplyDAO {
     
@@ -20,4 +21,10 @@ public interface ClassApplyDAO {
     void deleteClassApply(String caNum) throws SQLException;
     
     int selectClassApplySeqNext()throws SQLException;
+    
+    void updateClassProgress(ClassApplyVO apply) throws SQLException;
+
+	Integer selectLastLsnSeq(LessonVO searchVO)throws SQLException;
+
+	List<ClassApplyVO> selectCompletedClassList(ClassApplyVO apply)throws SQLException;
 }
