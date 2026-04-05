@@ -22,7 +22,6 @@ public class JobNoticeVO {
 	private Integer jnViews;
 	private Integer userNum;
 	
-	//첨부파일
-	//private List <JobNoticeAttachVO> jobNoticeAttachList;
-
+	
+	private String userName;
 }

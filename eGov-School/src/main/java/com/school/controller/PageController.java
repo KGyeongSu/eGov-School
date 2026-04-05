@@ -48,6 +48,12 @@ public class PageController {
 
         return "page/cregist";
     }
+    
+    @GetMapping("/classDetail")
+    @ResponseBody
+    public ClassVO classDetail(@RequestParam("claNum") String claNum) throws Exception {
+        return classService.selectClassByCla_num(claNum);
+    }
 
     // 공무원채용 페이지 (채용공고 + 시험공고 탭)
     @GetMapping("/notice")

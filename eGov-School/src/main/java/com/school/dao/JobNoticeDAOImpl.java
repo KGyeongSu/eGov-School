@@ -55,7 +55,7 @@ public class JobNoticeDAOImpl implements JobNoticeDAO {
 	@Override
 	public JobNoticeVO selectJobListByJn_num(String jn_num) throws SQLException {
 
-		return session.selectOne("JobNotice-Mapper.selectJobNoticeByJn_num", jn_num);
+		return session.selectOne("JobNotice-Mapper.selectJobListByJn_num", jn_num);
 		
 	}
 

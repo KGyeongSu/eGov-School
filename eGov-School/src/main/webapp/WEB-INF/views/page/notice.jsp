@@ -60,7 +60,7 @@
                             <c:when test="${not empty jobList}">
                                 <c:forEach var="job" items="${jobList}" varStatus="status">
                                     <tr>
-                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perpageNum) - status.index}</td>
+                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perPageNum) - status.index}</td>
                                         <td class="notice_title" onclick="openJobDetail('${job.jnNum}')">${job.jnTitle}</td>
                                         <td>${job.userName}</td>
                                         <td><fmt:formatDate value="${job.jnRegDate}" pattern="yyyy.MM.dd"/></td>
@@ -95,7 +95,7 @@
                             <c:when test="${not empty examList}">
                                 <c:forEach var="exam" items="${examList}" varStatus="status">
                                     <tr>
-                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perpageNum) - status.index}</td>
+                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perPageNum) - status.index}</td>
                                         <td class="notice_title" onclick="openExamDetail('${exam.enNum}')">${exam.enTitle}</td>
                                         <td>${exam.userName}</td>
                                         <td><fmt:formatDate value="${exam.enRegDate}" pattern="yyyy.MM.dd"/></td>
