@@ -1,7 +1,9 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -57,7 +59,7 @@ public class ClassApplyDAOImpl implements ClassApplyDAO {
     }
 
 	@Override
-	public int selectClassApplySeqNext() throws SQLException {
+	public String selectClassApplySeqNext() throws SQLException {
 		
 		return session.selectOne("ClassApply-Mapper.selectClassApplySeqNext");
 	}
@@ -79,6 +81,19 @@ public class ClassApplyDAOImpl implements ClassApplyDAO {
 	public List<ClassApplyVO> selectCompletedClassList(ClassApplyVO apply) throws SQLException {
 	
 		return session.selectList("ClassApply-Mapper.selectCompletedClassList", apply);
+	}
+
+	@Override
+	public int checkDuplicate(String userNum, String claNum) throws SQLException {
+		Map<String, String> param = new HashMap<>();
+	    param.put("userNum", userNum);
+	    param.put("claNum", claNum);
+	    return session.selectOne("ClassApply-Mapper.checkDuplicate", param);
+	}
+
+	@Override
+	public int checkFull(String claNum) throws SQLException {
+		return session.selectOne("ClassApply-Mapper.checkFull", claNum);
 	}
 
 }

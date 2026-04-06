@@ -56,6 +56,7 @@ public class SpringSecurityConfig {
 						// 누구나 접근 가능 (로그인 안해도 됨)
 						.requestMatchers("/commons/**").permitAll() // 로그인, 회원가입
 						.requestMatchers("/resources/**").permitAll() // CSS, JS 등
+						.requestMatchers("/display/**").permitAll()
 						.requestMatchers("/", "/main").permitAll() // 메인페이지
 						.requestMatchers("/page/**").permitAll() // 공개 페이지
 

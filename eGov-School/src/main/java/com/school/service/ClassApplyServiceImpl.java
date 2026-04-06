@@ -31,7 +31,9 @@ public class ClassApplyServiceImpl implements ClassApplyService {
 
     @Override
     public void registClassApply(ClassApplyVO apply) throws SQLException {
-        classApplyDAO.insertClassApply(apply);
+    	String caNum = classApplyDAO.selectClassApplySeqNext();
+        apply.setCaNum(caNum);
+    	classApplyDAO.insertClassApply(apply);
     }
 
     @Override
@@ -187,5 +189,15 @@ public class ClassApplyServiceImpl implements ClassApplyService {
 		vo.setUserNum(userNum);
 		
 		return classApplyDAO.selectCompletedClassList(vo);
+	}
+
+	@Override
+	public int checkDuplicate(String userNum, String claNum) throws SQLException {
+	    return classApplyDAO.checkDuplicate(userNum, claNum);
+	}
+
+	@Override
+	public int checkFull(String claNum) throws SQLException {
+	    return classApplyDAO.checkFull(claNum);
 	}
 }

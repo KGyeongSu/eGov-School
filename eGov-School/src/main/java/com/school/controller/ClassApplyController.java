@@ -112,4 +112,49 @@ public class ClassApplyController {
             return "fail";
         }
     }
+    
+    @RequestMapping(value = "/classApply", method = RequestMethod.POST)
+    @ResponseBody
+    public String classApply(@RequestParam("claNum") String claNum, HttpSession session) {
+        
+        // 1. 로그인 체크
+        UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "login";
+        }
+        
+        // 2. 사용자 권한 체크 (사용자만 가능)
+        if (!"사용자".equals(loginUser.getUserRole())) {
+            return "denied";
+        }
+        
+        String userNum = String.valueOf(loginUser.getUserNum());
+        
+        try {
+            // 3. 중복 신청 체크
+            int count = classApplyService.checkDuplicate(userNum, claNum);
+            if (count > 0) {
+                return "already";
+            }
+            
+            // 4. 모집인원 마감 체크
+            int full = classApplyService.checkFull(claNum);
+            if (full <= 0) {
+                return "full";
+            }
+            
+            // 5. 수강신청 INSERT
+            ClassApplyVO apply = new ClassApplyVO();
+            apply.setUserNum(userNum);
+            apply.setClaNum(claNum);
+            classApplyService.registClassApply(apply);
+            
+            return "success";
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+    
 }

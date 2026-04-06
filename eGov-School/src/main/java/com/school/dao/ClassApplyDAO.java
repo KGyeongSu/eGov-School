@@ -20,11 +20,15 @@ public interface ClassApplyDAO {
     void updateClassApply(ClassApplyVO apply) throws SQLException;
     void deleteClassApply(String caNum) throws SQLException;
     
-    int selectClassApplySeqNext()throws SQLException;
+    String selectClassApplySeqNext()throws SQLException;
     
     void updateClassProgress(ClassApplyVO apply) throws SQLException;
 
 	Integer selectLastLsnSeq(LessonVO searchVO)throws SQLException;
 
 	List<ClassApplyVO> selectCompletedClassList(ClassApplyVO apply)throws SQLException;
+	
+	int checkDuplicate(String userNum, String claNum) throws SQLException;
+	
+	int checkFull(String claNum) throws SQLException;
 }

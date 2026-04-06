@@ -13,9 +13,11 @@ import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
 import com.school.dto.ExamNoticeVO;
 import com.school.dto.JobNoticeVO;
+import com.school.dto.LessonVO;
 import com.school.service.ClassService;
 import com.school.service.ExamNoticeService;
 import com.school.service.JobNoticeService;
+import com.school.service.LessonService;
 
 @Controller
 @RequestMapping("/page")
@@ -24,13 +26,16 @@ public class PageController {
     private final ClassService classService;
     private final JobNoticeService jobNoticeService;
     private final ExamNoticeService examNoticeService;
+    private final LessonService lessonService;
 
     public PageController(ClassService classService, 
                           JobNoticeService jobNoticeService,
-                          ExamNoticeService examNoticeService) {
+                          ExamNoticeService examNoticeService,
+                          LessonService lessonService) {
         this.classService = classService;
         this.jobNoticeService = jobNoticeService;
         this.examNoticeService = examNoticeService;
+        this.lessonService = lessonService;
     }
 
     // 기존 수강신청 페이지
@@ -52,7 +57,10 @@ public class PageController {
     @GetMapping("/classDetail")
     @ResponseBody
     public ClassVO classDetail(@RequestParam("claNum") String claNum) throws Exception {
-        return classService.selectClassByCla_num(claNum);
+        ClassVO classVO = classService.selectClassByCla_num(claNum);
+        List<LessonVO> lessonList = lessonService.selectLessonList(claNum);
+        classVO.setLessonList(lessonList);
+        return classVO;
     }
 
     // 공무원채용 페이지 (채용공고 + 시험공고 탭)

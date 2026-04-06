@@ -65,7 +65,9 @@
 	
 	<select id="selectClassByCla_num" resultType="classs">
 	
-		select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_complete, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_complete, 
+       	user_name, u.user_photo, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views,
+      	(SELECT COUNT(*) FROM classapply ca WHERE ca.cla_num = c.cla_num) AS applyCnt
 		from class c
 		inner join users u
 		on c.user_num = u.user_num

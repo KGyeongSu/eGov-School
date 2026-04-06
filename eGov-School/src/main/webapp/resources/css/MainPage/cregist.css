@@ -372,6 +372,34 @@
     flex: 1;
 }
 
+/* 커리큘럼 차시 목록 */
+.cm_lesson_item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cm_lesson_item:last-child {
+    border-bottom: none;
+}
+
+.cm_lesson_seq {
+    background: #e8f4fd;
+    color: #2c7be5;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 12px;
+    white-space: nowrap;
+}
+
+.cm_lesson_title {
+    font-size: 14px;
+    color: #333;
+}
+
 .cm_section h4 {
     font-size: 14px;
     font-weight: 600;

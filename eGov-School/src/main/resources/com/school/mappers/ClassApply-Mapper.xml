@@ -67,7 +67,7 @@
 		WHERE CA_NUM = #{caNum}
 	</delete>
 
-	<select id="selectClassApplySeqNext">
+	<select id="selectClassApplySeqNext" resultType="str">
 		SELECT SEQ_CLASSAPPLY.NEXTVAL AS CA_NUM FROM DUAL
 	</select>
 
@@ -106,5 +106,22 @@
     WHERE A.USER_NUM = #{userNum}
     AND E.ER_SCORE IS NOT NULL
 </select>
+
+	<!-- 중복 신청 체크 -->
+	<select id="checkDuplicate" parameterType="map" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM CLASSAPPLY 
+	    WHERE USER_NUM = #{userNum} 
+	    AND CLA_NUM = #{claNum}
+	</select>
+	
+	<!-- 모집인원 마감 체크 (남은 자리 수 리턴) -->
+	<select id="checkFull" parameterType="str" resultType="int">
+	    SELECT (C.CLA_MAXSTU - COUNT(CA.CA_NUM)) 
+	    FROM CLASS C 
+	    LEFT JOIN CLASSAPPLY CA ON C.CLA_NUM = CA.CLA_NUM 
+	    WHERE C.CLA_NUM = #{claNum} 
+	    GROUP BY C.CLA_MAXSTU
+	</select>
 
 </mapper>

@@ -26,6 +26,10 @@ public interface ClassApplyService {
 
 	List<LessonVO> getLessonListByCoures(String claNum) throws SQLException;
 	
+	int checkDuplicate(String userNum, String claNum) throws SQLException;
+	
+	int checkFull(String claNum) throws SQLException;
+	
 	
 	
 }
