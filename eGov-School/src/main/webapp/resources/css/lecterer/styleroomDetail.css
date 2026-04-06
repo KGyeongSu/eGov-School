@@ -67,6 +67,10 @@ div.content>div.mid {
     display: flex; /* 추가 */
 }
 
+div.mid > form {
+    width: 100%;
+}
+
 div.mid .reg_container {
     display: flex;          
     width: 100%;
@@ -233,6 +237,7 @@ div.mid .reg_container {
 .chapter_list {
     flex: 1;
     overflow-y: auto;
+    margin-top: 20px;
 }
 
 .chapter_list li {
@@ -291,4 +296,12 @@ div.mid .reg_container {
     color: #bbb;
     padding: 10px 0;
     font-size: 0.8rem;
+}
+
+.file_item_list li:last-child {
+    border-bottom: none; 
+}
+
+.lesson_item:hover {
+    background-color: #f9f9f9; /* 아주 연한 회색 */
 }

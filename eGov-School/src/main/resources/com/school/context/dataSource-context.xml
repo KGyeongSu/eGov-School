@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+   	   xmlns:tx="http://www.springframework.org/schema/tx"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xmlns:c="http://www.springframework.org/schema/c"
 	   xsi:schemaLocation="
 			http://www.springframework.org/schema/beans 
-			https://www.springframework.org/schema/beans/spring-beans.xsd" >
+			https://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/tx
+        	https://www.springframework.org/schema/tx/spring-tx.xsd" >
 
 	<!-- hikariCP라는 커낵션풀을 사용. 
 		DB 접속에 필요한 정보를 모아놓는 설정 객체 -->
@@ -45,5 +48,7 @@
 		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager"		
 		  p:dataSource-ref="dataSource"
 		  />
+		  
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>

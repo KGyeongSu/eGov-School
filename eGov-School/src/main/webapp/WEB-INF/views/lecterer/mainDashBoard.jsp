@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%@ include file="../modules/lecHeader.jsp"%>
+
+<head>
 <!-- 개별 css -->
 <link type="text/css" rel="stylesheet"
 	href="../../../resources/css/lecterer/style.css" />
@@ -24,7 +28,7 @@
 				<a href=""><i class="fa-regular fa-user"></i></a>
 			</div>
 			<div class="state_bar">
-				<p>???님의 메인 대시보드</p>
+				<p>${loginUser.userName}님의 메인대시보드</p>
 			</div>
 			<div class="logout_dash">
 				<div class="mes">
@@ -41,69 +45,40 @@
 			<div class="container-fluid">
 				<h4 class="section-title">진행중인 강좌</h4>
 				<div class="row">
-					<div class="col-md-4">
-						<div class="card course-card-v2">
-							<div class="course-img-wrapper">
-								<img src="../../../resources/imgs/lope.png" class="course-img">
-								<div class="course-overlay">
-									<button class="btn-play" onclick="location.href='#'">
-										<i class="fas fa-cloud-upload-alt"></i> 강좌 업로드
-									</button>
-								</div>
+					<c:choose>
+						<c:when test="${empty classList}">
+							<div class="col-12 text-center">
+								<p>현재 진행 중인 강좌가 없습니다.</p>
 							</div>
-							<div class="card-body">
-								<h3 class="course-title">자바 프로그래밍</h3>
-								<div class="course-status-text">
-									<span>등록 강좌율</span><span class="percent-text">65%</span>
+						</c:when>
+						<c:otherwise>
+							<c:forEach items="${classList}" var="classs" begin="0" end="2">
+								<div class="col-md-4">
+									<div class="card course-card-v2">
+										<div class="course-img-wrapper">
+											<img
+												src="${not empty classs.claThumb ? classs.claThumb : '/resources/images/default.jpg'}"
+												class="course-img">
+											<div class="course-overlay">
+												<button class="btn-play" onclick="go_roomDetail('${classs.claNum}', '${classs.claTitle}');">
+													<i class="fa-solid fa-door-open"></i> 강의실 바로가기
+												</button>
+											</div>
+										</div>
+										<div class="card-body">
+											<h3 class="course-title">${classs.claTitle}</h3>
+											<div class="course-status-text">
+												<span>등록 강좌율</span><span class="percent-text">${classs.claGoal }</span>
+											</div>
+											<div class="progress custom-progress-v2" style="height: 20px; background-color: #eee;">
+												<div class="progress-bar" style="width: ${classs.claGoal}!important; height: 100%; background-color: #1a6d91 !important; "></div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="progress custom-progress-v2">
-									<div class="progress-bar" style="width: 65%"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card course-card-v2">
-							<div class="course-img-wrapper">
-								<img src="../../../resources/imgs/lope.png" class="course-img">
-								<div class="course-overlay">
-									<button class="btn-play" onclick="location.href='#'">
-										<i class="fas fa-cloud-upload-alt"></i>강좌 업로드
-									</button>
-								</div>
-							</div>
-							<div class="card-body">
-								<h3 class="course-title">데이터베이스</h3>
-								<div class="course-status-text">
-									<span>등록 강좌율</span><span class="percent-text">40%</span>
-								</div>
-								<div class="progress custom-progress-v2">
-									<div class="progress-bar bg-warning" style="width: 40%"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card course-card-v2">
-							<div class="course-img-wrapper">
-								<img src="../../../resources/imgs/lope.png" class="course-img">
-								<div class="course-overlay">
-									<button class="btn-play" onclick="location.href='#'">
-										<i class="fas fa-cloud-upload-alt"></i> 강좌 업로드
-									</button>
-								</div>
-							</div>
-							<div class="card-body">
-								<h3 class="course-title">웹 퍼블리싱</h3>
-								<div class="course-status-text">
-									<span>등록 강좌율</span><span class="percent-text">85%</span>
-								</div>
-								<div class="progress custom-progress-v2">
-									<div class="progress-bar bg-success" style="width: 85%"></div>
-								</div>
-							</div>
-						</div>
-					</div>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
@@ -216,6 +191,7 @@
 		</div>
 </body>
 
+<script src="/resources/js/commons.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -320,16 +296,17 @@ document.addEventListener('DOMContentLoaded', function() {
         fullCalendar.updateSize();
     });
 });
-	
+
 </script>
 
 <script>
 
-	function openPro() {
-		
-		
-		
-	}
+function go_roomDetail (claNum, claTitle) {
+	
+	alert (claTitle + " 강의실로 이동합니다.");
+	location.href="/lecterer/roomDetail?claNum=" + claNum;
+	
+}
 
 </script>
 

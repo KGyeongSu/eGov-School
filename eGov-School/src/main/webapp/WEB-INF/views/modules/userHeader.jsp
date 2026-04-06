@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <head>
 
 	<meta charset="UTF-8">
@@ -35,7 +37,7 @@
             <a href="#"><i class="fa-regular fa-user"></i></a>
         </div>
         <div class="state_bar">
-            <p>??님의 메인대시보드</p>
+           <p><strong>${loginUser.userName}</strong>님의 대시보드</p>
         </div>
         <div class="logout_dash">
             <div class="mes">

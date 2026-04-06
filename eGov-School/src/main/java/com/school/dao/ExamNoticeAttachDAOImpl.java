@@ -9,7 +9,7 @@ import com.school.dto.ExamNoticeAttachVO;
 
 public class ExamNoticeAttachDAOImpl implements ExamNoticeAttachDAO {
 
-	private SqlSession session;
+	private final SqlSession session;
 
 	public ExamNoticeAttachDAOImpl(SqlSession session) {
 		this.session = session;

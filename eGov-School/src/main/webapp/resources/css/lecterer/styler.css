@@ -3,7 +3,7 @@
 /* Mid 영역 */
 div.content > div.mid {
     width: 100%;
-    height: calc((100vh - 130px) / 2);
+    height: calc(100vh - 130px);
     padding: 30px 40px;
     padding-bottom: 0;
     background-color: #f8fafc;
@@ -127,4 +127,8 @@ div.content > div.mid {
 }
 .custom-progress-v2 .progress-bar {
     background-color: #0e506e !important;
+}
+
+.pagination_wrapper nav {
+    margin-top: 0 !important;
 }

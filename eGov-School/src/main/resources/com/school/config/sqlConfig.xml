@@ -37,6 +37,7 @@
 		<typeAlias type="com.school.dto.ExamResultVO" alias="examresult"/>
 		<typeAlias type="com.school.dto.ProgressVO" alias="progress"/>
 		<typeAlias type="com.school.dto.ReputationVO" alias="reputation"/>
+		<typeAlias type="com.school.dto.LearningStatusVO" alias="learningstatus"/>
   		
   	</typeAliases>
   

@@ -12,11 +12,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class QuestionVO {
 	
 	private String queNum;
 	private String tetNum;
-	private String queSeq;
+	private Integer queSeq;
 	private String queText;
 	private String queOpt1;
 	private String queOpt2;
@@ -26,5 +27,6 @@ public class QuestionVO {
 	private String queDesc;
 	private Integer quePoint;
 	
-
+	private Integer userAnswer; 
+	private String isCorrect;
 }

@@ -137,6 +137,16 @@ div.content>div.top>div.state_bar {
 
     /**background-color: #0e506e;**/
 
+
+}
+
+div.content>div.top>div.state_bar p strong{
+	 font-size: 20px;
+    margin-top: 20px;
+    color: #24272b;
+    font-weight: 600;
+
+    cursor: pointer;
 }
 
 div.content>div.top>div.state_bar p {
