@@ -55,7 +55,7 @@
 	<insert id="insertJobNotice" parameterType="jobNotice">
 	
 		insert into jobNotice(jn_num, jn_title, jn_content, jn_regdate, jn_views, user_num)
-		values(#{jnNum}, #{jnTitle}, #{jnContent}, SYSDATE, #{jnViews}, #{userNum})
+		values(#{jnNum}, #{jnTitle}, #{jnContent}, SYSDATE, 0, #{userNum})
 		
 	</insert>
 	

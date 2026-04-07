@@ -283,7 +283,7 @@
                 $('.nm_title').text(data.enTitle);
                 $('.nm_writer').text('작성자: ' + data.userName);
 
-                var date = new Date(data.enDate);
+                var date = new Date(data.enRegDate);
                 var dateStr = date.getFullYear() + '.' + String(date.getMonth()+1).padStart(2,'0') + '.' + String(date.getDate()).padStart(2,'0');
                 $('.nm_date').text('등록일: ' + dateStr);
 

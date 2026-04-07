@@ -20,7 +20,7 @@ public class ExamNoticeVO {
 	private String enContent;
 	private Date enRegDate;
 	private Integer enViews;
-	private Integer userNum;
+	private String userNum;
 
 	private String userName;
 }

@@ -20,7 +20,7 @@ public class JobNoticeVO {
 	private String jnContent;
 	private Date jnRegDate;
 	private Integer jnViews;
-	private Integer userNum;
+	private String userNum;
 	
 	
 	private String userName;

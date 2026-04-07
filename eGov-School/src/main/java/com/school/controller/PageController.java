@@ -136,7 +136,7 @@ public class PageController {
             JobNoticeVO vo = new JobNoticeVO();
             vo.setJnTitle(title);
             vo.setJnContent(content);
-            vo.setUserNum(Integer.parseInt(loginUser.getUserNum()));
+            vo.setUserNum(loginUser.getUserNum());
 
             jobNoticeService.insertJobNotice(vo);
             return "success";
@@ -161,7 +161,7 @@ public class PageController {
             ExamNoticeVO vo = new ExamNoticeVO();
             vo.setEnTitle(title);
             vo.setEnContent(content);
-            vo.setUserNum(Integer.parseInt(loginUser.getUserNum()));
+            vo.setUserNum(loginUser.getUserNum());
 
             examNoticeService.insertExamNotice(vo);
             return "success";
