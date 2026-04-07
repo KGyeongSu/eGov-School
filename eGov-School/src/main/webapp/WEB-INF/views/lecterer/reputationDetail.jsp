@@ -23,7 +23,7 @@
             <div class="form_top">
                 <h2 class="title">[${rdetail.claTitle}] 피드백 상세 보기</h2>
                 <div class="send_btn">
-                    <button type="button" class="btn" onclick="history.back();">
+                    <button type="button" class="btn" onclick="go_back();">
                         <i class="fa-solid fa-xmark" style="margin-top: 3px;"></i>닫기
                     </button>
                 </div>
@@ -72,5 +72,15 @@
 </body>
 
 <script src="/resources/js/commons.js"></script>
+
+<script>
+	
+	function go_back () {
+		
+		window.close();
+		
+	}
+
+</script>
 
 </html>

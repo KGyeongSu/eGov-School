@@ -56,9 +56,19 @@
 								<div class="col-md-4">
 									<div class="card course-card-v2">
 										<div class="course-img-wrapper">
-											<img
-												src="${not empty classs.claThumb ? classs.claThumb : '/resources/images/default.jpg'}"
-												class="course-img">
+											<c:choose>
+										        <%-- DB에 썸네일 파일명이 있는 경우 --%>
+										        <c:when test="${not empty classs.claThumb}">
+										            <img src="${pageContext.request.contextPath}${classs.claSavePath}/${classs.claSaveName}" 
+										                 class="course-img" 
+										                 onerror="this.src='${pageContext.request.contextPath}/resources/images/default.jpg'">
+										        </c:when>
+										        <%-- 없는 경우 기본 이미지 출력 --%>
+										        <c:otherwise>
+										            <img src="${pageContext.request.contextPath}/resources/images/default.jpg" 
+										                 class="course-img">
+										        </c:otherwise>
+										      </c:choose>
 											<div class="course-overlay">
 												<button class="btn-play" onclick="go_roomDetail('${classs.claNum}', '${classs.claTitle}');">
 													<i class="fa-solid fa-door-open"></i> 강의실 바로가기

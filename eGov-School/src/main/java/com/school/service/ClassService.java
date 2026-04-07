@@ -3,8 +3,6 @@ package com.school.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.ibatis.session.RowBounds;
-
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
 import com.school.dto.UserVO;

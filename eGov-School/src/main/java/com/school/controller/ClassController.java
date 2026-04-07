@@ -134,7 +134,7 @@ public class ClassController {
 					LessonAttachVO attach = new LessonAttachVO ();
 					attach.setLaName(name);
 					attach.setLaSaveName(saveName);
-					attach.setLaPath(lessonFilePath);
+					attach.setLaPath("/upload/lesson");
 					attach.setLaType(file.getContentType());
 					
 					attachList.add(attach);
@@ -198,7 +198,7 @@ public class ClassController {
 	}
 	
 	@PostMapping("/makeRoom")
-	public String insertClass (ClassVO classVO, HttpSession session, RedirectAttributes rttr) throws Exception {
+	public String insertClass (ClassVO classVO, HttpSession session, Model model) throws Exception {
 		
 		// 로그인한 강사 정보 가져오기
 		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
@@ -213,18 +213,18 @@ public class ClassController {
 		try {
 			
 			classService.insertClass(classVO);
-			rttr.addFlashAttribute("msg", "강의실 생성이 완료되었습니다.");
-			rttr.addFlashAttribute("status", "success");
+			model.addAttribute("msg", "강의실 생성이 완료되었습니다.");
+	        model.addAttribute("status", "success");
 			
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
-			rttr.addFlashAttribute("msg", "서버 장애로 인해 강의실 생성에 실패했습니다. \\n 다시 시도해 주세요.");
-			rttr.addFlashAttribute("status", "fail");
+			model.addAttribute("msg", "서버 장애로 인해 강의실 생성에 실패했습니다. \\n 다시 시도해 주세요.");
+			model.addAttribute("status", "fail");
 			
 		}
 		
-		return "redirect:/lecterer/myRoom?userNum=" + classVO.getUserNum();
+		return "lecterer/makeRoom";
 		
 	}
 

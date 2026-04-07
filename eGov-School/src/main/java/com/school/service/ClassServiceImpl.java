@@ -1,11 +1,16 @@
 package com.school.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.school.cmd.PageMaker;
 import com.school.dao.ClassDAO;
@@ -28,7 +33,7 @@ public class ClassServiceImpl implements ClassService {
 		this.lessonDAO = lessonDAO;
 		
 	}
-  // 
+   
 	@Override
 	public List<ClassVO> selectClassList(PageMaker pageMaker, String userNum) throws SQLException {
 		
@@ -49,9 +54,46 @@ public class ClassServiceImpl implements ClassService {
 
 	}
 	
+	@Value("${savedPath.class.photo}")
+	private String classPhotoPath;
+	
+	
 	@Override
 	@Transactional
 	public void insertClass(ClassVO classVO) throws SQLException {
+		
+		// 썸네일 등록
+		MultipartFile file = classVO.getThumb();
+		
+		if (file != null && !file.isEmpty()) {
+			
+	        try {
+	        	
+	            // 저장 경로
+	            String uploadPath = classPhotoPath;
+	            
+	            File dir = new File(uploadPath);
+	            if (!dir.exists()) dir.mkdirs();
+	            
+	            // 2. 파일명 중복 방지 (UUID)
+	            String name = file.getOriginalFilename();
+	            String saveName = UUID.randomUUID().toString() + "_" + name;
+	            
+	            // 3. 물리적 저장
+	            file.transferTo(new File(uploadPath, saveName));
+	            
+	            // 4. DB 저장
+	            classVO.setClaThumb(name);
+	            classVO.setClaSaveName(saveName);
+	            classVO.setClaSavePath("/classDisplay");
+	            
+	        } catch (IOException e) {
+	        	
+	            e.printStackTrace();
+	            throw new SQLException("파일 저장 중 오류가 발생했습니다.");
+	            
+	        }
+	    }
 		
 		// 클래스 DB에 넣기
 		classDAO.insertClass(classVO);

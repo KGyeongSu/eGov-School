@@ -4,6 +4,8 @@ package com.school.dto;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +25,8 @@ public class ClassVO {
 	private String claGoal;
 	private String claCategory;
 	private String claThumb;
+	private String claSaveName;
+	private String claSavePath;
 	private String userNum;
 	private Date claRegDate;
 	private Date appDate;
@@ -41,6 +45,8 @@ public class ClassVO {
 	private List<LessonVO> lessonList;
 	// 수료증 존재 여부
 	private String cerNum;
+	// 강의 썸네일 받아두는 그릇
+	private MultipartFile thumb;
   
 	// 사용자
   // join문으로 가져오는 user정보를 담을 그릇
