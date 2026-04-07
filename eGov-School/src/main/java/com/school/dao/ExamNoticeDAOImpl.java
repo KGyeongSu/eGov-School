@@ -74,7 +74,7 @@ public class ExamNoticeDAOImpl implements ExamNoticeDAO {
 	}
 
 	@Override
-	public int selectExamNoticeSeqNext() throws SQLException {
+	public String selectExamNoticeSeqNext() throws SQLException {
 
 		return session.selectOne("ExamNotice-Mapper.selectExamNoticeSeqNext");
 		
