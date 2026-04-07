@@ -27,15 +27,15 @@
             <div class="slide_list">
                 <ul>
                     <li>
-                            <img src="/resources/images/slide1.png" />
+                            <img src="/resources/images/slide4.png" />
                     </li>
                     
                     <li>
-                            <img src="/resources/images/slide2.png" />
+                            <img src="/resources/images/slide5.png" />
                     </li>
                     
                     <li>
-                            <img src="/resources/images/slide3.png" />
+                            <img src="/resources/images/slide6.png" />
                     </li>
                 </ul>
             </div>
