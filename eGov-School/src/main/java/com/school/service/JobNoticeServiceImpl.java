@@ -36,5 +36,12 @@ public class JobNoticeServiceImpl implements JobNoticeService {
         return jobNoticeDAO.selectJobListByJn_num(jnNum);
     }
 
+	@Override
+	public void insertJobNotice(JobNoticeVO vo) throws SQLException {
+		String jnNum = jobNoticeDAO.selectJobNoticeSeqNext();
+        vo.setJnNum(String.valueOf(jnNum));
+        jobNoticeDAO.insertJobNotice(vo);
+	}
+
 	
 }

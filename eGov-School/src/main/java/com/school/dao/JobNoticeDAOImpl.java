@@ -74,7 +74,7 @@ public class JobNoticeDAOImpl implements JobNoticeDAO {
 	}
 
 	@Override
-	public int selectJobNoticeSeqNext() throws SQLException {
+	public String selectJobNoticeSeqNext() throws SQLException {
 
 		return session.selectOne("JobNotice-Mapper.selectJobNoticeSeqNext");
 		

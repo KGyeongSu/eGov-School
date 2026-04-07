@@ -35,5 +35,12 @@ public class ExamNoticeServiceImpl implements ExamNoticeService {
         return examNoticeDAO.selectExamNoticeByEn_num(enNum);
     }
 
+	@Override
+	public void insertExamNotice(ExamNoticeVO vo) throws SQLException {
+		String enNum = examNoticeDAO.selectExamNoticeSeqNext();
+        vo.setEnNum(String.valueOf(enNum));
+        examNoticeDAO.insertExamNotice(vo);
+	}
+
 	
 }

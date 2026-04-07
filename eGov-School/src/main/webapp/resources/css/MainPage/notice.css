@@ -83,6 +83,78 @@
     background: #16124d;
 }
 
+/* 글쓰기 버튼 */
+.notice_write_btn_wrap {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.btn_write {
+    background: #1a2b4a;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn_write:hover {
+    background: #1a5cbf;
+}
+
+/* 글쓰기 폼 */
+.write_form {
+    padding: 10px 0;
+}
+
+.write_field {
+    margin-bottom: 16px;
+}
+
+.write_field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.write_field input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.write_field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.btn_write_submit {
+    background: #1a2b4a;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.btn_write_submit:hover {
+    background: #1a5cbf;
+}
+
 /* ===== 테이블 ===== */
 .notice_table {
     width: 100%;

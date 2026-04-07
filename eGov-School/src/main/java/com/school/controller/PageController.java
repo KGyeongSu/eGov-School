@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,10 +15,13 @@ import com.school.dto.ClassVO;
 import com.school.dto.ExamNoticeVO;
 import com.school.dto.JobNoticeVO;
 import com.school.dto.LessonVO;
+import com.school.dto.UserVO;
 import com.school.service.ClassService;
 import com.school.service.ExamNoticeService;
 import com.school.service.JobNoticeService;
 import com.school.service.LessonService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/page")
@@ -117,5 +121,54 @@ public class PageController {
         return examNoticeService.selectExamNoticeByEn_num(enNum);
     }
     
+ // 채용공고 등록
+    @PostMapping("/insertJobNotice")
+    @ResponseBody
+    public String insertJobNotice(@RequestParam("title") String title,
+                                  @RequestParam("content") String content,
+                                  HttpSession session) {
+        try {
+            UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+            if (loginUser == null || !"관리자".equals(loginUser.getUserRole())) {
+                return "denied";
+            }
+
+            JobNoticeVO vo = new JobNoticeVO();
+            vo.setJnTitle(title);
+            vo.setJnContent(content);
+            vo.setUserNum(Integer.parseInt(loginUser.getUserNum()));
+
+            jobNoticeService.insertJobNotice(vo);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
+    // 시험공고 등록
+    @PostMapping("/insertExamNotice")
+    @ResponseBody
+    public String insertExamNotice(@RequestParam("title") String title,
+                                   @RequestParam("content") String content,
+                                   HttpSession session) {
+        try {
+            UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+            if (loginUser == null || !"관리자".equals(loginUser.getUserRole())) {
+                return "denied";
+            }
+
+            ExamNoticeVO vo = new ExamNoticeVO();
+            vo.setEnTitle(title);
+            vo.setEnContent(content);
+            vo.setUserNum(Integer.parseInt(loginUser.getUserNum()));
+
+            examNoticeService.insertExamNotice(vo);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
 
 }
