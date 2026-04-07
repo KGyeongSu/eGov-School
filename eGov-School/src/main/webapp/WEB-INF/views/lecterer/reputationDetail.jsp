@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,41 +18,59 @@
 </head>
 
 <body>
-    <div class="inner">
+    <div class="inner reputation_detail_page">
         <div class="form">
-            <!-- 버튼 -->
             <div class="form_top">
-                <h2 class="title">[2026 신규 공무원 과정] 피드백 상세</h2>
+                <h2 class="title">[${rdetail.claTitle}] 피드백 상세 보기</h2>
                 <div class="send_btn">
-                    <button type="button" class="btn"><i class="fa-solid fa-xmark" style="margin-top: 3px;"></i>닫기</button>
+                    <button type="button" class="btn" onclick="history.back();">
+                        <i class="fa-solid fa-xmark" style="margin-top: 3px;"></i>닫기
+                    </button>
                 </div>
             </div>
 
             <div class="form_mid">
-                <!-- 발신인 -->
                 <div class="info_group">
-                    <label>발신 구분</label>
-                    <div class="read_only_box">
-                        <span>관리자</span>
-                    </div>
-                </div>
+				    <label>발신 구분</label>
+				    <div class="read_only_box" style="display: flex; align-items: center;">
+				        <c:choose>
+				            <c:when test="${rdetail.userRole eq '관리자'}">
+				                <span style=" background-color: #82d932; color: #24272b; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; display: inline-block; line-height: 1; ">
+				                	관리자
+				                </span>
+				            </c:when>
+				            <c:otherwise>
+				                <span style=" background-color: #ebf1f6; color: #24272b;  padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; line-height: 1; ">
+				                	수강생
+				                </span>
+				            </c:otherwise>
+				        </c:choose>
+				        <span style="margin-left: 10px; font-size: 14px; color: #24272b; font-weight: 500;">
+				            ${rdetail.userName} 님
+				        </span>
+				    </div>
+				</div>
 
-                <!-- 날짜 -->
                 <div class="info_group" style="margin-top: 15px;">
                     <label>수신 일시</label>
-                    <div class="read_only_text">2026-03-19 10:15:30</div>
+                    <div class="read_only_text">
+                        <fmt:formatDate value="${rdetail.repRegDate}" pattern="yyyy-MM-dd" />
+                    </div>
                 </div>
             </div>
 
-            <!-- 상세 내용 -->
             <div class="form_bot">
                 <div class="message_detail_box">
                     <label>피드백 상세 내용</label>
-                    <div class="message_content">트랄라라라라라라라qvonienrcwijmqc;wjn ureghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh라</div>
+                    <div class="message_content" style="max-height: 200px; overflow-y: auto;" >
+                        <p style="position: relative; top: -55px;">${rdetail.repContent}</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
+<script src="/resources/js/commons.js"></script>
 
 </html>

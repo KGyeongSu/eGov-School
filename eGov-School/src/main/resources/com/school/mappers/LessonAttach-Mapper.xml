@@ -10,8 +10,8 @@
 	</select>
  
 	<insert id="insertLessonAttach" parameterType="lessonAttach">
-		INSERT INTO LESSON_ATTACH(LA_NUM, LSN_NUM, LA_NAME, LA_SAVE_NAME, LA_TYPE)
-		VALUES(#{laNum}, #{lsnNum}, #{laName}, #{laSaveName}, #{laType})
+		INSERT INTO LESSON_ATTACH(LA_NUM, LSN_NUM, LA_NAME, LA_SAVE_NAME, LA_TYPE, LA_PATH)
+		VALUES(#{laNum}, #{lsnNum}, #{laName}, #{laSaveName}, #{laType}, #{laPath})
 	</insert>
  
 	<select id="selectLessonAttachList" parameterType="str" resultType="lessonAttach">

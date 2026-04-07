@@ -39,6 +39,8 @@ public class ClassVO {
 	private String tetNum;
   // class 안 lesson 들 리스트 보여주기
 	private List<LessonVO> lessonList;
+	// 수료증 존재 여부
+	private String cerNum;
   
 	// 사용자
   // join문으로 가져오는 user정보를 담을 그릇

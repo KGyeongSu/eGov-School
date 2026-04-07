@@ -20,12 +20,23 @@
                 <a href=""><i class="fa-regular fa-user"></i></a>
             </div>
             <div class="state_bar">
-                <p>평가 출제</p>
+                <c:choose>
+	                <c:when test="${not empty testEditInfo}">
+	                    <p>
+	                    	평가 수정 > <strong style="font: '나눔 고딕'; font-size: 17px;">&nbsp;&nbsp;${testEditInfo.claTitle}</strong>
+	                    </p>
+	                </c:when>
+	                <c:otherwise>
+	                	<p>
+	                    	평가 출제 > <strong style="font: '나눔 고딕'; font-size: 17px;">&nbsp;&nbsp;${testMake.claTitle}</strong>
+	                    </p>
+	                </c:otherwise>
+	            </c:choose>
             </div>
             <div class="logout_dash">
-                <div class="mes">
-                    <a href=""><i class="fa-regular fa-envelope"></i></a>
-                </div>
+                <div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer;">
+				    <i class="fa-regular fa-envelope"></i>
+				</div>
                 <div class="out">
                     <button type="button" class="btn btn-sm"
                         style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px;  border: none; line-height: 1;">로그아웃
@@ -34,15 +45,19 @@
             </div>
         </div>
         <div class="divider">
-            <div class="write"><a href="">
-                    <h2>평가 출제</h2>
-                </a></div>
-            <div class="manage"><a href="">
-                    <h2>평가 관리</h2>
-                </a></div>
+            <div class="write">
+			    <a href="/lecterer/resultManage?userNum=${loginUser.userNum}">
+			        <h2>평가 출제</h2>
+			    </a>
+			</div>
+			<div class="manage">
+			    <a href="/lecterer/resultSend?userNum=${loginUser.userNum}">
+			        <h2>평가 관리</h2>
+			    </a>
+			</div>
         </div>
         <form action="/lecturer/testMake" method="post" id="testForm">
-        		<input type="hidden" id="claNum" value="${testMake.claNum}">
+        		<input type="hidden" id="claNum" value="${not empty testEditInfo ? testEditInfo.claNum : testMake.claNum}">
 			    <input type="hidden" name="quePoint" value="5"> 
 			    <input type="hidden" name="testTimeLimit" value="40"> 
 	        <div class="main">
@@ -52,7 +67,17 @@
 					        <div class="info_column">
 					            <div class="course_info">
 					                <span class="label">강좌명 :</span>
-					                <span class="name">${testMake.claTitle}</span> </div>
+					                <span class="name">
+							            <c:choose>
+							                <c:when test="${not empty testEditInfo}">
+							                    ${testEditInfo.claTitle}
+							                </c:when>
+							                <c:otherwise>
+							                    ${testMake.claTitle}
+							                </c:otherwise>
+							            </c:choose>
+							        </span>
+					            </div>
 					        </div>
 					
 					        <div class="info_column">
@@ -107,15 +132,22 @@
 	            </div>
 	            <div class="state">
 	                <div class="state_up">
-	                    <button type="submit" class="btn_register">평가 등록</button>
+                    	<c:choose>
+                    		<c:when test="${not empty testEdit.testQuestionList  }">
+                    			<button type="submit" class="btn_register">평가수정</button>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<button type="submit" class="btn_register">평가등록</button>
+                    		</c:otherwise>
+                    	</c:choose>
 	                </div>
 	                <div class="state_down">
 	                    <h2 class="status_title">문제 출제 현황</h2>
-	                    <div class="status_content">
+	                    <div class="status_content" data-idx="${i}">
 	                        <ul class="question_status_list">
 	                            <!-- 등록 완료 상태 -->
 	                            <c:forEach var="i" begin="1" end="20">
-		                            <li class="item ${i == 1 ? 'active' : ''}">
+		                            <li class="item ${i == 1 ? 'active' : ''}" data-idx="${i}" style="cursor: pointer !important;">
 		                                <span class="q_no">${i < 10 ? '0' : ''}${i}</span>
 		                                <span class="q_title">미등록 문항</span>
 		                                <span class="state_icon" style="display:none;">✔</span>
@@ -134,13 +166,103 @@
 <script src="/resources/js/commons.js"></script>
 
 <script>
+// 수정시 문제 세팅
+const editData = {
+	
+	tetClaTitle: "${testEditInfo.claTitle}",
+    tetTitle: "${testEdit.tetTitle}",
+    questions: [
+        <c:forEach var="que" items="${testEdit.testQuestionList}" varStatus="status">
+        
+        {
+        	queNum: "${que.queNum}",
+            queSeq: ${status.index + 1},
+            queText: `${que.queText}`,
+            queOpt1: `${que.queOpt1}`,
+            queOpt2: `${que.queOpt2}`,
+            queOpt3: `${que.queOpt3}`,
+            queOpt4: `${que.queOpt4}`,
+            queAnswer: "${que.queAnswer}",
+            queDesc: `${que.queDesc}`
+            
+        }${!status.last ? ',' : ''}
+        
+        </c:forEach>
+    ]
+};
 
-// 초기화
-const totalQuestions = 2; 
-let currentNum = 1;        
-let questionList = [];     
+// 식별자 선언 & 초기화
+const totalQuestions = 20;
+let currentNum = 1;     
+let questionList = editData.questions.length > 0 ? editData.questions : []; 
 
-$(document).ready(function() {
+// 문제 & 현황판 상태 -> 가장 많이 호출, 최상단 위치 필요
+function refreshUI(num) {
+    currentNum = num;
+    $("#currentIdx").text(currentNum);
+    
+    // 데이터 복원
+    const data = questionList[currentNum - 1];
+    if (data && data.queText) {
+        $("#queText").val(data.queText);
+        $("input[name='queOpt1']").val(data.queOpt1);
+        $("input[name='queOpt2']").val(data.queOpt2);
+        $("input[name='queOpt3']").val(data.queOpt3);
+        $("input[name='queOpt4']").val(data.queOpt4);
+        $(`input[name='queAnswer'][value='\${data.queAnswer}']`).prop("checked", true);
+        $("textarea[name='queDesc']").val(data.queDesc);
+    } else {
+        // 초기화
+        $("#queText").val("");                      
+        $(".choice_input").val("");                
+        $("textarea[name='queDesc']").val("");
+        $("input[name='queAnswer']").prop("checked", false);
+    }
+
+    // 초기화
+    const $items = $(".question_status_list .item");
+    
+    $items.each(function(index) {
+    	
+        const $this = $(this);
+        const qData = questionList[index];
+        
+        $this.removeClass("active complete");
+        $this.find(".state_tag").remove();
+        $this.find(".state_icon").hide();
+
+        // 데이터가 이미 존재하는 문항
+        if (qData && qData.queText && qData.queText.trim() !== "") {
+        	
+            $this.addClass("complete");
+            $this.find(".state_icon").show();
+            const shortTitle = qData.queText.length > 8 ? qData.queText.substring(0, 20) + "..." : qData.queText;
+            $this.find(".q_title").text(shortTitle);
+            
+        } else {
+        	
+            $this.find(".q_title").text("미등록 문항");
+            
+        }
+
+        // 현재 내가 선택해서 보고 있는 문항
+        
+        if (index == (currentNum - 1)) {
+        	
+            $this.addClass("active");
+            $this.find(".state_icon").hide();
+            
+            // 수정중/작성중 텍스트 결정
+            const hasData = qData && qData.queText && qData.queText.trim() !== "";
+            const tagText = hasData ? "수정중" : "작성중";
+            const tagColor = hasData ? "#e67e22" : "#1a6d91";
+            
+            $this.append(`<span class="state_tag" style="color:${tagColor}; font-weight:bold; margin-left:5px; font-size:11px;">[\${tagText}]</span>`);
+            
+        }
+    });
+
+}
 
     // 유효성 검사
     function validate() {
@@ -199,154 +321,134 @@ $(document).ready(function() {
     	
     	const text = $("#queText").val().trim();
         const answer = $("input[name='queAnswer']:checked").val();
+        const existingData = questionList[currentNum - 1];
+        const qNum = existingData ? existingData.queNum : null;
     	
-        if (text !== "" && answer !== undefined) {
-        	
+        if (text !== "" || answer !== undefined) {
+        		
             	questionList[currentNum - 1] = {
-            			
-	                queSeq: currentNum,
-	                queText: text,
-	                queOpt1: $("input[name='queOpt1']").val(),
-	                queOpt2: $("input[name='queOpt2']").val(),
-	                queOpt3: $("input[name='queOpt3']").val(),
-	                queOpt4: $("input[name='queOpt4']").val(),
-	                queAnswer: answer,
-	                queDesc: $("textarea[name='queDesc']").val()
-	                
+        		queNum: qNum,
+                queSeq: currentNum,
+                queText: text,
+                queOpt1: $("input[name='queOpt1']").val(),
+                queOpt2: $("input[name='queOpt2']").val(),
+                queOpt3: $("input[name='queOpt3']").val(),
+                queOpt4: $("input[name='queOpt4']").val(),
+                queAnswer: answer || "",
+                queDesc: $("textarea[name='queDesc']").val()
+                
             };
-            	
-        } else {
-        	
-            questionList[currentNum - 1] = null;
             
         }
     }
-
-    // 3. UI 업데이트 (현황판 상태 포함)
-    function refreshUI(num) {
-        currentNum = num;
-        $("#currentIdx").text(currentNum);
-        
-        // 데이터 복원
-        const data = questionList[currentNum - 1];
-        if (data) {
-            $("#queText").val(data.queText);
-            $("input[name='queOpt1']").val(data.queOpt1);
-            $("input[name='queOpt2']").val(data.queOpt2);
-            $("input[name='queOpt3']").val(data.queOpt3);
-            $("input[name='queOpt4']").val(data.queOpt4);
-            $(`input[name='queAnswer'][value='\${data.queAnswer}']`).prop("checked", true);
-            $("textarea[name='queDesc']").val(data.queDesc);
-        } else {
-            // 초기화
-            $("#queText").val("");                      
-            $(".choice_input").val("");                
-            $("textarea[name='queDesc']").val("");
-            $("input[name='queAnswer']").prop("checked", false);
-        }
-
-        // 초기화
-        const $items = $(".question_status_list .item");
-		$items.removeClass("active").removeClass("complete"); 
-		$items.find(".state_tag").remove();
-		$items.find(".state_icon").hide();
-		$items.find(".q_title").text("미등록 문항");
-		
-		// 작성중
-		const $current = $items.eq(currentNum - 1);
-		$current.addClass("active");
-		$current.append('<span class="state_tag">작성중</span>');
-
-        // 완료된 문항 체크 표시
-        questionList.forEach((q, idx) => {
-        	if(q && q.queText.trim() !== "") {
-        		
-                const $target = $items.eq(idx);
-                $target.addClass("complete");
-                $target.find(".state_icon").show();
-                $target.find(".q_title").text(q.queText.substring(0, 10) + "...");
-                
-            }
-        });
-    }
-
-    // [다음 문제]
-    $("#nextBtn").click(function() {
-    	
-        if (!validate()) return;
-        
-        saveTemp();
-        
-        if (currentNum < totalQuestions) {
-        	
-            refreshUI(currentNum + 1);
-            
-        } else {
-        	
-            alert("마지막 문항입니다.");
-            
-        }
-    });
-
-    // [이전 문제]
-    $("#prevBtn").click(function() {
-        saveTemp();
-        if (currentNum > 1) {
-            refreshUI(currentNum - 1);
-        }
-    });
-
-    // [평가 등록] AJAX 전송
-    $(".btn_register").click(function(e) {
-        e.preventDefault();
-        if (!validate()) return;
-        saveTemp();
-
-        if (questionList.filter(q => q).length < totalQuestions) {
-            if (!confirm("미작성 문항이 있습니다. 정말 등록하시겠습니까?")) return;
-        }
-
-        const finalData = {
-        		
-            tetTitle: $("input[name='tetTitle']").val(),
-            tetTimelimit: $("input[name='testTimeLimit']").val(),
-            quePoint: $("input[name='quePoint']").val(),
-            testQuestionList: questionList.filter(q => q)
-            
-        };
-        
-        const cNum = $("#claNum").val();
-
-        $.ajax({
-            url: "/lecterer/testMake?claNum=" + cNum, 
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(finalData),
-            
-            success: function(res) {
-            	
-            	if (res === "success") {
-            	
-                alert("성공적으로 등록되었습니다.");
-                location.href = "/lecterer/resultManage";
-                
-            	} else {
-            	
-                	alert("등록에 실패했습니다. 다시 시도해주세요.");
-                
-            		}
-           
-            }, error: function(xhr) {
-            	
-            	alert("서버 통신 오류가 발생했습니다. (에러코드: " + xhr.status + ")");
-            	
-            }
-        });
-    });
     
-    // 페이지 로드 시 첫 번째 문항 초기화
-    refreshUI(1);
-});
+ 	// 시험 제출
+    $(document).ready(function() {
+    	
+    	// 수정 : 시험 제목 미리 채우기
+        if (editData.tetTitle) {
+        	
+            $("input[name='tetTitle']").val(editData.tetTitle);
+            
+        }
+        
+    	    refreshUI(1);
+    	    
+    	 // [다음 문제]
+    	    $("#nextBtn").click(function() {
+    	    	
+    	        if (!validate()) return;
+    	        
+    	        saveTemp();
+    	        
+    	        if (currentNum < totalQuestions) {
+    	        	
+    	            refreshUI(currentNum + 1);
+    	            
+    	        } else {
+    	        	
+    	            alert("마지막 문항입니다.");
+    	            
+    	        }
+    	    });
+
+    	    // [이전 문제]
+    	    $("#prevBtn").click(function() {
+    	        saveTemp();
+    	        if (currentNum > 1) {
+    	            refreshUI(currentNum - 1);
+    	        }
+    	    });
+    	    
+    	    // 출제현황 문제 누르면 해당 문제로 이동
+    	    $(document).on("click", ".question_status_list .item", function() {
+    	        const targetIdx = parseInt($(this).attr("data-idx"));
+    	        
+    	        // 이동 전 현재 작성 중인 내용 자동 저장
+    	        saveTemp();
+    	        
+    	        // 해당 번호 UI로 변경
+    	        refreshUI(targetIdx);
+    	    });
+
+    	    // 평가 등록 AJAX 전송
+    	    $(".btn_register").click(function(e) {
+    	        e.preventDefault();
+    	        if (!validate()) return;
+    	        saveTemp();
+
+    	        if (questionList.filter(q => q).length < totalQuestions) {
+    	            if (!confirm("미작성 문항이 있습니다.")) return;
+    	        }
+
+    	        const finalData = {
+    	        		
+    	            tetTitle: $("input[name='tetTitle']").val(),
+    	            tetTimelimit: $("input[name='testTimeLimit']").val(),
+    	            quePoint: $("input[name='quePoint']").val(),
+    	            testQuestionList: questionList.filter(q => q)
+    	            
+    	        };
+    	        
+    	        const cNum = $("#claNum").val();
+    	        const url = "${not empty testEditInfo ? '/lecterer/testEdit' : '/lecterer/testMake'}";
+    	        const isEditMode = ${not empty testEditInfo ? true : false};
+    	        const msg1 = isEditMode ? "성공적으로 수정되었습니다." : "성공적으로 등록되었습니다.";
+    	        const msg2 = isEditMode ? "수정에 실패했습니다. 다시 시도해주세요." : "등록에 실패했습니다. 다시 시도해주세요.";
+    	        
+    	        $.ajax({
+    	            url: url + "?claNum=" + cNum, 
+    	            type: "POST",
+    	            contentType: "application/json",
+    	            data: JSON.stringify(finalData),
+    	            
+    	            success: function(res) {
+    	            	
+    	            	if (res === "success") {
+    	            	
+    	            	alert(msg1);	
+    	                location.href = "/lecterer/resultManage";
+    	                
+    	            	} else {
+    	            	
+    	                	alert(msg2);
+    	                	return;
+    	                
+    	            		}
+    	           
+    	            }, error: function(xhr) {
+    	            	
+    	            	alert("서버 통신 오류가 발생했습니다. (에러코드: " + xhr.status + ")");
+    	            	return;
+    	            	
+    	            }
+    	        });
+    	    });
+    	    
+    	    // 페이지 로드 시 첫 번째 문항 초기화
+    	    refreshUI(1);
+    	});
+
 </script>
 
 </html>

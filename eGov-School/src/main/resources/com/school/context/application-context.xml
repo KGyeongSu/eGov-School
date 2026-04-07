@@ -90,6 +90,8 @@
       <constructor-arg index="1" ref="questionDAO" />
       <constructor-arg index="2" ref="examResultDAO" />
    </bean>
+   <bean id="messageService" class="com.school.service.MessageServiceImpl"
+   		c:messageDAO-ref="messageDAO" />
 
 	
 
@@ -102,7 +104,14 @@
 	    c:jobNoticeDAO-ref="jobNoticeDAO" /> 
 	<bean id="examNoticeService" class="com.school.service.ExamNoticeServiceImpl"
 	    c:examNoticeDAO-ref="examNoticeDAO" />
-
+	    
+	<bean id="certificationService"
+		class="com.school.service.CertificateServiceImpl"
+		c:certificateDAO-ref="certifiCateDAO" />
+		
+	<bean id="reputationService"
+		class="com.school.service.ReputationServiceImpl"
+		c:reputationDAO-ref="reputationDAO"/>
 
 
 

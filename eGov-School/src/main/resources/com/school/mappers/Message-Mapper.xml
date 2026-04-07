@@ -10,8 +10,8 @@
 	</select>
 
 	<insert id="insertMessage" parameterType="message">
-		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM)
-		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum})
+		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM, TET_NUM)
+		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum}, #{tetNum, jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 받은 쪽지 목록 -->
@@ -46,5 +46,12 @@
 		DELETE FROM MESSAGE
 		WHERE MS_NUM = #{msNum}
 	</delete>
+	
+	<select id="selectPassStudentByUserNum" parameterType="map" resultType="str">
+	    SELECT MAX(ER.ER_PASS) 
+   		FROM EXAM_RESULT ER
+    	JOIN TEST T ON ER.TET_NUM = T.TET_NUM
+    	WHERE T.CLA_NUM = #{claNum}    AND ER.USER_NUM = #{userNum}
+	</select>
 
 </mapper>

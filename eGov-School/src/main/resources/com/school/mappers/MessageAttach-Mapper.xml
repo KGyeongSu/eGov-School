@@ -10,8 +10,24 @@
 	</select>
  
 	<insert id="insertMsgAttach" parameterType="msgAttach">
-		INSERT INTO MESSAGE_ATTACH(MA_NUM, MS_NUM, MA_NAME, MA_TYPE)
-		VALUES(#{maNum}, #{msNum}, #{maName}, #{maType})
+	    INSERT INTO MESSAGE_ATTACH (
+	        MA_NUM, 
+	        MS_NUM, 
+	        MA_NAME, 
+	        MA_TYPE, 
+	        MA_SAVE_NAME, 
+	        MA_SAVE_PATH, 
+	        MA_SIZE, 
+	        MA_REGDATE
+	    ) VALUES (
+	        #{maNum}, 
+	        #{msNum}, 
+	        #{maName}, 
+	        #{maType}, 
+	        #{maSaveName}, 
+	        #{maSavePath}, 
+	        #{maSize}, 
+	        SYSDATE  )
 	</insert>
  
 	<select id="selectMsgAttachList" parameterType="str" resultType="msgAttach">

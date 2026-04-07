@@ -71,5 +71,12 @@ public class UserDAOImpl implements UserDAO {
 		return session.update("User-Mapper.updateLectererProfile", user);
 		
 	}
+
+	@Override
+	public List<UserVO> getAdminList() throws SQLException {
+		
+		return session.selectList("User-Mapper.getAdminList");
+		
+	}
 }
 

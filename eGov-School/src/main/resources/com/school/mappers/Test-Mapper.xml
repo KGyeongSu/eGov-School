@@ -59,9 +59,8 @@
 	
 	<update id="updateTest" parameterType="test">
 		UPDATE TEST
-		SET TET_TITLE = #{tetTitle},
-		    TET_TIMELIMIT = #{tetTimelimit}
-		WHERE TET_NUM = #{tetNum}
+		SET TET_TITLE = #{tetTitle}
+		WHERE CLA_NUM = #{claNum}
 	</update>
 
 	

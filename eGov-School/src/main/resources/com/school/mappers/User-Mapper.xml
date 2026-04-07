@@ -84,5 +84,11 @@
 		where user_num = #{userNum}
 	
 	</update>
+	
+	<select id="getAdminList" resultType="user">
+	    SELECT USER_NUM, USER_NAME, USER_EMAIL
+	    FROM USERS
+	    WHERE USER_ROLE = '관리자'  ORDER BY USER_NAME ASC
+	</select>
 
 </mapper>

@@ -3,6 +3,7 @@ package com.school.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.school.dto.MessageAttachVO;
 import com.school.dto.MessageVO;
 
 public interface MessageDAO {
@@ -20,4 +21,7 @@ public interface MessageDAO {
 	void updateMessageCheck(String msNum) throws SQLException;
 
 	void deleteMessage(String msNum) throws SQLException;
+	
+	String selectPassStudentByUserNum (String userNum, String claNum) throws SQLException;
+	
 }

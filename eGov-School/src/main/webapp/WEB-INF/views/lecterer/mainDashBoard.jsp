@@ -31,8 +31,8 @@
 				<p>${loginUser.userName}님의 메인대시보드</p>
 			</div>
 			<div class="logout_dash">
-				<div class="mes">
-					<a href=""><i class="fa-regular fa-envelope"></i></a>
+				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer;">
+				    <i class="fa-regular fa-envelope"></i>
 				</div>
 				<div class="out">
 					<button type="button" class="btn btn-sm"

@@ -117,8 +117,20 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public List<UserVO> selectStdentListByClaNum(PageMaker pageMaker, String claNum) throws SQLException {
 		
-		// 먼저 7로 변경 (얘가 먼저 와야지 시작 행을 정할 수 있음)
-		pageMaker.setPerPageNum(7); 
+		// roomManage에서는 학생 7명씩, 평가 발송때는 모두
+		if(pageMaker.getPerPageNum() == 999) {
+			
+	        int totalCount = classDAO.selectStudentListCount(pageMaker, claNum);
+	        
+	        pageMaker.setTotalCount(totalCount);
+	        pageMaker.setPerPageNum(totalCount); 
+	        
+	    } else {
+	    	
+	        pageMaker.setPerPageNum(7); 
+	        
+	    }
+		
 		int limit = pageMaker.getPerPageNum();
 		
 		// 전체 개수 가져오기(페이지 선택 숫자 칸 마련해야 함)
@@ -166,6 +178,12 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException {
 		return classDAO.selectApprovedClassListCount(pageMaker);
+	}
+	@Override
+	public List<UserVO> selectUnsentStudentList(String claNum, String tetNum) throws SQLException {
+
+		return classDAO.selectUnsentStudentList(claNum, tetNum);
+		
 	}
 
 }

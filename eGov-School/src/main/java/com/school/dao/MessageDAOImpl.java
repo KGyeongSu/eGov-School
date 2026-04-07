@@ -1,10 +1,13 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.school.dto.MessageAttachVO;
 import com.school.dto.MessageVO;
 
 public class MessageDAOImpl implements MessageDAO {
@@ -49,5 +52,16 @@ public class MessageDAOImpl implements MessageDAO {
 	public void deleteMessage(String msNum) throws SQLException {
 		session.delete("Message-Mapper.deleteMessage", msNum);
 	}
-	
+
+	@Override
+	public String selectPassStudentByUserNum(String userNum, String claNum) throws SQLException {
+		
+		Map<String, Object> param = new HashMap<> ();
+		param.put("userNum", userNum);
+		param.put("claNum", claNum);
+		
+		return session.selectOne("Message-Mapper.selectPassStudentByUserNum", param);
+		
+	}
+
 }

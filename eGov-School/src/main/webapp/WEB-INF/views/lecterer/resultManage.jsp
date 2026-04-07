@@ -22,9 +22,9 @@
                 <p>My 평가</p>
             </div>
             <div class="logout_dash">
-                <div class="mes">
-                    <a href=""><i class="fa-regular fa-envelope"></i></a>
-                </div>
+                <div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer;">
+				    <i class="fa-regular fa-envelope"></i>
+				</div>
                 <div class="out">
                     <button type="button" class="btn btn-sm"
 						style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px; border: none; line-height: 1;">로그아웃
@@ -33,12 +33,16 @@
             </div>
         </div>
         <div class="divider">
-            <div class="write"><a href="">
-                    <h2>평가 출제</h2>
-                </a></div>
-            <div class="manage"><a href="">
-                    <h2>평가 관리</h2>
-                </a></div>
+            <div class="write">
+			    <a href="/lecterer/resultManage?userNum=${loginUser.userNum}">
+			        <h2>평가 출제</h2>
+			    </a>
+			</div>
+			<div class="manage">
+			    <a href="/lecterer/resultSend?userNum=${loginUser.userNum}">
+			        <h2>평가 관리</h2>
+			    </a>
+			</div>
             <div class="search">
                 <div class="search_area" style="display: flex; gap: 10px; width: 96%;">
                     <div style="position: relative; flex: 1;">
@@ -76,7 +80,7 @@
 	                        <c:otherwise>
 					            <c:forEach var="test" items="${testList}" varStatus="status">
 								    <tr style="border-bottom: 1px solid #f1f1f1; transition: background 0.2s;">
-								        <td style="text-align: center; color: #24272b; font-size: 13px;">${status.count}</td>
+								        <td style="text-align: center; color: #24272b; font-size: 13px;">${(pageMaker.page - 1) * pageMaker.perPageNum + status.count}</td>
 								        
 								        <td style="padding: 18px 20px;">
 								            <div style="font-weight: 600; color: #212529;">${test.claTitle}</div>

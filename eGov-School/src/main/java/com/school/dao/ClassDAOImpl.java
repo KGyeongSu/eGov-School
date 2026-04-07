@@ -142,4 +142,15 @@ public class ClassDAOImpl implements ClassDAO {
 		
 	}
 
+	@Override
+	public List<UserVO> selectUnsentStudentList(String claNum, String tetNum) {
+		
+		Map<String, Object> dataMap = new HashMap<>();
+	    dataMap.put("claNum", claNum);
+	    dataMap.put("tetNum", tetNum);
+	    
+	    return session.selectList("Class-Mapper.selectUnsentStudentList", dataMap);
+		
+	}
+
 }

@@ -280,9 +280,9 @@ div.content .main > .state {
 .q_title {
     flex: 1 !important;
     color: #666 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+
+    white-space: normal !important;   
+    word-break: break-all !important; 
 }
 
 .item.complete {
