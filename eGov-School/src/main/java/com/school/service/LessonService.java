@@ -18,5 +18,9 @@ public interface LessonService {
 	
 	// 강의 수정
 	void updateLesson (LessonVO lesson, List<LessonAttachVO> attachList, String deleteFiles) throws Exception;
- 
+
+	//파일 번호(laNum)로 첨부파일의 상세 정보 조회 (다운로드용)
+    LessonAttachVO getLessonAttachByLaNum(String laNum) throws Exception;
+
+	List<LessonAttachVO> getLessonFileList(String lsnNum) throws Exception;
 }

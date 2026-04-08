@@ -13,6 +13,7 @@ import com.school.dto.ClassApplyVO;
 import com.school.dto.LearningStatusVO;
 import com.school.dto.LessonAttachVO;
 import com.school.dto.LessonVO;
+import com.school.dto.ReputationVO;
 
 public class ClassApplyServiceImpl implements ClassApplyService {
 
@@ -21,12 +22,11 @@ public class ClassApplyServiceImpl implements ClassApplyService {
     private LearningStatusDAO learningStatusDAO;
     private LessonAttachDAO lessonAttachDAO;
 
-
     public ClassApplyServiceImpl(ClassApplyDAO classApplyDAO, LessonDAO lessonDAO, LearningStatusDAO learningStatusDAO, LessonAttachDAO lessonAttachDAO) {
         this.classApplyDAO = classApplyDAO;
         this.lessonDAO = lessonDAO;
         this.learningStatusDAO = learningStatusDAO;
-        this. lessonAttachDAO = lessonAttachDAO;
+        this.lessonAttachDAO = lessonAttachDAO;
     }
 
     @Override
@@ -36,86 +36,103 @@ public class ClassApplyServiceImpl implements ClassApplyService {
 
     @Override
     public ClassApplyListCommand getClassApplyList(String userNum, PageMaker pageMaker) throws SQLException {
-       
-        List<ClassApplyVO> applyList = classApplyDAO.selectClassApply(userNum, pageMaker);
         
+        pageMaker.setPerPageNum(6);
+        pageMaker.setPage(pageMaker.getPage());
+        
+        int totalCount = classApplyDAO.selectClassApplyListCount(userNum, pageMaker);
+        pageMaker.setTotalCount(totalCount);
+      
+        List<ClassApplyVO> applyList = classApplyDAO.selectClassApply(userNum, pageMaker);
 
         if (applyList != null) {
             for (ClassApplyVO apply : applyList) {
-               
+                // 1. 기존 진도율 로직
                 int totalLessons = lessonDAO.selectTotalLessonCount(apply.getClaNum());
-                
-            
                 LearningStatusVO status = new LearningStatusVO();
                 status.setUserNum(userNum);
                 status.setClaNum(apply.getClaNum());
                 int completedLessons = learningStatusDAO.selectCompletedLessonCount(status);
                 
-                // 진도율 계산
                 double progressPercent = 0.0;
                 if (totalLessons > 0) {
                     progressPercent = ((double) completedLessons / totalLessons) * 100;
                 }
-                
-           
                 apply.setProgress(progressPercent);
+
+                // 2. 썸네일 매칭 로직 호출
+                setThumbnail(apply);
             }
         }
 
-        ClassApplyListCommand command = new ClassApplyListCommand(applyList, pageMaker);
-        return command;
+        return new ClassApplyListCommand(applyList, pageMaker);
+    }
+
+    @Override
+    public List<ClassApplyVO> getCompletedClassList(String userNum) throws SQLException {
+        ClassApplyVO vo = new ClassApplyVO();
+        vo.setUserNum(userNum);
+        
+        List<ClassApplyVO> endList = classApplyDAO.selectCompletedClassList(vo);
+        
+        // 종료된 강좌 목록에도 썸네일 매칭 로직 적용
+        if (endList != null) {
+            for (ClassApplyVO apply : endList) {
+                setThumbnail(apply);
+            }
+        }
+        
+        return endList;
+    }
+
+    /**
+     * 공통 메서드: LessonAttachDAO를 활용하여 이미지 파일을 찾아 lsnThumb에 세팅
+     */
+    private void setThumbnail(ClassApplyVO apply) throws SQLException {
+        List<LessonAttachVO> fileList = lessonAttachDAO.selectLessonAttachList(apply.getClaNum());
+        
+        if (fileList != null) {
+            for (LessonAttachVO file : fileList) {
+                String fileName = file.getLaSaveName().toLowerCase();
+                if (fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg") || fileName.endsWith(".gif")) {
+                    apply.setLsnThumb(file.getLaSaveName());
+                    break; 
+                }
+            }
+        }
     }
 
     @Override
     public LessonVO getLessonDetail(String userNum, String claNum, String lsnSeq) throws SQLException {
-        
-   
-    	//차시 번호 , 이어보기 로직 
         if (lsnSeq == null || lsnSeq.trim().isEmpty() || lsnSeq.equals("0")) {
             int resumeSeq = this.getResumeLsnSeq(userNum, claNum);
             lsnSeq = String.valueOf(resumeSeq);
         } 
 
-      
         LessonVO paramVO = new LessonVO();
         paramVO.setClaNum(claNum);
         try {
             paramVO.setLsnSeq(Integer.parseInt(lsnSeq));
         } catch (NumberFormatException e) {
-            
             paramVO.setLsnSeq(1);
         }
 
-        //차시 기본 정보 조회
         LessonVO lesson = lessonDAO.selectLessonByNum(paramVO);
         
-        
         if (lesson != null) {
-        	//첨부파일 리스트로 조회
             List<LessonAttachVO> files = lessonAttachDAO.selectLessonAttachList(lesson.getLsnNum());
             lesson.setLessonFiles(files);
 
-            if(files != null & !files.isEmpty()) {
-            	lesson.setLessonFiles(files); //전체리스트 보관
-            }
-            
-         // 비디오 확장자 패턴 정의 (mp4, avi, wmv, mov 등)
-            String videoPattern = ".*\\.(mp4|avi|wmv|mov)$";
-
-         // 서비스 클래스의 비디오 경로 조립 부분
-            for (LessonAttachVO file : files) {
-                if (file.getLaSaveName().toLowerCase().endsWith(".mp4")) {
-                    // 1. ContextPath를 포함한 절대 경로 형태로 조립 (null 방지)
-                    // 만약 DB의 laPath가 null이라면 기본 경로를 넣어줍니다.
-                    String folderPath = (file.getLaPath() == null) ? "/resources/upload" : file.getLaPath();
-                    
-                    // 2. 경로의 시작은 항상 '/'로 시작하게 해서 상대경로가 되지 않도록 합니다.
-                    if(!folderPath.startsWith("/")) {
-                        folderPath = "/" + folderPath;
+            if(files != null && !files.isEmpty()) {
+                for (LessonAttachVO file : files) {
+                    if (file.getLaSaveName().toLowerCase().endsWith(".mp4")) {
+                        String folderPath = (file.getLaPath() == null) ? "/resources/upload" : file.getLaPath();
+                        if(!folderPath.startsWith("/")) {
+                            folderPath = "/" + folderPath;
+                        }
+                        lesson.setLsnVideo(folderPath + "/" + file.getLaSaveName());
+                        break;
                     }
-
-                    lesson.setLsnVideo(folderPath + "/" + file.getLaSaveName());
-                    break;
                 }
             }
             
@@ -182,10 +199,9 @@ public class ClassApplyServiceImpl implements ClassApplyService {
     }
 
 	@Override
-	public List<ClassApplyVO> getCompletedClassList(String userNum) throws SQLException {
-		ClassApplyVO vo = new ClassApplyVO();
-		vo.setUserNum(userNum);
+	public void registReputation(ReputationVO repo) throws SQLException {
+		classApplyDAO.insertReputation(repo);
 		
-		return classApplyDAO.selectCompletedClassList(vo);
 	}
+    
 }

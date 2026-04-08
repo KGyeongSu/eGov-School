@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
 import com.school.dto.LessonVO;
+import com.school.dto.ReputationVO;
 
 public class ClassApplyDAOImpl implements ClassApplyDAO {
     
@@ -79,6 +80,12 @@ public class ClassApplyDAOImpl implements ClassApplyDAO {
 	public List<ClassApplyVO> selectCompletedClassList(ClassApplyVO apply) throws SQLException {
 	
 		return session.selectList("ClassApply-Mapper.selectCompletedClassList", apply);
+	}
+
+	@Override
+	public void insertReputation(ReputationVO repo) throws SQLException {
+		
+		session.insert("ClassApply-Mapper.insertReputation", repo);
 	}
 
 }

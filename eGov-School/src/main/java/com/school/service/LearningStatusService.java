@@ -16,4 +16,6 @@ public interface LearningStatusService {
      * 2. 기존 학습 데이터 조회 (상세 페이지 진입 시 이어보기 위치 파악용)
      */
     LearningStatusVO getLearningStatus(LearningStatusVO status) throws SQLException;
+    
+    int getLastLearningSeq(LearningStatusVO status) throws SQLException;
 }

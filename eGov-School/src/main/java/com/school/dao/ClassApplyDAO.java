@@ -6,6 +6,7 @@ import java.util.List;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
 import com.school.dto.LessonVO;
+import com.school.dto.ReputationVO;
 
 public interface ClassApplyDAO {
     
@@ -27,4 +28,8 @@ public interface ClassApplyDAO {
 	Integer selectLastLsnSeq(LessonVO searchVO)throws SQLException;
 
 	List<ClassApplyVO> selectCompletedClassList(ClassApplyVO apply)throws SQLException;
+	
+	void insertReputation(ReputationVO repo) throws SQLException; //피드백
+	
+	
 }

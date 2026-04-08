@@ -3,7 +3,6 @@ package com.school.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.ibatis.session.RowBounds;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
@@ -36,6 +35,9 @@ public interface ClassService {
 		
 	// 수강중인 학생 수 세기
 	int selectStudentListCount(PageMaker pageMaker, String claNum) throws SQLException;
+	
+	// 메시지 중복 발송 방지
+	List <UserVO> selectUnsentStudentList (String claNum, String tetNum) throws SQLException;
   
   // 사용자
 	// 수강신청 페이지용 (승인완료 강좌)

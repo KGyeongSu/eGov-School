@@ -51,7 +51,7 @@ public class UserController {
     @GetMapping("/main")
     public String mainPage(PageMaker pageMaker, Model model) throws Exception {
     	
-    	pageMaker.setPerpageNum(15); // 메인 페이지에서는 한 페이지에 5개씩 3줄 노출.
+    	pageMaker.setPerPageNum(15); // 메인 페이지에서는 한 페이지에 5개씩 3줄 노출.
     	
         List<ClassVO> classList = classService.selectApprovedClassList(pageMaker);
 

@@ -5,30 +5,32 @@
 
 <mapper namespace="Lesson-Mapper">
 
-    <resultMap id="lessonMap1" type="lesson">
-        <id property="lsnNum" column="LSN_NUM" />
-        <result property="claNum" column="CLA_NUM" />
-        <result property="lsnSeq" column="LSN_SEQ" />
-        <result property="lsnTitle" column="LSN_TITLE" />
-        <result property="lsnVideo" column="LA_SAVE_NAME" />
-        <result property="claName" column="CLA_TITLE" />
-    </resultMap>
+<resultMap id="lessonMap1" type="lesson">
+    <id property="lsnNum" column="LSN_NUM" />
+    <result property="claNum" column="CLA_NUM" />
+    <result property="lsnSeq" column="LSN_SEQ" />
+    <result property="lsnTitle" column="LSN_TITLE" />
+    <result property="lsnContent" column="LSN_CONTENT" />
+    
+    <result property="lsnVideo" column="LA_SAVE_NAME" /> 
+    
+    <result property="claName" column="CLA_TITLE" />
+</resultMap>
 
     <select id="selectLessonByNum" parameterType="lesson" resultMap="lessonMap1">
-        SELECT
-            A.LSN_NUM,
-            A.CLA_NUM,
-            A.LSN_SEQ,
-            A.LSN_TITLE,
-            B.LA_SAVE_NAME,
-            C.CLA_TITLE
-        FROM LESSON A
-        LEFT JOIN LESSON_ATTACH B ON A.LSN_NUM = B.LSN_NUM AND B.LA_TYPE = 'VIDEO'
-        JOIN CLASS C ON A.CLA_NUM = C.CLA_NUM
-        WHERE A.CLA_NUM = #{claNum}
-          AND A.LSN_SEQ = #{lsnSeq}
-    </select>
-
+    SELECT
+        A.LSN_NUM,
+        A.CLA_NUM,
+        A.LSN_SEQ,
+        A.LSN_TITLE,
+        A.LSN_CONTENT,  B.LA_SAVE_NAME,
+        C.CLA_TITLE
+    FROM LESSON A
+    LEFT JOIN LESSON_ATTACH B ON A.LSN_NUM = B.LSN_NUM AND B.LA_TYPE = 'VIDEO'
+    JOIN CLASS C ON A.CLA_NUM = C.CLA_NUM
+    WHERE A.CLA_NUM = #{claNum}
+      AND A.LSN_SEQ = #{lsnSeq}
+</select>
     <select id="selectLessonFileList" parameterType="str" resultType="lessonAttach">
         SELECT
             LA_NUM,

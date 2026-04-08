@@ -49,5 +49,11 @@ public class MessageDAOImpl implements MessageDAO {
 	public void deleteMessage(String msNum) throws SQLException {
 		session.delete("Message-Mapper.deleteMessage", msNum);
 	}
+
+	@Override
+	public int selectUnreadCount(String userNum) throws SQLException {
+	    
+	    return session.selectOne("Message-Mapper.selectUnreadCount", userNum);
+	}
 	
 }

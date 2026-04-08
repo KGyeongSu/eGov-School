@@ -35,11 +35,6 @@ public class LessonDAOImpl implements LessonDAO {
 	public List<LessonVO> selectLessonList(String claNum) throws SQLException {
 		return session.selectList("Lesson-Mapper.selectLessonList", claNum);
 	}
-
-	@Override
-	public LessonVO selectLessonByLsnNum(String lsnNum) throws SQLException {
-		return session.selectOne("Lesson-Mapper.selectLessonByNum", lsnNum);
-  }
   
   @Override
 	public LessonVO selectLessonByNum(LessonVO lesson) throws SQLException {

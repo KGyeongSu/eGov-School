@@ -34,7 +34,6 @@ public interface ClassDAO {
 	
 	// 수강중인 학생 수 세기
 	int selectStudentListCount(@Param("pageMaker") PageMaker pageMaker, @Param("claNum") String claNum) throws SQLException;
-	int selectClassSeqNext() throws SQLException;
 	
 	//수강신청 페이지용 (승인완료 강좌)
 	List<ClassVO> selectApprovedClassList(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
@@ -42,6 +41,9 @@ public interface ClassDAO {
 	int selectApprovedClassListCount(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
 
 	void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException;
+	
+	// 메시지 중복 발송 방지 학생 리스트
+	List <UserVO> selectUnsentStudentList (@Param("claNum") String claNum, @Param("tetNum") String tetNum);
 
 }
  

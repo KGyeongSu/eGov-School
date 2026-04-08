@@ -19,4 +19,8 @@ public interface LessonAttachDAO {
 	
 	// 파일 수정 시 삭제
 	void deleteLessonAttachBySaveName(String laSaveName) throws Exception;
+	
+	LessonAttachVO selectLessonAttachByLaNum(String laNum) throws SQLException;
+
+	List<LessonAttachVO> selectLessonFileList(String lsnNum) throws SQLException;
 }

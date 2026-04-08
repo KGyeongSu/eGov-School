@@ -8,36 +8,44 @@
     <update id="updateLessonComplete" parameterType="learningstatus">
         MERGE INTO PROGRESS P
         USING DUAL
-        ON (P.USER_NUM = #{userNum} AND P.LSN_NUM = #{lsnNum})
+        ON (P.USER_NUM = #{userNum, jdbcType=VARCHAR} AND P.LSN_NUM = #{lsnNum, jdbcType=VARCHAR})
         WHEN MATCHED THEN
             UPDATE SET 
                 P.PRG_COMPLETE = 'Y', 
-                P.WATCH_TIME = #{watchTime},
                 P.PRG_LASTDATE = SYSDATE
         WHEN NOT MATCHED THEN
-            INSERT (PRG_NUM, USER_NUM, LSN_NUM, CLA_NUM, PRG_COMPLETE, WATCH_TIME, PRG_LASTDATE)
-            VALUES (SEQ_PROGRESS.NEXTVAL, #{userNum}, #{lsnNum}, #{claNum}, 'Y', #{watchTime}, SYSDATE)
+            INSERT (PRG_NUM, USER_NUM, LSN_NUM, CLA_NUM, PRG_COMPLETE, PRG_LASTDATE)
+            VALUES (SEQ_PROGRESS.NEXTVAL, 
+                    #{userNum, jdbcType=VARCHAR}, 
+                    #{lsnNum, jdbcType=VARCHAR}, 
+                    #{claNum, jdbcType=VARCHAR}, 
+                    'Y', 
+                    SYSDATE)
     </update>
 
     <select id="selectCompletedLessonCount" parameterType="learningstatus" resultType="int">
         SELECT COUNT(*)
         FROM PROGRESS
-        WHERE USER_NUM = #{userNum}
-          AND CLA_NUM = #{claNum}
+        WHERE USER_NUM = #{userNum, jdbcType=VARCHAR}
+          AND CLA_NUM = #{claNum, jdbcType=VARCHAR}
           AND PRG_COMPLETE = 'Y'
     </select>
 
     <update id="upsertLearningStatus" parameterType="learningstatus">
         MERGE INTO PROGRESS P
         USING DUAL
-        ON (P.USER_NUM = #{userNum} AND P.LSN_NUM = #{lsnNum})
+        ON (P.USER_NUM = #{userNum, jdbcType=VARCHAR} AND P.LSN_NUM = #{lsnNum, jdbcType=VARCHAR})
         WHEN MATCHED THEN
             UPDATE SET 
-                P.WATCH_TIME = #{watchTime},
                 P.PRG_LASTDATE = SYSDATE
         WHEN NOT MATCHED THEN
-            INSERT (PRG_NUM, USER_NUM, LSN_NUM, CLA_NUM, PRG_COMPLETE, WATCH_TIME, PRG_LASTDATE)
-            VALUES (SEQ_PROGRESS.NEXTVAL, #{userNum}, #{lsnNum}, #{claNum}, 'N', #{watchTime}, SYSDATE)
+            INSERT (PRG_NUM, USER_NUM, LSN_NUM, CLA_NUM, PRG_COMPLETE, PRG_LASTDATE)
+            VALUES (SEQ_PROGRESS.NEXTVAL, 
+                    #{userNum, jdbcType=VARCHAR}, 
+                    #{lsnNum, jdbcType=VARCHAR}, 
+                    #{claNum, jdbcType=VARCHAR}, 
+                    'N', 
+                    SYSDATE)
     </update>
 
     <select id="selectLearningStatus" parameterType="learningstatus" resultType="learningstatus">
@@ -46,29 +54,37 @@
             USER_NUM as userNum, 
             LSN_NUM as lsnNum, 
             CLA_NUM as claNum, 
-            WATCH_TIME as watchTime, 
             PRG_COMPLETE as prgComplete, 
             PRG_LASTDATE as prgLastdate
         FROM PROGRESS
-        WHERE USER_NUM = #{userNum} AND LSN_NUM = #{lsnNum}
+        WHERE USER_NUM = #{userNum, jdbcType=VARCHAR} 
+          AND LSN_NUM = #{lsnNum, jdbcType=VARCHAR}
     </select>
     
-    
     <select id="selectCourseProgress" resultType="double">
-    SELECT 
-        CASE 
-            WHEN total_cnt = 0 THEN 0 
-            ELSE ROUND((completed_cnt / total_cnt) * 100, 1) 
-        END as progress
-    FROM (
         SELECT 
-            (SELECT COUNT(*) FROM LESSON WHERE CLA_NUM = #{claNum}) as total_cnt,
-            (SELECT COUNT(*) FROM PROGRESS 
-             WHERE CLA_NUM = #{claNum} 
-               AND USER_NUM = #{userNum} 
-               AND PRG_COMPLETE = 'Y') as completed_cnt
-        FROM DUAL
-    )
+            CASE 
+                WHEN total_cnt = 0 THEN 0 
+                ELSE ROUND((completed_cnt / total_cnt) * 100, 1) 
+            END as progress
+        FROM (
+            SELECT 
+                (SELECT COUNT(*) FROM LESSON WHERE CLA_NUM = #{claNum, jdbcType=VARCHAR}) as total_cnt,
+                (SELECT COUNT(*) FROM PROGRESS 
+                 WHERE CLA_NUM = #{claNum, jdbcType=VARCHAR} 
+                   AND USER_NUM = #{userNum, jdbcType=VARCHAR} 
+                   AND PRG_COMPLETE = 'Y') as completed_cnt
+            FROM DUAL
+        )
+    </select>
+    
+    <select id="selectLastLearningSeq" resultType="int">
+    SELECT MAX(L.LSN_SEQ)
+    FROM PROGRESS P
+    JOIN LESSON L ON P.LSN_NUM = L.LSN_NUM
+    WHERE P.USER_NUM = #{userNum} 
+      AND P.CLA_NUM = #{claNum}
+      AND P.PRG_COMPLETE = 'Y'
 </select>
 
 </mapper>

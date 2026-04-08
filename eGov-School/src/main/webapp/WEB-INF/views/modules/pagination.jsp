@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:if test="${not empty pageMaker and pageMaker.endPage gt 0}">
-<nav aria-label="Navigation" style="margin-top: 40px;">
+
+
+<nav aria-label="Navigation" style="margin-bottom: 40px;">
 	<ul class="pagination justify-content-center m-0">
 		<li class="page-item">
 			<a class="page-link" href="javascript:search_list(1);"> 

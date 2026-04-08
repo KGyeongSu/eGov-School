@@ -5,7 +5,14 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+	font-family: 'Pretendard', sans-serif;
 	overflow: hidden;
+}
+
+.main-wrapper {
+	display: flex;
+	width: 100%;
+	height: 100%;
 }
 
 header {
@@ -13,156 +20,83 @@ header {
 	height: 100vh;
 	background-color: #0e506e;
 	flex-shrink: 0;
-	overflow: hidden;
-}
-
-nav.menu {
-	width: 100%;
-	height: auto;
-	position: relative;
-	top: -20px;
-}
-
-nav.menu li {
-	width: 100%;
-	height: 100px;
-	text-align: center;
 }
 
 .mid {
 	flex: 1;
 	height: 100vh;
-	padding: 30px 40px;
+	padding: 25px 35px;
 	background-color: #f8fafc;
 	overflow-y: auto;
+	overflow-x: hidden;
 	box-sizing: border-box;
+	zoom: 0.9;
+	-moz-transform: scale(0.9);
+	-moz-transform-origin: 0 0;
 }
 
-.section-title {
-	font-weight: 800;
-	margin-bottom: 20px;
-	color: #1e293b;
-	font-size: 20px;
+.section-header {
+	border-bottom: 2px solid #0e506e;
+	padding-bottom: 10px;
+	margin-bottom: 25px;
 }
 
-.course-card-v2 {
-	border: none !important;
-	border-radius: 12px !important;
-	background: #fff !important;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
-	overflow: hidden;
-	margin-bottom: 20px;
-	transition: transform 0.2s;
-}
-
-.course-card-v2:hover {
-	transform: translateY(-5px);
-}
-
-.course-img-wrapper {
-	position: relative;
-	width: 100%;
-	height: 160px;
-	background: #eee;
-}
-
-.course-img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
-.course-overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.4);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	opacity: 0;
-	transition: opacity 0.3s;
-}
-
-.course-card-v2:hover .course-overlay {
-	opacity: 1;
-}
-
-.btn-play {
+.course-card-custom {
 	background: #fff;
-	color: #0e506e;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 30px;
-	font-weight: 800;
-	font-size: 14px;
-	cursor: pointer;
-}
-
-.card-body {
-	padding: 15px 20px !important;
-}
-
-.course-title {
-	font-size: 17px;
-	font-weight: 700;
-	color: #1e293b;
-	margin-bottom: 12px !important;
-}
-
-.course-status-text {
+	border-radius: 12px;
+	border: 1px solid #eee;
+	height: 100%;
 	display: flex;
-	justify-content: space-between;
-	font-size: 12px;
-	font-weight: 600;
-	color: #64748b;
-	margin-bottom: 8px;
+	flex-direction: column;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.percent-text {
-	color: #0e506e;
-	font-weight: 800;
+.card-thumb-area {
+	height: 160px;
+	position: relative;
+	background-color: #f1f1f1;
+	border-radius: 12px 12px 0 0;
 }
 
-.custom-progress-v2 {
-	height: 8px !important;
-	border-radius: 10px !important;
-	background-color: #f1f5f9 !important;
+.bottom-container {
+	display: flex;
+	gap: 25px;
+	height: 500px;
+	align-items: stretch;
+	margin-bottom: 30px;
 }
 
-.custom-progress-v2 .progress-bar {
-	background-color: #0e506e !important;
+.card-fixed-height {
+	flex: 2;
+	height: 500px !important;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border-radius: 12px;
+	overflow: hidden;
+	min-height: 0;
 }
 
-.result-flex-box {
-	display: flex !important;
-	padding: 25px !important;
-	gap: 20px;
-}
-
-.chart-area {
+.fixed-card-body {
 	flex: 1;
-	border-right: 1px solid #f1f5f9;
-	padding-right: 25px;
-}
-
-.status-panel {
-	width: 280px;
+	display: flex;
+	gap: 20px;
+	padding: 20px;
+	overflow: hidden;
+	min-height: 0;
 }
 
 .status-item {
-	margin-bottom: 15px;
-	padding-bottom: 12px;
-	border-bottom: 1px solid #f8fafc;
+	padding: 12px 0;
+	border-bottom: 1px solid #f1f5f9;
 }
 
 .subject-name {
 	display: block;
 	font-weight: 700;
 	font-size: 14px;
-	margin-bottom: 8px;
+	color: #334155;
+	margin-bottom: 6px;
 }
 
 .status-row {
@@ -171,16 +105,11 @@ nav.menu li {
 	align-items: center;
 }
 
-.status-left {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
 .square {
-	width: 12px;
-	height: 12px;
+	width: 10px;
+	height: 10px;
 	border-radius: 2px;
+	margin-right: 5px;
 }
 
 .square.pass {
@@ -194,8 +123,8 @@ nav.menu li {
 .rank-badge {
 	background: #e0f2fe;
 	color: #0369a1;
-	padding: 4px 8px;
-	border-radius: 6px;
+	padding: 2px 8px;
+	border-radius: 4px;
 	font-size: 11px;
 	font-weight: 700;
 }
@@ -211,16 +140,301 @@ nav.menu li {
 	cursor: pointer;
 }
 
+/* ══════════════════════════════════════
+   미니 캘린더
+══════════════════════════════════════ */
 #mini-calendar {
+	flex: 1;
 	background: #fff;
-	padding: 15px;
-	border-radius: 12px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-	cursor: pointer;
+	padding: 16px;
+	border-radius: 16px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	border: 1px solid #e8eef3;
+	height: 500px !important;
+	box-sizing: border-box;
+	overflow: hidden;
+	min-height: 0;
 }
 
-.fc-daygrid-day-number {
+/* 전체 fc 기본 */
+#mini-calendar .fc {
+	height: 100%;
+	font-family: 'Pretendard', sans-serif;
+}
+
+/* 헤더 툴바 */
+#mini-calendar .fc-header-toolbar {
+	margin-bottom: 10px !important;
+	padding: 0 2px;
+}
+
+#mini-calendar .fc-toolbar-title {
+	font-size: 15px !important;
+	font-weight: 800;
+	color: #0e506e;
+	letter-spacing: -0.3px;
+}
+
+/* 이전/다음 버튼 */
+#mini-calendar .fc-prev-button, #mini-calendar .fc-next-button {
+	background: #0e506e !important;
+	border: none !important;
+	border-radius: 8px !important;
+	width: 28px;
+	height: 28px;
+	padding: 0 !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 6px rgba(14, 80, 110, 0.25);
+	transition: background 0.2s, transform 0.15s;
+}
+
+#mini-calendar .fc-prev-button:hover, #mini-calendar .fc-next-button:hover
+	{
+	background: #0a3d54 !important;
+	transform: scale(1.08);
+}
+
+/* 요일 헤더 */
+#mini-calendar .fc-col-header-cell {
+	padding: 6px 0 !important;
+	font-size: 11px;
+	font-weight: 700;
+	color: #94a3b8;
+	text-transform: uppercase;
+	background: transparent;
+	border: none !important;
+}
+
+#mini-calendar .fc-col-header-cell:first-child .fc-col-header-cell-cushion
+	{
+	color: #ef4444;
+}
+
+#mini-calendar .fc-col-header-cell:last-child .fc-col-header-cell-cushion
+	{
+	color: #3b82f6;
+}
+
+/* 날짜 셀 */
+#mini-calendar .fc-daygrid-day {
+	cursor: pointer;
+	transition: background 0.15s;
+	border-color: #f1f5f9 !important;
+}
+
+#mini-calendar .fc-daygrid-day:hover {
+	background: #f0f9ff !important;
+}
+
+#mini-calendar .fc-daygrid-day-number {
+	font-size: 12px;
+	font-weight: 600;
+	color: #475569;
+	padding: 4px 6px !important;
 	text-decoration: none !important;
-	color: #333;
+}
+
+/* 오늘 날짜 */
+#mini-calendar .fc-day-today {
+	background: #eff8ff !important;
+}
+
+#mini-calendar .fc-day-today .fc-daygrid-day-number {
+	background: #0e506e;
+	color: #fff !important;
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 3px;
+	font-size: 11px;
+}
+
+/* 일요일/토요일 색상 */
+#mini-calendar .fc-day-sun .fc-daygrid-day-number {
+	color: #ef4444;
+}
+
+#mini-calendar .fc-day-sat .fc-daygrid-day-number {
+	color: #3b82f6;
+}
+
+/* 이벤트 도트/바 */
+#mini-calendar .fc-daygrid-event {
+	border-radius: 4px !important;
+	font-size: 10px !important;
+	font-weight: 600 !important;
+	padding: 1px 5px !important;
+	border: none !important;
+	background: #0e506e !important;
+	color: #fff !important;
+	margin: 1px 2px !important;
+	transition: opacity 0.15s;
+}
+
+#mini-calendar .fc-daygrid-event:hover {
+	opacity: 0.85;
+}
+
+/* 표 테두리 정리 */
+#mini-calendar .fc-scrollgrid {
+	border: none !important;
+}
+
+#mini-calendar .fc-scrollgrid td, #mini-calendar .fc-scrollgrid th {
+	border-color: #f1f5f9 !important;
+}
+
+/* ══════════════════════════════════════
+   모달 풀 캘린더
+══════════════════════════════════════ */
+#full-calendar {
+	height: 580px;
+}
+
+#full-calendar .fc {
+	font-family: 'Pretendard', sans-serif;
+}
+
+#full-calendar .fc-toolbar-title {
+	font-size: 18px !important;
+	font-weight: 800;
+	color: #0e506e;
+}
+
+#full-calendar .fc-button-primary {
+	background: #0e506e !important;
+	border-color: #0e506e !important;
+	border-radius: 8px !important;
+	font-size: 13px !important;
+	font-weight: 600 !important;
+	transition: background 0.2s, transform 0.15s;
+}
+
+#full-calendar .fc-button-primary:hover {
+	background: #0a3d54 !important;
+	transform: scale(1.03);
+}
+
+#full-calendar .fc-button-primary:not(:disabled).fc-button-active {
+	background: #07304a !important;
+	border-color: #07304a !important;
+}
+
+#full-calendar .fc-col-header-cell {
+	background: #f8fafc;
+	padding: 10px 0 !important;
 	font-size: 13px;
+	font-weight: 700;
+	color: #64748b;
+	border-color: #e2e8f0 !important;
+}
+
+#full-calendar .fc-col-header-cell:first-child .fc-col-header-cell-cushion
+	{
+	color: #ef4444;
+}
+
+#full-calendar .fc-col-header-cell:last-child .fc-col-header-cell-cushion
+	{
+	color: #3b82f6;
+}
+
+#full-calendar .fc-daygrid-day {
+	cursor: pointer;
+	transition: background 0.15s;
+}
+
+#full-calendar .fc-daygrid-day:hover {
+	background: #f0f9ff !important;
+}
+
+#full-calendar .fc-day-today {
+	background: #eff8ff !important;
+}
+
+#full-calendar .fc-day-today .fc-daygrid-day-number {
+	background: #0e506e;
+	color: #fff !important;
+	border-radius: 50%;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 4px;
+	font-weight: 700;
+}
+
+#full-calendar .fc-daygrid-event {
+	border-radius: 6px !important;
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	padding: 2px 8px !important;
+	border: none !important;
+	background: #0e506e !important;
+	color: #fff !important;
+	margin: 1px 3px !important;
+	cursor: pointer;
+	transition: opacity 0.15s, transform 0.15s;
+}
+
+#full-calendar .fc-daygrid-event:hover {
+	opacity: 0.85;
+	transform: translateY(-1px);
+}
+
+#full-calendar .fc-highlight {
+	background: #dbeafe !important;
+}
+
+#full-calendar .fc-scrollgrid {
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+#full-calendar .fc-scrollgrid td, #full-calendar .fc-scrollgrid th {
+	border-color: #e2e8f0 !important;
+}
+
+/* 모달 스타일 */
+#calendarModal .modal-content {
+	border-radius: 16px;
+	overflow: hidden;
+	border: none;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+#calendarModal .modal-header {
+	padding: 18px 24px;
+}
+
+#calendarModal .modal-body {
+	padding: 20px 24px;
+	background: #f8fafc;
+}
+
+#calendarModal .modal-footer {
+	background: #f8fafc;
+	border-top: 1px solid #e2e8f0;
+	padding: 12px 24px;
+}
+
+/* 저장 버튼 hover */
+#saveBtn {
+	transition: background 0.2s, transform 0.15s;
+}
+
+#saveBtn:hover {
+	background: #0a3d54 !important;
+	transform: scale(1.03);
+}
+
+/* SweetAlert2 가 Bootstrap 모달 위에 표시되도록 */
+.swal2-container {
+	z-index: 99999 !important; 
 }

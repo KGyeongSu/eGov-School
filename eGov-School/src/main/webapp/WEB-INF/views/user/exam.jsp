@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user/styleEX.css" />
 <%@include file="../modules/userHeader.jsp"%>
 
@@ -34,11 +33,16 @@
                         <c:forEach var="test" items="${pendingTestList}" varStatus="status">
                             <tr>
                                 <td>${status.count}</td>
-                                <td class="col-title" style="text-align:left;"><b>[${test.claTitle}] ${test.tetTitle}</b></td>
-                                <td>${test.claStartDate}~ ${test.claEndDate}</td>
+                                <td class="col-title" style="text-align:left;">
+                                    <b>[${test.claTitle}] ${test.tetTitle}</b>
+                                </td>
+                                <td>
+                                    <fmt:formatDate value="${test.claStartDate}" pattern="yyyy.MM.dd"/>
+                                    ~ 
+                                    <fmt:formatDate value="${test.claEndDate}" pattern="yyyy.MM.dd"/>
+                                </td>
                                 <td><span style="color:#0e506e; font-weight:700;">응시가능</span></td>
                                 <td>
-                                    <%-- 기존 URL 유지 --%>
                                     <button type="button" class="btn-main-action is-feedback" 
                                         onclick="location.href='${pageContext.request.contextPath}/user/test?tetNum=${test.tetNum}'">
                                         응시하기
@@ -52,15 +56,21 @@
                         <c:forEach var="res" items="${completedTestList}" varStatus="status">
                             <tr>
                                 <td>${status.count}</td>
-                                <td class="col-title" style="text-align:left;">${res.tetTitle}</td>
-                                <td><fmt:formatDate value="${res.erDate}" pattern="yyyy.MM.dd" /> 응시완료</td>
+                                <td class="col-title" style="text-align:left;">
+                                    <b>${res.tetTitle}</b>
+                                </td>
+                                <td>
+                                    <fmt:formatDate value="${res.erDate}" pattern="yyyy.MM.dd"/> 응시완료
+                                </td>
                                 <td>평가 완료</td>
                                 <td>
                                     <button type="button" class="btn-main-action is-completed"
                                         data-score="${res.erScore}"
                                         data-percent="${res.topPercent}"
                                         data-title="${res.tetTitle}"
-                                        data-complete="${res.claComplete}">결과 확인</button>
+                                        data-complete="${res.claComplete}">
+                                        결과 확인
+                                    </button>
                                 </td>
                             </tr>
                         </c:forEach>

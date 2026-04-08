@@ -24,6 +24,9 @@
 	
 	<!-- @Controller,@RequestMapping 동작 -->
 	<annotation-driven />
+	
+	<!-- 강의 썸네일 접근 -->
+	<resources mapping="/classDisplay/**" location="file:///c:/class/picture/upload/" />
 
 	<!-- css,js 이미지 파일 접근 허용 -->
 	<resources mapping="/resources/**" location="/resources/" />

@@ -100,7 +100,7 @@ public class ClassDAOImpl implements ClassDAO {
 	@Override
 	public List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException {
 		int offset = pageMaker.getStartRow() -1;
-		int limit = pageMaker.getPerpageNum();
+		int limit = pageMaker.getPerPageNum();
 		RowBounds rows = new RowBounds (offset, limit);
 		
 		Map<String, Object> param = new HashMap<> ();
@@ -139,6 +139,17 @@ public class ClassDAOImpl implements ClassDAO {
 		studentCount.put("claNum", claNum);
 
 		return session.selectOne("Class-Mapper.selectStudentListCount", studentCount);
+		
+	}
+
+	@Override
+	public List<UserVO> selectUnsentStudentList(String claNum, String tetNum) {
+		
+		Map<String, Object> dataMap = new HashMap<>();
+	    dataMap.put("claNum", claNum);
+	    dataMap.put("tetNum", tetNum);
+	    
+	    return session.selectList("Class-Mapper.selectUnsentStudentList", dataMap);
 		
 	}
 
