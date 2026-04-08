@@ -67,6 +67,20 @@ public class ReputationDAOImpl implements ReputationDAO{
 		return session.selectOne("Reputation-Mapper.selectReputationDetailByRepNum", repNum);
 		
 	}
+	
+	@Override
+	public int selectUnreadReputationCount(String userNum) throws SQLException {
+
+		return session.selectOne("Reputation-Mapper.selectUnreadReputationCount", userNum);
+		
+	}
+
+	@Override
+	public void updateReputationCheck(String repNum) throws SQLException {
+
+		session.update("Reputation-Mapper.updateReputationCheck", repNum);
+		
+	}
 
 	@Override
 	public int selectReputationCountByLecturer(PageMaker pageMaker, String userNum) throws SQLException {
@@ -78,5 +92,7 @@ public class ReputationDAOImpl implements ReputationDAO{
 		return session.selectOne("Reputation-Mapper.selectReputationCountByLecturer", reputationCount);
 		
 	}
+
+	
 
 }

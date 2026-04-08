@@ -28,6 +28,7 @@
 	         R.REP_CONTENT,
 	         R.REP_SAT,
 	         R.REP_REGDATE,
+	         R.REP_CHECK,
 	         U.USER_ROLE AS userRole,      -- 관리자/사용자 구분용
 	         C.CLA_TITLE AS claTitle
 	     FROM REPUTATION R
@@ -64,6 +65,20 @@
 	    JOIN CLASS C ON R.CLA_NUM = C.CLA_NUM
 	    WHERE R.REP_NUM = #{repNum} 
 	</select>
+	
+	<select id="selectUnreadReputationCount" resultType="int">
+	    SELECT COUNT(R.REP_NUM)
+	    FROM REPUTATION R
+	    JOIN CLASS C ON R.CLA_NUM = C.CLA_NUM
+	    WHERE C.USER_NUM = #{userNum}
+	    AND R.REP_CHECK = 'N'  
+    </select>
+
+	<update id="updateReputationCheck" parameterType="str">
+	    UPDATE REPUTATION
+	    SET REP_CHECK = 'Y'
+	    WHERE REP_NUM = #{repNum}
+	</update>
 
     <select id="selectReputationCount" resultType="reputation">
         SELECT 

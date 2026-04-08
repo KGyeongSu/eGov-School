@@ -22,8 +22,11 @@
                 <p>${loginUser.userName}님의 메인 대시보드</p>
             </div>
             <div class="logout_dash">
-                 <div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer;">
+                 <div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer; position: relative; display: inline-block;">
 				    <i class="fa-regular fa-envelope"></i>
+				    <span id="repBadge" style="position: absolute; top: 5px; right: 50px; background-color: #dc3545; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 50%; display: none; border: 2px solid white;">
+				    	0
+				    </span>
 				</div>
                	<div class="out">
 					<button type="button" class="btn btn-sm"
@@ -70,7 +73,7 @@
 					
 					    <c:if test="${not empty reputationList}">
 					        <c:forEach items="${reputationList}" var="rep" varStatus="status">
-					            <tr>
+					            <tr style="${rep.repCheck eq 'Y' ? 'background-color: #f8f9fa;' : ''}">
 					                <td style="text-align: center; color: #24272b; font-size: 13px; font-weight: 500;">
 					                    ${(pageMaker.page - 1) * pageMaker.perPageNum + status.count}
 					                </td>
@@ -92,13 +95,13 @@
 					                    </div>
 					                    <div style="color: #24272b; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 550px;">
 					                        <c:choose>
-										        <c:when test="${fn:length(rep.repContent) > 12}">
-										            ${fn:substring(rep.repContent, 0, 12)}...
-										        </c:when>
-										        <c:otherwise>
-										            ${rep.repContent}
-										        </c:otherwise>
-										    </c:choose>
+					                            <c:when test="${fn:length(rep.repContent) > 12}">
+					                                ${fn:substring(rep.repContent, 0, 12)}...
+					                            </c:when>
+					                            <c:otherwise>
+					                                ${rep.repContent}
+					                            </c:otherwise>
+					                        </c:choose>
 					                    </div>
 					                </td>
 					                
@@ -106,11 +109,18 @@
 					                    <span style="font-size: 13px; color: #24272b; margin-right: 15px;">
 					                        <fmt:formatDate value="${rep.repRegDate}" pattern="yyyy-MM-dd" />
 					                    </span>
-					                    <button type="button" 
-					                            onclick="OpenWindow('/lecterer/reputationDetail?repNum=${rep.repNum}', '피드백 상세', 900, 650);"
-					                            style="background: #fff; border: 1px solid #d1d1d1; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">
-					                        상세보기
-					                    </button>
+					                    <c:choose>
+					                        <c:when test="${rep.repCheck eq 'Y'}">
+					                            <button type="button" style="background-color: #e9ecef; color: #6c757d; border: 1px solid #dee2e6; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: default;">
+					                                확인완료
+					                            </button>
+					                        </c:when>
+					                        <c:otherwise>
+					                            <button type="button" onclick="updateBadgeDirectly(this); OpenWindow('/lecterer/reputationDetail?repNum=${rep.repNum}', '피드백 상세', 900, 650);" style="background: #fff; border: 1px solid #d1d1d1; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">
+					                                상세보기
+					                            </button>
+					                        </c:otherwise>
+					                    </c:choose>
 					                </td>
 					            </tr>
 					        </c:forEach>
@@ -129,5 +139,73 @@
 	</body>
 
 <script src="/resources/js/commons.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    	
+        // 알림 배지 초기 로드 및 1분마다 갱신
+        updateReputationAlarm();
+        setInterval(updateReputationAlarm, 60000);
+        
+    });
+
+    // 알림 배지 AJAX 함수
+    function updateReputationAlarm() {
+        $.ajax({
+            url: '${pageContext.request.contextPath}/lecterer/reputationAlarm',
+            type: 'GET',
+            success: function(count) {
+                const badge = $('#repBadge');
+                if (count > 0) {
+                    badge.text(count).show();
+                } else {
+                    badge.hide();
+                }
+            }
+        });
+    }
+    
+    function updateBadgeDirectly(btn, repNum) {
+    	
+        const isClicked = $(btn).attr('data-clicked'); 
+        
+        if (isClicked !== 'Y') {
+        	
+            const badge = $('#repBadge');
+            let currentCount = parseInt(badge.text()) || 0; 
+
+            if (currentCount > 0) {
+                currentCount -= 1;
+                if (currentCount > 0) {
+                    badge.text(currentCount).show();
+                } else {
+                    badge.hide(); 
+                }
+            }
+            
+            $(btn).attr('data-clicked', 'Y');
+            $(btn).closest('tr').css('background-color', '#f8f9fa');
+            $(btn).text('확인완료').css({
+                'background-color': '#e9ecef',
+                'color': '#6c757d',
+                'border-color': '#dee2e6'
+            });
+
+        }
+    }
+
+    // 검색 실행 함수
+    function search_list(page) {
+    	
+        let url = "reputationHome";
+        url += "?page=" + page;
+        url += "&perPageNum=${pageMaker.perPageNum}";
+        url += "&keyword=" + encodeURIComponent($('#keywordInput').val());
+        
+        location.href = url;
+        
+    }
+</script>
 
 </html>

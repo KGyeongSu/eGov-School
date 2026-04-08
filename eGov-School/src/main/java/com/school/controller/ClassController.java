@@ -49,16 +49,23 @@ public class ClassController {
 		
 		String userNum = loginUser.getUserNum();
 		
-		// 대시보드에서 3개만 보여줌
+		// 대시보드에서 3개만 보여줌 (강의)
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setPage(1);
 		pageMaker.setPerPageNum(3);
 		
+		// 출제 리스트
+		PageMaker testList = new PageMaker();
+	    testList.setPage(1);
+	    testList.setPerPageNum(5);
+		
 		// 서비스 부르기
 		List <ClassVO> classList = classService.selectClassList(pageMaker, userNum);
+		List<ClassVO> testClassList = classService.selectTestClassList(testList, userNum);
 		
 		// 모델에 담아서 보여주기
 		model.addAttribute("classList", classList);
+		model.addAttribute("examList", testClassList);
 		
 		return "lecterer/mainDashBoard";
 		

@@ -26,6 +26,11 @@ public interface ReputationDAO {
 	
 	ReputationVO selectReputationDetailByRepNum (String repNum) throws SQLException;
 	
+	// 강사 메시지 알림 전용
+	int selectUnreadReputationCount (String userNum) throws SQLException;
+	
+	void updateReputationCheck (String repNum) throws SQLException;
+	
 	//페이지네이션 시
 	int selectReputationCountByLecturer (PageMaker pageMaker, String userNum) throws SQLException;
 

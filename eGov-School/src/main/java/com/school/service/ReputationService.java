@@ -14,4 +14,8 @@ public interface ReputationService {
 	ReputationVO selectReputationDetailByRepNum (String repNum) throws SQLException;
 	
 	int selectReputationCountByLecturer (PageMaker pagemaker, String userNum) throws SQLException;
+	
+	void updateReputationCheck (String repNum) throws SQLException;
+	
+	int selectUnreadReputationCount (String userNum) throws SQLException;
 }

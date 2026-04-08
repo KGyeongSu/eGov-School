@@ -22,6 +22,7 @@ public class ReputationVO {
 	private String repContent;
 	private Integer repSat;
 	private Date repRegDate;
+	private String repCheck;
 
 	
 	private int totalCount;    // 전체 후기 개수

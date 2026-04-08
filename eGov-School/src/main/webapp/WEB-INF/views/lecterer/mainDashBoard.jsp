@@ -31,8 +31,11 @@
 				<p>${loginUser.userName}님의 메인대시보드</p>
 			</div>
 			<div class="logout_dash">
-				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer;">
+				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer; position: relative; display: inline-block;">
 				    <i class="fa-regular fa-envelope"></i>
+				    <span id="repBadge" style="position: absolute; top: 5px; right: 50px; background-color: #dc3545; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 50%; display: none; border: 2px solid white;">
+				    	0
+				    </span>
 				</div>
 				<div class="out">
 					<button type="button" class="btn btn-sm"
@@ -97,78 +100,54 @@
 				<h4 class="section-title">최근 출제한 평가</h4>
 				<div class="row">
 					<div class="col-sm-6">
-						<div class="card" style="height: 380px">
-							<div class="card-header">
-								<h3 class="card-title">출제 목록</h3>
-
-								<div class="card-tools">
-									<ul class="pagination pagination-sm float-right">
-										<li class="page-item"><a class="page-link" href="#">«</a></li>
-										<li class="page-item"><a class="page-link" href="#">1</a></li>
-										<li class="page-item"><a class="page-link" href="#">2</a></li>
-										<li class="page-item"><a class="page-link" href="#">3</a></li>
-										<li class="page-item"><a class="page-link" href="#">»</a></li>
-									</ul>
-								</div>
+					    <div class="card" style="height: 380px">
+					        <div class="card-body p-0">
+							    <table class="table table-valign-middle table-hover" style="margin-top: 5px;">
+							        <thead>
+							            <tr>
+							                <th style="width: 10px">no.</th>
+							                <th style="width: 50%">강좌명</th>
+							                <th style="text-align: left;">응시율</th>
+							            </tr>
+							        </thead>
+							        <tbody>
+							            <c:choose>
+							                <c:when test="${empty examList}">
+							                    <tr>
+							                        <td colspan="3" class="text-center" style="padding: 50px 0; color: #999;">
+							                            최근 출제된 평가 내역이 없습니다.
+							                        </td>
+							                    </tr>
+							                </c:when>
+							                <c:otherwise>
+							                    <c:forEach items="${examList}" var="exam" varStatus="vs" begin="0" end="4">
+							                        <tr onclick="location.href='${pageContext.request.contextPath}/lecterer/resultManage';" 
+							                            style="cursor:pointer;">
+							                            <td>${vs.count}.</td>
+							                            <td>
+							                                <div style="font-weight: 600; font-size: 15px; color: #333; padding: 5px 0;">
+							                                    ${exam.claTitle}
+							                                </div>
+							                            </td>
+							                            <td>
+							                                <div style="display: flex; align-items: center;">
+							                                    <c:set var="fakeRate" value="${95 - (vs.count * 6)}" />
+							                                    
+							                                    <div class="progress progress-xs" style="flex: 1; margin-right: 15px; margin-bottom: 0; background-color: #eee;">
+							                                        <div class="progress-bar ${fakeRate > 80 ? 'bg-success' : 'bg-primary'}" 
+							                                             style="width: ${fakeRate}%"></div>
+							                                    </div>
+							                                    <span class="badge ${fakeRate > 80 ? 'bg-success' : 'bg-primary'}">${fakeRate}%</span>
+							                                </div>
+							                            </td>
+							                        </tr>
+							                    </c:forEach>
+							                </c:otherwise>
+							            </c:choose>
+							        </tbody>
+							    </table>
 							</div>
-							<!-- /.card-header -->
-							<div class="card-body p-0">
-								<table class="table">
-									<thead>
-										<tr>
-											<th style="width: 10px">no.</th>
-											<!-- 1. 여기 너비를 넓히면 나머지가 오른쪽으로  -->
-											<th style="width: 50%">강좌명</th>
-											<th style="text-align: left;">응시율</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>1.</td>
-											<td>Update software</td>
-											<!-- 2. 막대기와 배지를 한 칸(td)에 넣고 flex로 정렬합니다 -->
-											<td>
-												<div style="display: flex; align-items: center;">
-													<div class="progress progress-xs"
-														style="flex: 1; margin-right: 15px; margin-bottom: 0;">
-														<div class="progress-bar progress-bar-danger"
-															style="width: 55%"></div>
-													</div>
-													<span class="badge bg-danger">55%</span>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>2.</td>
-											<td>Clean database</td>
-											<td>
-												<div style="display: flex; align-items: center;">
-													<div class="progress progress-xs"
-														style="flex: 1; margin-right: 15px; margin-bottom: 0;">
-														<div class="progress-bar bg-warning" style="width: 70%"></div>
-													</div>
-													<span class="badge bg-warning">70%</span>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>3.</td>
-											<td>Cron job running</td>
-											<td>
-												<div style="display: flex; align-items: center;">
-													<div class="progress progress-xs progress-striped active"
-														style="flex: 1; margin-right: 15px; margin-bottom: 0;">
-														<div class="progress-bar bg-primary" style="width: 30%"></div>
-													</div>
-													<span class="badge bg-primary">30%</span>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<!-- /.card-body -->
-						</div>
+					    </div>
 					</div>
 					<div class="col-sm-6">
 						<div id="mini-calendar"></div>
@@ -203,120 +182,221 @@
 
 <script src="/resources/js/commons.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
 <script>
+
+	$(document).ready(function() {
+		
+		updateReputationAlarm();
+		
+		setInterval(updateReputationAlarm, 60000);
 	
-document.addEventListener('DOMContentLoaded', function() {
-	
-	   if (window.jQuery && $.fn.modal) {
+	    // 모달 포커스 에러 방지
+	    if (window.jQuery && $.fn.modal) {
 	        $.fn.modal.Constructor.prototype._enforceFocus = function() {};
 	    }
 	
-    // 1. 전역 변수 설정 (데이터 공유용)
-    let newEvents = []; 
-
-    // 2. 작은 캘린더 (대시보드 메인)
-    const miniEl = document.getElementById('mini-calendar');
-    const miniCalendar = new FullCalendar.Calendar(miniEl, {
-        initialView: 'dayGridMonth',
-        locale: 'ko',
-        headerToolbar: { left: 'prev', center: 'title', right: 'next' },
-        height: '112%', 
-        expandRows: true,
-        dayCellContent: (info) => info.date.getDate(),
-        // 날짜 클릭 시 모달 열기
-        dateClick: function() { 
-            $('#calendarModal').modal('show'); 
-        },
-        events: [{ title: '기존 일정', start: '2026-03-20', color: '#f39c12' }]
-    });
-    miniCalendar.render();
-
-    // 3. 큰 캘린더 (모달 안쪽)
-    const fullEl = document.getElementById('full-calendar');
-    const fullCalendar = new FullCalendar.Calendar(fullEl, {
-        initialView: 'dayGridMonth',
-        locale: 'ko',
-        selectable: true, // [중요] 이게 있어야 드래그/클릭 선택이 됩니다
-        headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' },
-        dayCellContent: (info) => info.date.getDate(),
-        
-        // 날짜를 선택(클릭)했을 때 실행
-        select: function(info) {
-            Swal.fire({
-                title: '새 일정 등록',
-                input: 'text',
-                inputLabel: '일정 제목을 입력하세요',
-                showCancelButton: true,
-                confirmButtonColor: '#1a6d91',
-                confirmButtonText: '확인',
-                cancelButtonText: '취소'
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    const eventData = {
-                        title: result.value,
-                        start: info.startStr,
-                        end: info.endStr,
-                        allDay: info.allDay,
-                        color: '#1a6d91'
-                    };
-                    
-                    // 큰 캘린더에 즉시 표시 (미리보기)
-                    fullCalendar.addEvent(eventData);
-                    // 임시 배열에 저장 (나중에 한꺼번에 저장 버튼으로 처리)
-                    newEvents.push(eventData);
-                }
-                fullCalendar.unselect(); // 선택 해제
-            });
-        }
-    });
-
-    // 4. 저장 버튼 클릭 시 (작은 캘린더로 전송)
-    document.getElementById('saveBtn').addEventListener('click', function() {
-        if (newEvents.length === 0) {
-            Swal.fire('알림', '추가할 일정이 없습니다.', 'info');
-            return;
-        }
-
-        // 임시 저장된 모든 일정을 작은 캘린더에 추가
-        newEvents.forEach(event => {
-            miniCalendar.addEvent(event);
-        });
-
-        // 초기화
-        newEvents = [];
-        
-        Swal.fire({
-            icon: 'success',
-            title: '저장 완료',
-            text: '대시보드 캘린더에 반영되었습니다.',
-            timer: 1500
-        });
-        
-        $('#calendarModal').modal('hide'); // 모달 닫기
-    });
-
-    // 모달이 열릴 때 캘린더 크기 재조정 (안 하면 깨짐)
-    $('#calendarModal').on('shown.bs.modal', function () {
-        fullCalendar.render();
-        fullCalendar.updateSize();
-    });
-});
-
-</script>
-
-<script>
-
-function go_roomDetail (claNum, claTitle) {
+	    const STORAGE_KEY = 'dashboard_calendar_events';
 	
-	alert (claTitle + " 강의실로 이동합니다.");
-	location.href="/lecterer/roomDetail?claNum=" + claNum;
+	    function loadEvents() {
+	        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+	        catch(e) { return []; }
+	    }
+	    function saveEvents(events) {
+	        localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+	    }
 	
-}
+	    // ── 1. 미니 캘린더 (대시보드 메인) ────────────────────────────────────
+	    const miniCalendar = new FullCalendar.Calendar(document.getElementById('mini-calendar'), {
+	        initialView: 'dayGridMonth',
+	        locale: 'ko',
+	        height: '112%',
+	        expandRows: true,
+	        headerToolbar: { left: 'prev', center: 'title', right: 'next' },
+	        dayCellContent: (info) => info.date.getDate(),
+	        events: loadEvents(),
+	        dateClick: function() { $('#calendarModal').modal('show'); },
+	        eventClick: function() { $('#calendarModal').modal('show'); }
+	    });
+	    miniCalendar.render();
+	
+	    // ── 2. 풀 캘린더 (모달 내부) ─────────────────────────────────────
+	    let fullCalendar = null;
+	
+	    function buildFullCalendar() {
+	        if (fullCalendar) { fullCalendar.destroy(); }
+	
+	        fullCalendar = new FullCalendar.Calendar(document.getElementById('full-calendar'), {
+	            initialView: 'dayGridMonth',
+	            locale: 'ko',
+	            selectable: true,
+	            selectMirror: true,
+	            headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' },
+	            dayCellContent: (info) => info.date.getDate(),
+	            events: loadEvents(),
+	
+	            // 날짜 선택 → 세련된 일정 추가 모달
+	            select: function(info) {
+	                const startLabel = info.startStr.slice(0,10);
+	                const endDate   = new Date(info.end); endDate.setDate(endDate.getDate()-1);
+	                const endLabel  = endDate.toISOString().slice(0,10);
+	                const dateLabel = startLabel === endLabel ? startLabel : startLabel + ' ~ ' + endLabel;
+	
+	                Swal.fire({
+	                    title: '<span style="font-size:18px; font-weight:800; color:#1a6d91;">새 일정 추가</span>',
+	                    html: '<div style="font-size:12px; color:#64748b; margin-bottom:8px;"><i class="fa-solid fa-calendar-day" style="color:#1a6d91;"></i> ' + dateLabel + '</div>',
+	                    input: 'text',
+	                    inputPlaceholder: '일정 제목을 입력하세요',
+	                    inputAttributes: { maxlength: 30 },
+	                    customClass: {
+	                        input: 'swal-custom-input',
+	                        confirmButton: 'swal-confirm-btn',
+	                        cancelButton: 'swal-cancel-btn'
+	                    },
+	                    showCancelButton: true,
+	                    confirmButtonColor: '#1a6d91',
+	                    confirmButtonText: '<i class="fa-solid fa-plus"></i> 추가',
+	                    cancelButtonText: '취소',
+	                    didOpen: () => {
+	                        const input = Swal.getInput();
+	                        input.style.cssText = 'border-radius:8px; border:1.5px solid #cbd5e1; font-size:14px; padding:10px 14px; box-sizing:border-box;';
+	                        input.addEventListener('focus', () => { input.style.borderColor = '#1a6d91'; input.style.outline = 'none'; input.style.boxShadow = '0 0 0 3px rgba(26,109,145,0.15)'; });
+	                        input.addEventListener('blur',  () => { input.style.borderColor = '#cbd5e1'; input.style.boxShadow = 'none'; });
+	                    }
+	                }).then((result) => {
+	                    if (result.isConfirmed && result.value && result.value.trim()) {
+	                        fullCalendar.addEvent({
+	                            id: Date.now().toString(),
+	                            title: result.value.trim(),
+	                            start: info.startStr,
+	                            end: info.endStr,
+	                            allDay: info.allDay,
+	                            color: '#1a6d91' // 일정 띠 색상
+	                        });
+	                    }
+	                    fullCalendar.unselect();
+	                });
+	            },
+	
+	            // 이벤트 클릭 → 세련된 삭제 경고 모달
+	            eventClick: function(info) {
+	                const startStr = info.event.startStr ? info.event.startStr.slice(0,10) : '';
+	                Swal.fire({
+	                    title: '<span style="font-size:16px; font-weight:800; color:#1e293b;">일정 삭제</span>',
+	                    html: '<div style="margin:10px 0;">' +
+	                          '<div style="background:#fef2f2; border-radius:8px; padding:12px; margin-bottom:8px;">' +
+	                          '<div style="font-weight:700; color:#dc3545; font-size:14px;">' + info.event.title + '</div>' +
+	                          (startStr ? '<div style="font-size:12px; color:#94a3b8; margin-top:3px;"><i class="fa-solid fa-calendar"></i> ' + startStr + '</div>' : '') +
+	                          '</div>' +
+	                          '<div style="font-size:12px; color:#64748b;">이 일정을 삭제하면 복구할 수 없습니다.</div></div>',
+	                    icon: 'warning',
+	                    showCancelButton: true,
+	                    confirmButtonColor: '#dc3545',
+	                    confirmButtonText: '<i class="fa-solid fa-trash"></i> 삭제',
+	                    cancelButtonText: '취소',
+	                    reverseButtons: true
+	                }).then((result) => {
+	                    if (result.isConfirmed) {
+	                        info.event.remove();
+	                        Swal.fire({
+	                            icon: 'success',
+	                            title: '삭제되었습니다',
+	                            text: '저장하기를 눌러 반영하세요.',
+	                            timer: 1800,
+	                            showConfirmButton: false,
+	                            toast: true,
+	                            position: 'top-end'
+	                        });
+	                    }
+	                });
+	            }
+	        });
+	
+	        fullCalendar.render();
+	    }
+	
+	    // ── 3. 저장하기 버튼 클릭 이벤트 ──────────────────────────────────────
+	    document.getElementById('saveBtn').addEventListener('click', function() {
+	        if (!fullCalendar) return;
+	
+	        const currentEvents = fullCalendar.getEvents().map(e => ({
+	            id: e.id || Date.now().toString(),
+	            title: e.title,
+	            start: e.startStr,
+	            end: e.endStr || null,
+	            allDay: e.allDay,
+	            color: '#1a6d91'
+	        }));
+	
+	        saveEvents(currentEvents);
+	
+	        // 미니 캘린더 갱신
+	        miniCalendar.getEvents().forEach(e => e.remove());
+	        currentEvents.forEach(e => miniCalendar.addEvent(e));
+	
+	        $('#calendarModal').modal('hide');
+	
+	        // 우측 상단 토스트 알림으로 부드럽게 완료 메시지
+	        setTimeout(() => {
+	            Swal.fire({
+	                icon: 'success',
+	                title: '저장 완료!',
+	                text: '일정이 대시보드에 반영되었습니다.',
+	                timer: 2000,
+	                showConfirmButton: false,
+	                toast: true,
+	                position: 'top-end'
+	            });
+	        }, 300);
+	    });
+	
+	    // ── 4. 모달 열고 닫기 관리 ────────────────────────────────
+	    $('#calendarModal').on('shown.bs.modal', function() { buildFullCalendar(); });
+	    $('#calendarModal').on('hidden.bs.modal', function() {
+	        if (fullCalendar) { fullCalendar.destroy(); fullCalendar = null; }
+	    });
+	    
+	    function updateReputationAlarm() {
+	        
+	    	$.ajax({
+	            
+	    		url: '${pageContext.request.contextPath}/lecterer/reputationAlarm',
+	            type: 'GET',
+	            success: function(count) {
+	                
+	            	const badge = $('#repBadge');
+	            	
+	                if (count > 0) {
+	                    
+	                	badge.text(count).show(); // 0보다 크면 숫자 넣고 보여줌
+	                	
+	                } else {
+	                   
+	                	badge.hide(); // 0이면 숨김
+	                	
+	                }
+	            },
+	            
+	            error: function() {
+	            	
+	                console.log("알림 데이터를 가져오는데 실패했습니다.");
+	                
+	            }
+	        });
+	    
+		}
+	
+	});
+	
+	// 강의실 이동 함수
+	function go_roomDetail(claNum, claTitle) {
+		
+	    alert(claTitle + " 강의실로 이동합니다.");
+	    location.href = "/lecterer/roomDetail?claNum=" + claNum;
+	    
+	}
 
 </script>
 

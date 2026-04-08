@@ -22,8 +22,11 @@
                 <p>My 평가</p>
             </div>
             <div class="logout_dash">
-                <div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer;">
+                <div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer; position: relative; display: inline-block;">
 				    <i class="fa-regular fa-envelope"></i>
+				    <span id="repBadge" style="position: absolute; top: 5px; right: 50px; background-color: #dc3545; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 50%; display: none; border: 2px solid white;">
+				    	0
+				    </span>
 				</div>
                 <div class="out">
                     <button type="button" class="btn btn-sm"
@@ -132,6 +135,33 @@
     </div>
     
 <script src="/resources/js/commons.js"></script>
+
+<script>
+    $(document).ready(function() {
+    	
+        // 알림 배지 초기 로드 및 1분마다 갱신
+        updateReputationAlarm();
+        setInterval(updateReputationAlarm, 60000);
+        
+    });
+
+    // 알림 배지 AJAX 함수
+    function updateReputationAlarm() {
+        $.ajax({
+            url: '${pageContext.request.contextPath}/lecterer/reputationAlarm',
+            type: 'GET',
+            success: function(count) {
+                const badge = $('#repBadge');
+                if (count > 0) {
+                    badge.text(count).show();
+                } else {
+                    badge.hide();
+                }
+            }
+        });
+    }
+    
+</script>
 
 </body>
 

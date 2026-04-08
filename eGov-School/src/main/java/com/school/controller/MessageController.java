@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ReputationVO;
@@ -49,6 +50,9 @@ public class MessageController {
 	@GetMapping("/reputationDetail")
 	public String messageDetail (String repNum, Model model) throws Exception {
 		
+		// 메시지 읽음 처리
+		reputationService.updateReputationCheck(repNum);
+		
 		// 해당 피드백 클릭 시
 		ReputationVO rdetail = reputationService.selectReputationDetailByRepNum(repNum);
 		
@@ -56,6 +60,18 @@ public class MessageController {
 		model.addAttribute("rdetail", rdetail);
 		
 		return "lecterer/reputationDetail";
+		
+	}
+	
+	// 메시지 알람
+	@ResponseBody
+	@GetMapping("/reputationAlarm")
+	public int messageAlarm (HttpSession session) throws SQLException {
+		
+		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+		String userNum = loginUser.getUserNum();
+		
+	    return reputationService.selectUnreadReputationCount(userNum);
 		
 	}
 	

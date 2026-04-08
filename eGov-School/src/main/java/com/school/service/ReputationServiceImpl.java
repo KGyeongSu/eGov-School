@@ -22,7 +22,7 @@ public class ReputationServiceImpl implements ReputationService {
 	@Override
 	public List<ReputationVO> selectReputationListByLecturer(PageMaker pageMaker, String userNum) throws SQLException {
 		
-		//9개씩 보여주기
+		//8개씩 보여주기
 		pageMaker.setPerPageNum(8);
 		int limit = pageMaker.getPerPageNum();
 		
@@ -44,6 +44,21 @@ public class ReputationServiceImpl implements ReputationService {
 		return reputationDAO.selectReputationDetailByRepNum(repNum);
 		
 	}
+	
+	@Override
+	public void updateReputationCheck(String repNum) throws SQLException {
+		
+		reputationDAO.updateReputationCheck(repNum);
+		
+	}
+
+	@Override
+	public int selectUnreadReputationCount(String userNum) throws SQLException {
+
+		return reputationDAO.selectUnreadReputationCount(userNum);
+		
+	}
+	
 
 	@Override
 	public int selectReputationCountByLecturer(PageMaker pageMaker, String userNum) throws SQLException {
@@ -51,7 +66,5 @@ public class ReputationServiceImpl implements ReputationService {
 		return reputationDAO.selectReputationCountByLecturer(pageMaker, userNum);
 		
 	}
-	
-	
 
 }

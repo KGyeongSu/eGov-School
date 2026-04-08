@@ -27,8 +27,11 @@
 				</p>
 			</div>
 			<div class="logout_dash">
-				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer;">
+				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer; position: relative; display: inline-block;">
 				    <i class="fa-regular fa-envelope"></i>
+				    <span id="repBadge" style="position: absolute; top: 5px; right: 50px; background-color: #dc3545; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 50%; display: none; border: 2px solid white;">
+				    	0
+				    </span>
 				</div>
 				<div class="out">
 					<button type="button" class="btn btn-sm"
@@ -59,8 +62,7 @@
 						<canvas id="chart1"></canvas>
 					</div>
 					<span
-						style="margin-top: 15px !important; margin-bottom: 15px !important;">강좌별
-						진도율</span>
+						style="margin-top: 15px !important; margin-bottom: 15px !important;">강좌별 진도율</span>
 				</div>
 				<div class="per">
 					<div class="chart2"
@@ -103,41 +105,42 @@
 							<tbody>
 								<c:choose>
 									<c:when test="${not empty studentList}">
-										<c:forEach var="student" items="${studentList}">
-											<tr
-												style="border-bottom: 1px solid #f1f1f1; transition: background 0.2s;">
-												<td style="padding: 12px 15px;">
-													<div style="font-weight: 500; color: #212529;">${student.userName}</div>
-													<div style="font-size: 12px; color: #868e96;">${student.userEmail}</div>
-												</td>
-												<td style="padding: 12px 15px;">
-													<div
-														style="width: 100px; background: #e9ecef; height: 6px; border-radius: 3px; position: relative;">
-														<div
-															style="width: 50%; background: #27ae60; height: 100%; border-radius: 3px;">
-														</div>
-													</div> <span
-													style="font-size: 12px; color: #27ae60; font-weight: bold;">50%</span> <%-- ${student.progress} --%>
-												</td>
-												<td style="padding: 12px 15px; color: #495057;">
-													2026.04.01</td><%-- ${student.lastStudyDate} --%>
-												<td style="padding: 12px 15px; text-align: center;"><c:if
-														test="${student.userStatus == '활성'}">
-														<span
-															style="background: #e7f5ff; color: #228be6; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">학습중</span>
-													</c:if> <c:if test="${student.userStatus != '비활성'}">
-														<span
-															style="background: #fff4e6; color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">미접속</span>
-													</c:if>
-												</td>
-											</tr>
+										<c:forEach var="student" items="${studentList}" varStatus="vs">
+										    <tr style="border-bottom: 1px solid #f1f1f1; transition: background 0.2s;">
+										        <td style="padding: 12px 15px;">
+										            <div style="font-weight: 500; color: #212529;">${student.userName}</div>
+										            <div style="font-size: 12px; color: #868e96;">${student.userEmail}</div>
+										        </td>
+										        <td style="padding: 12px 15px;">
+										            <c:set var="fakeProgress" value="${90 - (vs.index * 7)}" />
+										            <c:if test="${fakeProgress < 10}"><c:set var="fakeProgress" value="12" /></c:if>
+										            
+										            <div style="width: 100px; background: #e9ecef; height: 6px; border-radius: 3px; position: relative;">
+										                <div style="width: ${fakeProgress}%; background: #27ae60; height: 100%; border-radius: 3px;"></div>
+										            </div> 
+										            <span style="font-size: 12px; color: #27ae60; font-weight: bold;">${fakeProgress}%</span>
+										        </td>
+										        <td style="padding: 12px 15px; color: #495057;">
+										            2026.04.0${(vs.index % 9) + 1}
+										        </td>
+										        <td style="padding: 12px 15px; text-align: center;">
+										            <c:choose>
+										                <c:when test="${vs.index % 3 == 0}">
+										                    <span style="background: #e7f5ff; color: #228be6; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">학습중</span>
+										                </c:when>
+										                <c:otherwise>
+										                    <span style="background: #fff4e6; color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">미접속</span>
+										                </c:otherwise>
+										            </c:choose>
+										        </td>
+										    </tr>
 										</c:forEach>
 									</c:when>
 									<c:otherwise>
 										<tr>
-											<td colspan="4"
-												style="padding: 30px; text-align: center; color: #868e96;">
-												수강 중인 학생이 없습니다.</td>
+											<td colspan="4" style="padding: 30px; text-align: center; color: #868e96;">
+												수강 중인 학생이 없습니다.
+											</td>
 										</tr>
 									</c:otherwise>
 								</c:choose>
@@ -157,105 +160,99 @@
 <script src="/resources/js/commons.js"></script>
 
 <script>
+
+	// 가변 데이터를 생성하는 함수 (최솟값, 최댓값, 개수)
+	function getRandomData(min, max, count) {
+	    return Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+	}
+	
+	// 차트 1: 강좌별 진도율
 	const ctx1 = document.getElementById('chart1').getContext('2d');
-
+	const chart1Data = getRandomData(40, 95, 5); // 40~95 사이의 랜덤 숫자 5개 생성
+	
 	new Chart(ctx1, {
-		type : 'bar',
-		data : {
-			labels : [ '강좌 1', '강좌 2', '강좌 3', '강좌 4', '강좌 5' ], // 강좌 명칭
-			datasets : [ {
-				label : '전체 학습자 평균',
-				data : [ 65, 65, 65, 65, 65 ], // 평균값은 고정
-				backgroundColor : '#e9ecef', // 연한 회색 배경 느낌
-				borderWidth : 0,
-				barPercentage : 0.6, // 막대 두께 조절
-			}, {
-				label : '강좌별 진도율',
-				data : [ 85, 42, 70, 55, 90 ], // 실제 내 강좌 진도율
-				backgroundColor : '#0e506e', // 포인트 컬러 (네이비)
-				borderRadius : 4, // 막대 끝을 둥글게
-				barPercentage : 0.6,
-			} ]
-		},
-		options : {
-			responsive : true,
-			maintainAspectRatio : false,
-			scales : {
-				y : {
-					beginAtZero : true,
-					max : 100, // 진도율은 100%가 만점
-					ticks : {
-						callback : function(value) {
-							return value + '%';
-						}
-					}
-				},
-				x : {
-					grid : {
-						display : false
-					}
-				// X축 줄무늬 제거 (깔끔함)
-				}
-			},
-			plugins : {
-				legend : {
-					position : 'top',
-					align : 'end'
-				}
-			// 범례를 오른쪽 상단으로
-			}
-		}
+	    type: 'bar',
+	    data: {
+	        labels: [ '1강', '2강', '3강', '4강', '5강' ], 
+	        datasets: [ {
+	            label: '전체 학습자 평균',
+	            data: [ 65, 65, 65, 65, 65 ], 
+	            backgroundColor: '#e9ecef',
+	            barPercentage: 0.6,
+	        }, {
+	            label: '현재 강좌 진도율',
+	            data: chart1Data, // 랜덤 생성된 데이터 적용
+	            backgroundColor: '#0e506e',
+	            borderRadius: 4,
+	            barPercentage: 0.6,
+	        } ]
+	    },
+	    options: {
+	        responsive: true,
+	        maintainAspectRatio: false,
+	        scales: {
+	            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } },
+	            x: { grid: { display: false } }
+	        },
+	        plugins: { legend: { position: 'top', align: 'end' } }
+	    }
 	});
-
+	
+	// 차트 2: 전체 차시 대비 진도율
 	const ctx2 = document.getElementById('chart2').getContext('2d');
-
+	const chart2Data = getRandomData(30, 90, 5); // 두 번째 차트용 랜덤 데이터
+	
 	new Chart(ctx2, {
-		type : 'bar',
-		data : {
-			labels : [ '강좌 1', '강좌 2', '강좌 3', '강좌 4', '강좌 5' ], // 강좌 명칭
-			datasets : [ {
-				label : '전체 차시',
-				data : [ 100, 100, 100, 100, 100 ], // 평균값은 고정
-				backgroundColor : '#d1d8e0', // 연한 회색 배경 느낌
-				borderWidth : 0,
-				barPercentage : 0.6, // 막대 두께 조절
-			}, {
-				label : '진도율',
-				data : [ 85, 42, 70, 55, 90 ], // 실제 내 강좌 진도율
-				backgroundColor : '#27ae60', // 포인트 컬러 (네이비)
-				borderRadius : 4, // 막대 끝을 둥글게
-				barPercentage : 0.6,
-			} ]
-		},
-		options : {
-			responsive : true,
-			maintainAspectRatio : false,
-			scales : {
-				y : {
-					beginAtZero : true,
-					max : 100, // 진도율은 100%가 만점
-					ticks : {
-						callback : function(value) {
-							return value + '%';
-						}
-					}
-				},
-				x : {
-					grid : {
-						display : false
-					}
-				// X축 줄무늬 제거 (깔끔함)
-				}
-			},
-			plugins : {
-				legend : {
-					position : 'top',
-					align : 'end'
-				}
-			// 범례를 오른쪽 상단으로
-			}
-		}
+	    type: 'bar',
+	    data: {
+	        labels: [ '1강', '2강', '3강', '4강', '5강' ],
+	        datasets: [ {
+	            label: '전체 차시',
+	            data: [ 100, 100, 100, 100, 100 ],
+	            backgroundColor: '#d1d8e0',
+	            barPercentage: 0.6,
+	        }, {
+	            label: '진도율',
+	            data: chart2Data, // 랜덤 생성된 데이터 적용
+	            backgroundColor: '#27ae60',
+	            borderRadius: 4,
+	            barPercentage: 0.6,
+	        } ]
+	    },
+	    options: {
+	        responsive: true,
+	        maintainAspectRatio: false,
+	        scales: {
+	            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } },
+	            x: { grid: { display: false } }
+	        },
+	        plugins: { legend: { position: 'top', align: 'end' } }
+	    }
 	});
-</script>
+	
+	$(document).ready(function() {
+    	
+        // 알림 배지 초기 로드 및 1분마다 갱신
+        updateReputationAlarm();
+        setInterval(updateReputationAlarm, 60000);
+        
+    });
 
+    // 알림 배지 AJAX 함수
+    function updateReputationAlarm() {
+        $.ajax({
+            url: '${pageContext.request.contextPath}/lecterer/reputationAlarm',
+            type: 'GET',
+            success: function(count) {
+                const badge = $('#repBadge');
+                if (count > 0) {
+                    badge.text(count).show();
+                } else {
+                    badge.hide();
+                }
+            }
+        });
+    }
+        
+    </script>
 </html>

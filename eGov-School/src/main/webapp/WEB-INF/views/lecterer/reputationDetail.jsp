@@ -80,6 +80,12 @@
 		window.close();
 		
 	}
+	
+	window.onload = function() {
+	    if (window.opener && !window.opener.closed) {
+	        window.opener.updateReputationAlarm();
+	    }
+	};
 
 </script>
 
