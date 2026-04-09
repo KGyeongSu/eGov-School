@@ -14,8 +14,8 @@ public class CertifiCateDAOImpl implements CertifiCateDAO {
     }
 
     @Override
-    public CertifiCateVO selectCertifiCate(String cerNum) throws SQLException {
-        return session.selectOne("CertifiCate-Mapper.selectCertifiCate", cerNum);
+    public CertifiCateVO selectCertifiCate(String claNum) throws SQLException {
+        return session.selectOne("CertifiCate-Mapper.selectCertifiCate", claNum);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CertifiCateDAOImpl implements CertifiCateDAO {
 	}
 
 	@Override
-	public int selectCertifiCateSeqNext() throws SQLException {
+	public String selectCertifiCateSeqNext() throws SQLException {
 		return session.selectOne("CertifiCate-Mapper.selectCertifiCateSeqNext");
 	}
 }

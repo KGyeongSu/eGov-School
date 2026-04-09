@@ -2,6 +2,7 @@
 package com.school.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.school.dto.UserVO;
 
@@ -24,4 +25,7 @@ public interface UserService {
 	
 	// 비밀번호 변경
 	void updateUserPwd(String userEmail, String newPwd) throws SQLException;
+	
+	// 관리자 리스트 조회
+	List <UserVO> getAdminList () throws SQLException;
 }

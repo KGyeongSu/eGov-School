@@ -134,7 +134,7 @@ public class TestServiceImpl implements TestService{
 		// 문제 꺼내기
 		List <QuestionVO> questionList = test.getTestQuestionList();
 		
-		if (questionList != null) {
+		if (questionList != null && !questionList.isEmpty()) {
 			
 			// 테스트 안 문제 번호
 			int queSeq =1;
@@ -168,7 +168,7 @@ public class TestServiceImpl implements TestService{
 	@Override
 	public TestVO selectTestWithQuestions(String claNum) throws SQLException {
 
-		return testDAO.selectTestbyTetNum(claNum);
+		return testDAO.selectTestWithQuestions(claNum);
 		
 	}
 
@@ -176,16 +176,18 @@ public class TestServiceImpl implements TestService{
 	@Transactional
 	public void updateTest(TestVO test) throws SQLException {
 		
+		
 		// 시험지 기본정보 수정
 		testDAO.updateTest(test);
 		
 		// 문제 수정
 		List <QuestionVO> questionList = test.getTestQuestionList();
 		
-		if (test.getTestQuestionList() != null) {
+		if (questionList != null && !questionList.isEmpty()) {
 			
 			for (QuestionVO question : questionList) {
 				
+				// 각 문제 수정
 				questionDAO.updateQuestion(question);
         
 			}

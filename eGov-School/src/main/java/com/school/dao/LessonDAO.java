@@ -6,9 +6,7 @@ import java.util.List;
 import com.school.dto.LessonAttachVO;
 import org.apache.ibatis.annotations.Param;
 
-import com.school.cmd.PageMaker;
 import com.school.dto.LessonVO;
-import com.school.dto.UserVO;
 
 public interface LessonDAO {
 

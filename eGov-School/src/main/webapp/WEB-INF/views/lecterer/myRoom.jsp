@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -16,17 +17,20 @@
 	<div class="content">
 		<div class="top">
 			<div class="icon">
-				<a href=""><i class="fa-regular fa-user"></i></a>
+				<a href="${pageContext.request.contextPath}/lecterer/mainDashBoard"><i class="fa-regular fa-user"></i></a>
 			</div>
 			<div class="state_bar">
-				<p>My 강의실</p>
+				<a href="${pageContext.request.contextPath}/lecterer/myRoom"><p>My 강의실</p></a>
 			</div>
 			<div class="logout_dash">
-				<div class="mes">
-					<a href=""><i class="fa-regular fa-envelope"></i></a>
+				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer; position: relative; display: inline-block;">
+				    <i class="fa-regular fa-envelope"></i>
+				    <span id="repBadge" style="position: absolute; top: 5px; right: 50px; background-color: #dc3545; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 50%; display: none; border: 2px solid white;">
+				    	0
+				    </span>
 				</div>
 				<div class="out">
-					<button type="button" class="btn btn-sm"
+					<button type="button" class="btn btn-sm" onclick="location.href='${pageContext.request.contextPath}/commons/logout'"
 						style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px;">로그아웃
 					</button>
 				</div>
@@ -39,7 +43,7 @@
 					style="height: 55px; margin-bottom: 50px !important;">
 					<h5 style="margin: 0; font-size: 25px; font-weight: 600;">진행 중인 강의</h5>
 					<button type="button" class="btn btn-add-room"
-						style="width: 200px; height: 50px;" onclick="OpenWindow('makeRoom', 'makeRoom', 1000, 700);">
+						style="width: 200px; height: 50px;" onclick="OpenWindow('makeRoom', 'makeRoom', 1000, 800);">
 						<i class="fa-solid fa-plus mr-1"></i> 강의실 등록
 					</button>
 				</div>
@@ -57,9 +61,19 @@
 									<div class="col-md-4" style="margin-bottom: 20px;">
 										<div class="card course-card-v2">
 											<div class="course-img-wrapper">
-												<img
-													src="${not empty classs.claThumb ? classs.claThumb : '/resources/images/default.jpg'}"
-													class="course-img">
+												<c:choose>
+											        <%-- DB에 썸네일 파일명이 있는 경우 --%>
+											        <c:when test="${not empty classs.claThumb}">
+											            <img src="${pageContext.request.contextPath}${classs.claSavePath}/${classs.claSaveName}" 
+											                 class="course-img" 
+											                 onerror="this.src='${pageContext.request.contextPath}/resources/images/default.jpg'">
+											        </c:when>
+											        <%-- 없는 경우 기본 이미지 출력 --%>
+											        <c:otherwise>
+											            <img src="${pageContext.request.contextPath}/resources/images/default.jpg" 
+											                 class="course-img">
+											        </c:otherwise>
+											      </c:choose>
 												<div class="course-overlay">
 													<button class="btn-play" onclick="go_roomDetail('${classs.claNum}', '${classs.claTitle}');">
 														<i class="fas fa-cloud-upload-alt"></i> 강좌 업로드
@@ -110,6 +124,30 @@
 <script src="/resources/js/commons.js"></script>
 
 <script>
+
+$(document).ready(function() {
+	
+    // 알림 배지 초기 로드 및 1분마다 갱신
+    updateReputationAlarm();
+    setInterval(updateReputationAlarm, 60000);
+    
+});
+
+// 알림 배지 AJAX 함수
+function updateReputationAlarm() {
+    $.ajax({
+        url: '${pageContext.request.contextPath}/lecterer/reputationAlarm',
+        type: 'GET',
+        success: function(count) {
+            const badge = $('#repBadge');
+            if (count > 0) {
+                badge.text(count).show();
+            } else {
+                badge.hide();
+            }
+        }
+    });
+}
 
 function go_roomDetail (claNum, claTitle) {
 	

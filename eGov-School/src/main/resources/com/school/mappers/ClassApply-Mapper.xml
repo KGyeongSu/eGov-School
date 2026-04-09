@@ -12,6 +12,9 @@
         NVL(P.AVG_PROGRESS, 0) AS PROGRESS,
         C.CLA_NUM,
         C.CLA_TITLE AS claName,
+        C.CLA_THUMB AS claThumb,
+        C.CLA_SAVE_NAME AS claSaveName,
+        C.CLA_SAVE_PATH AS claSavePath,
         E.ER_PASS,
         E.ER_SCORE,
         CASE WHEN R.REP_NUM IS NOT NULL THEN 'Y' ELSE 'N' END AS feedbackYN
@@ -33,12 +36,18 @@
     ORDER BY A.CA_DATE DESC
 </select>
 	
-	<select id="selectClassApplyListCount" resultType="int">
-		SELECT
-			COUNT(*)
-		FROM ClassApply
-		WHERE USER_NUM = #{userNum}
-	</select>
+<select id="selectClassApplyListCount" resultType="int">
+    SELECT
+        COUNT(*)
+    FROM ClassApply A
+    LEFT OUTER JOIN (
+        SELECT ER.USER_NUM, T.CLA_NUM, ER.ER_SCORE
+        FROM EXAM_RESULT ER
+        JOIN TEST T ON ER.TET_NUM = T.TET_NUM
+    ) E ON (A.USER_NUM = E.USER_NUM AND A.CLA_NUM = E.CLA_NUM)
+    WHERE A.USER_NUM = #{userNum}
+      AND E.ER_SCORE IS NULL 
+      </select>
 
 	<select id="selectClassByCaNum" resultType="classapply">
 		SELECT
@@ -84,12 +93,19 @@
         A.CA_NUM,
         A.USER_NUM,
         A.CLA_NUM,
+        C.CLA_SAVE_NAME AS claSaveName,
+        C.CLA_SAVE_PATH AS claSavePath,
         NVL(P.AVG_PROGRESS, 0) AS PROGRESS,
-        C.CLA_TITLE,
         C.CLA_TITLE AS claName,
         E.ER_SCORE, 
         E.ER_PASS,
-        CASE WHEN R.REP_NUM IS NOT NULL THEN 'Y' ELSE 'N' END AS feedbackYN
+       
+        NVL(
+            (SELECT CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END 
+             FROM REPUTATION R 
+             WHERE R.USER_NUM = A.USER_NUM 
+               AND R.CLA_NUM = A.CLA_NUM), 
+        'N') AS feedbackYN
     FROM ClassApply A
     JOIN Class C ON A.CLA_NUM = C.CLA_NUM
     LEFT OUTER JOIN (
@@ -102,10 +118,27 @@
         FROM EXAM_RESULT ER
         JOIN TEST T ON ER.TET_NUM = T.TET_NUM
     ) E ON (A.USER_NUM = E.USER_NUM AND A.CLA_NUM = E.CLA_NUM)
-    LEFT OUTER JOIN REPUTATION R ON (A.USER_NUM = R.USER_NUM AND A.CLA_NUM = R.CLA_NUM)
     WHERE A.USER_NUM = #{userNum}
     AND E.ER_SCORE IS NOT NULL
 </select>
+
+<insert id="insertReputation" parameterType="reputation">
+    INSERT INTO REPUTATION (
+        REP_NUM, 
+        USER_NUM, 
+        CLA_NUM, 
+        REP_CONTENT, 
+        REP_SAT, 
+        REP_REGDATE
+    ) VALUES (
+        SEQ_REPUTATION.NEXTVAL, 
+        #{userNum}, 
+        #{claNum}, 
+        #{repContent}, 
+        #{repSat}, 
+        SYSDATE
+    )
+</insert>
 
 	<!-- 중복 신청 체크 -->
 	<select id="checkDuplicate" parameterType="map" resultType="int">

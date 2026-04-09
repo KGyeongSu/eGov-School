@@ -22,7 +22,7 @@
   		que_opt4 = #{queOpt4},
   		que_answer = #{queAnswer},
   		que_desc = #{queDesc}
-  		where que_num = #{queNum}
+  		where que_num = #{queNum, jdbcType=VARCHAR}
   	
   	</update>
 

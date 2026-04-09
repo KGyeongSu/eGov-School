@@ -6,6 +6,7 @@ import java.util.List;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
 import com.school.dto.LessonVO;
+import com.school.dto.ReputationVO;
 
 public interface ClassApplyDAO {
     
@@ -31,4 +32,6 @@ public interface ClassApplyDAO {
 	int checkDuplicate(String userNum, String claNum) throws SQLException;
 	
 	int checkFull(String claNum) throws SQLException;
+	
+	void insertReputation(ReputationVO repo) throws SQLException; //피드백
 }

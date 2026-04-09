@@ -16,9 +16,12 @@
 	        c.cla_enddate, 
 	        c.cla_maxstu, 
 	        c.cla_views,
-	        t.tet_num  FROM class c
+	        c.cla_thumb,
+	        c.cla_save_name,
+	        c.cla_save_path,
+	        (SELECT tet_num FROM test WHERE cla_num = c.cla_num AND ROWNUM = 1) as tetNum
+	        FROM class c
 	    	INNER JOIN users u ON c.user_num = u.user_num
-	    	LEFT OUTER JOIN test t ON c.cla_num = t.cla_num 
     	<where> 
     	
 	        c.user_num = #{userNum}
@@ -29,13 +32,13 @@
 	            
 	    </where>
 	    
-	    ORDER BY c.cla_num ASC
+	    ORDER BY c.cla_num DESC
 	    
 	</select>
 	
 	<select id="selectSearchClassList" resultType="classs">
 	
-		select cla_num, cla_title, cla_goal, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views
+		select cla_num, cla_title, cla_goal, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views, cla_thumb, cla_save_name, cla_save_path
 		from class c
 		inner join users u
 		on c.user_num = u.user_num
@@ -64,14 +67,15 @@
 	</select>
 	
 	<select id="selectClassByCla_num" resultType="classs">
-	
-		select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_complete, 
-       	user_name, u.user_photo, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views,
-      	(SELECT COUNT(*) FROM classapply ca WHERE ca.cla_num = c.cla_num) AS applyCnt
-		from class c
-		inner join users u
-		on c.user_num = u.user_num
-		where cla_num = #{claNum}
+
+	    select cla_num, cla_title, cla_content, cla_goal, cla_category, cla_complete, 
+	    user_name, u.user_photo, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views, 
+	    cla_thumb, cla_save_name, cla_save_path,
+	    (SELECT COUNT(*) FROM classapply ca WHERE ca.cla_num = c.cla_num) AS applyCnt
+	    from class c
+	    inner join users u
+	    on c.user_num = u.user_num
+	    where cla_num = #{claNum}
 	
 	</select>
 	
@@ -81,8 +85,8 @@
         	SELECT seq_class.nextval FROM dual
     	</selectKey>
 	
-		insert into class(cla_num, cla_title, cla_content, cla_goal, cla_category, user_num, cla_startdate, cla_enddate, cla_maxstu, cla_complete)
-		values (#{claNum}, #{claTitle}, #{claContent}, #{claGoal, jdbcType=VARCHAR}, #{claCategory}, #{userNum}, #{claStartDate, jdbcType=DATE}, #{claEndDate, jdbcType=DATE}, #{claMaxStu, jdbcType=INTEGER}, #{claComplete, jdbcType=VARCHAR})
+		insert into class(cla_num, cla_title, cla_content, cla_goal, cla_category, user_num, cla_startdate, cla_enddate, cla_maxstu, cla_complete, cla_thumb, cla_save_name, cla_save_path)
+		values (#{claNum}, #{claTitle}, #{claContent}, #{claGoal, jdbcType=VARCHAR}, #{claCategory}, #{userNum}, #{claStartDate, jdbcType=DATE}, #{claEndDate, jdbcType=DATE}, #{claMaxStu, jdbcType=INTEGER}, #{claComplete, jdbcType=VARCHAR}, #{claThumb}, #{claSaveName}, #{claSavePath})
 	
 	</insert>
 	
@@ -106,7 +110,7 @@
     	SELECT 
        	 	u.* FROM users u
     		INNER JOIN classapply ca ON u.user_num = ca.user_num
-   		WHERE ca.cla_num = #{claNum}
+   			WHERE ca.cla_num = #{claNum}
     
     		<if test="pageMaker.keyword != null and pageMaker.keyword != ''">
         		AND (
@@ -118,6 +122,22 @@
     
    		 ORDER BY u.user_name ASC
    		 
+	</select>
+	
+	<select id="selectUnsentStudentList" resultType="user">
+		
+		SELECT u.user_num, u.user_name, u.user_email
+	    FROM users u
+	    INNER JOIN classapply ca ON u.user_num = ca.user_num
+	    WHERE ca.cla_num = #{claNum}
+	      AND NOT EXISTS (
+	          SELECT 1 
+	          FROM MESSAGE m 
+	          WHERE m.ms_receiver_num = u.user_num 
+	            AND m.tet_num = #{tetNum} 
+	      )
+	    ORDER BY u.user_name ASC
+		    
 	</select>
 	
 	<select id="selectStudentListCount" resultType="int">
@@ -200,12 +220,3 @@
 	
 	
 </mapper>
-
-
-
-
-
-
-
-
-

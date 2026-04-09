@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TestVO {
     // Test 관련
-	  private String tetNum;
+	private String tetNum;
     private String claNum;
     private String userNum;
     private String tetTitle;

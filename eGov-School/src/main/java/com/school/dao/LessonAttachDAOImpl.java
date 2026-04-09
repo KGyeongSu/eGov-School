@@ -14,7 +14,7 @@ public class LessonAttachDAOImpl implements LessonAttachDAO {
 	public LessonAttachDAOImpl(SqlSession session) {
 		this.session = session;
 	}
-
+	
 	@Override
 	public String selectLessonAttachSeqNext() throws SQLException {
 		return session.selectOne("LessonAttach-Mapper.selectLessonAttachSeqNext");
@@ -45,5 +45,18 @@ public class LessonAttachDAOImpl implements LessonAttachDAO {
 		
 		session.delete("LessonAttach-Mapper.deleteLessonAttachBySaveName", laSaveName);
 		
+	}
+
+	@Override
+	public LessonAttachVO selectLessonAttachByLaNum(String laNum) throws SQLException {
+		// TODO Auto-generated method stub
+		// 단건 조회 (다운로드용)
+        return session.selectOne("LessonAttach-Mapper.selectLessonAttachByLaNum", laNum);
+	}
+
+	@Override
+	public List<LessonAttachVO> selectLessonFileList(String lsnNum) throws SQLException {
+		// TODO Auto-generated method stub
+		return session.selectList("LessonAttach-Mapper.selectLessonFileList", lsnNum);
 	}
 }

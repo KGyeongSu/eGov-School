@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
 import com.school.dto.LessonVO;
+import com.school.dto.ReputationVO;
 
 public class ClassApplyDAOImpl implements ClassApplyDAO {
     
@@ -94,6 +95,11 @@ public class ClassApplyDAOImpl implements ClassApplyDAO {
 	@Override
 	public int checkFull(String claNum) throws SQLException {
 		return session.selectOne("ClassApply-Mapper.checkFull", claNum);
+	}
+	@Override
+	public void insertReputation(ReputationVO repo) throws SQLException {
+		
+		session.insert("ClassApply-Mapper.insertReputation", repo);
 	}
 
 }

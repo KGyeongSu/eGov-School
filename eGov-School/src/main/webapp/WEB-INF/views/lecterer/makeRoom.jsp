@@ -13,7 +13,7 @@
 
 <body>
     <div class="inner" style="background-color: #f0f4f7 !important;">
-    	<form id="makeRoomForm" class="form"  action="makeRoom" method="post" style="border: none !important; box-shadow: 0 10px 40px rgba(0,0,0,0.08) !important; max-width: 900px !important;">
+    	<form id="makeRoomForm" class="form"  action="makeRoom" method="post" enctype="multipart/form-data" style="border: none !important; box-shadow: 0 10px 40px rgba(0,0,0,0.08) !important; max-width: 900px !important;">
             <!-- 버튼 -->
             <div class="form_top" style="border-bottom: 1px solid #eee !important; padding: 25px 40px !important;">
                 <h2 class="title">강의실 생성</h2>
@@ -23,33 +23,61 @@
             </div>
 
             <div class="form_mid">
-                <!-- 작성자/강의명 -->
-                <div class="write_down">
-                    <div class="per_name">
-                        <label>작성자</label>
-                        <div class="read_only_box">
-                            <span class="badge_lec">강사명</span>${loginUser.userName }
-                        </div>
-                    </div>
-                    <div class="lec_name">
-                        <label>강의명</label>
-                        <input type="text" name="claTitle" class="input_control" placeholder="강의명을 입력하세요">
-                    </div>
-                    <!-- 강의 분야 입력란 -->
-                	<div class="category" style="margin-bottom: 20px;">
-            			<label>강의 분야</label>
-            			<input type="text" name="claCategory" class="input_control" placeholder="헌법, 행정법, 지방소비세법 등">
-        			</div>
-                </div>
-                <div class="items">
-                    <!-- 학습목표 입력란 -->
-                    <div class="goal">
-                        <label>학습 목표</label>
-                        <input type="text" name="claContent" class="input_control" placeholder="학습 목표를 입력하세요">
-                    </div>
-                </div>
-            </div>
-
+            	 <div class="top_info" style="display:flex; gap:20px; margin-bottom:25px;">
+				    <!-- 왼쪽: 썸네일 -->
+				    <div class="left_thumb">
+				      <div class="thumb_wrap">
+				        <div class="thumb_box" id="thumbBox">
+				          <input type="file" name="thumb" id="thumbInput" accept="image/*" style="display:none;">
+				          <label for="thumbInput" class="thumb_placeholder" id="thumbPlaceholder">
+				            <i class="fa-solid fa-image"></i>
+				            <span>이미지 선택</span>
+				          </label>
+				          <div class="thumb_preview" id="thumbPreview" style="display:none;">
+				            <img id="thumbImg">
+				            <button type="button" class="thumb_remove" id="thumbRemove">
+				              <i class="fa-solid fa-xmark"></i>
+				            </button>
+				          </div>
+				        </div>
+				        <div class="thumb_filename" id="thumbFilename"></div>
+				      </div>
+				    </div>
+				
+				    <!-- 오른쪽: 작성자 / 강의명 / 강의 분야 -->
+				    <div class="right_info" style="flex:1; display:flex; flex-direction:column; gap:15px;">
+				      
+				      <!-- 작성자 -->
+				      <div class="per_name">
+				        <label>작성자</label>
+				        <div class="read_only_box">
+				          <span class="badge_lec">강사명</span>${loginUser.userName}
+				        </div>
+				      </div>
+				
+				      <!-- 강의명 -->
+				      <div class="lec_name">
+				        <label>강의명</label>
+				        <input type="text" name="claTitle" class="input_control" placeholder="강의명을 입력하세요">
+				      </div>
+				
+				      <!-- 강의 분야 -->
+				      <div class="category">
+				        <label>강의 분야</label>
+				        <input type="text" name="claCategory" class="input_control" placeholder="헌법, 행정법, 지방소비세법 등">
+				      </div>
+				
+				    </div>
+            	</div>
+            	<!-- 학습 목표 (원래 위치 그대로) -->
+				  <div class="items">
+				    <div class="goal">
+				      <label>학습 목표</label>
+				      <input type="text" name="claContent" class="input_control" placeholder="학습 목표를 입력하세요">
+				    </div>
+				  </div>
+           	</div>
+            
             <!-- 커리큘럼 작성 (동적 생성 영역) -->
             <div class="form_bot">
                 <div class="curri_box">
@@ -165,6 +193,46 @@
         }
     };
 
+</script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+	    const thumbInput = document.getElementById('thumbInput');
+	    const thumbBox = document.getElementById('thumbBox');
+	    const thumbPlaceholder = document.getElementById('thumbPlaceholder');
+	    const thumbPreview = document.getElementById('thumbPreview');
+	    const thumbImg = document.getElementById('thumbImg');
+	    const thumbRemove = document.getElementById('thumbRemove');
+	
+	    if (thumbInput) {
+	        thumbInput.addEventListener('change', function(e) {
+	            const file = e.target.files[0];
+	            if (file) {
+	                const reader = new FileReader();
+	                reader.onload = function(event) {
+	                    thumbImg.src = event.target.result;
+	                    
+	                    thumbPlaceholder.style.setProperty('display', 'none', 'important');
+	                    thumbPreview.style.setProperty('display', 'block', 'important');
+	                    thumbBox.classList.add('has-image');
+	                };
+	                reader.readAsDataURL(file);
+	            }
+	        });
+	    }
+	
+	    if (thumbRemove) {
+	        thumbRemove.addEventListener('click', function(e) {
+	            e.preventDefault();
+	            e.stopPropagation(); 
+	            
+	            thumbInput.value = ''; 
+	            thumbImg.src = '';
+	            thumbPreview.style.setProperty('display', 'none', 'important');
+	            thumbPlaceholder.style.setProperty('display', 'flex', 'important');
+	            thumbBox.classList.remove('has-image');
+	        });
+	    }
+	});
 </script>
 
 </html>

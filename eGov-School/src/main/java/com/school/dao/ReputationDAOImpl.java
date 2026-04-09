@@ -1,10 +1,14 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
+import com.school.cmd.PageMaker;
 import com.school.dto.ReputationVO;
 
 public class ReputationDAOImpl implements ReputationDAO{
@@ -44,5 +48,51 @@ public class ReputationDAOImpl implements ReputationDAO{
 		
 		return session.selectOne("Reputation-Mapper.selectReputaioneqNext");
 	}
+	
+	// 강사
+	@Override
+	public List<ReputationVO> selectReputationListByLecturer(PageMaker pageMaker, String userNum, RowBounds rows) throws SQLException {
+		
+		Map<String, Object> reputationList = new HashMap<>();
+		reputationList.put("pageMaker", pageMaker);
+		reputationList.put("userNum", userNum);
+		
+		return session.selectList("Reputation-Mapper.selectReputationListByLecturer", reputationList, rows);
+		
+	}
+
+	@Override
+	public ReputationVO selectReputationDetailByRepNum(String repNum) throws SQLException {
+
+		return session.selectOne("Reputation-Mapper.selectReputationDetailByRepNum", repNum);
+		
+	}
+	
+	@Override
+	public int selectUnreadReputationCount(String userNum) throws SQLException {
+
+		return session.selectOne("Reputation-Mapper.selectUnreadReputationCount", userNum);
+		
+	}
+
+	@Override
+	public void updateReputationCheck(String repNum) throws SQLException {
+
+		session.update("Reputation-Mapper.updateReputationCheck", repNum);
+		
+	}
+
+	@Override
+	public int selectReputationCountByLecturer(PageMaker pageMaker, String userNum) throws SQLException {
+		
+		Map <String, Object> reputationCount = new HashMap<> ();
+		reputationCount.put("pageMaker", pageMaker);
+		reputationCount.put("userNum", userNum);
+		
+		return session.selectOne("Reputation-Mapper.selectReputationCountByLecturer", reputationCount);
+		
+	}
+
+	
 
 }

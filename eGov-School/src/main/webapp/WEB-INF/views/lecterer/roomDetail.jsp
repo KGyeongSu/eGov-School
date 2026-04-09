@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -15,19 +16,24 @@
 		<div class="top">
 
 			<div class="icon">
-				<a href=""><i class="fa-regular fa-user"></i></a>
+				<a href="${pageContext.request.contextPath }/lecterer/mainDashBoard"><i class="fa-regular fa-user"></i></a>
 			</div>
 			<div class="state_bar">
-				<p>
-					My 강의실 > <strong style="font: '나눔 고딕'; font-size: 17px;">&nbsp;&nbsp;${roomDetail.claTitle}</strong>
-				</p>
+				<a href="${pageContext.request.contextPath}/lecterer/myRoom">
+					<p>
+						My 강의실 > <strong style="font: '나눔 고딕'; font-size: 17px;">&nbsp;&nbsp;${roomDetail.claTitle}</strong>
+					</p>
+				</a>
 			</div>
 			<div class="logout_dash">
-				<div class="mes">
-					<a href=""><i class="fa-regular fa-envelope"></i></a>
+				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer; position: relative; display: inline-block;">
+				    <i class="fa-regular fa-envelope"></i>
+				    <span id="repBadge" style="position: absolute; top: 5px; right: 50px; background-color: #dc3545; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 50%; display: none; border: 2px solid white;">
+				    	0
+				    </span>
 				</div>
 				<div class="out">
-					<button type="button" class="btn btn-sm"
+					<button type="button" class="btn btn-sm" onclick="location.href='${pageContext.request.contextPath}/commons/logout'"
 						style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px; border: none; line-height: 1;">로그아웃
 					</button>
 				</div>
@@ -41,7 +47,7 @@
 			</div>
 			<div class="manage">
 				<a href="/lecterer/roomManage?claNum=${roomDetail.claNum}">
-					<h2>사용자 관리</h2>
+					<h2>수강생 관리</h2>
 				</a>
 			</div>
 		</div>
@@ -155,6 +161,7 @@
 </body>
 
 <script src="../../../resources/js/commons.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 
@@ -428,6 +435,33 @@ function go_modify() {
         
     }
     
+</script>
+
+<script>
+    $(document).ready(function() {
+    	
+        // 알림 배지 초기 로드 및 1분마다 갱신
+        updateReputationAlarm();
+        setInterval(updateReputationAlarm, 60000);
+        
+    });
+
+    // 알림 배지 AJAX 함수
+    function updateReputationAlarm() {
+        $.ajax({
+            url: '${pageContext.request.contextPath}/lecterer/reputationAlarm',
+            type: 'GET',
+            success: function(count) {
+                const badge = $('#repBadge');
+                if (count > 0) {
+                    badge.text(count).show();
+                } else {
+                    badge.hide();
+                }
+            }
+        });
+    }
+
 </script>
 
 </html>

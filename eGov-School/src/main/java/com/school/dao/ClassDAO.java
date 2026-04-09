@@ -41,6 +41,9 @@ public interface ClassDAO {
 	int selectApprovedClassListCount(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
 
 	void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException;
+	
+	// 메시지 중복 발송 방지 학생 리스트
+	List <UserVO> selectUnsentStudentList (@Param("claNum") String claNum, @Param("tetNum") String tetNum);
 
 }
  
