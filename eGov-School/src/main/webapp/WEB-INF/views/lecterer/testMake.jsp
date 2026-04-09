@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
@@ -401,7 +402,10 @@ function refreshUI(num) {
     	        saveTemp();
 
     	        if (questionList.filter(q => q).length < totalQuestions) {
-    	            if (!confirm("미작성 문항이 있습니다.")) return;
+    	        	
+    	            alert("20 문항을 모두 작성해야 등록됩니다."); 
+    	    		return;
+    	    		
     	        }
 
     	        const finalData = {
@@ -453,5 +457,6 @@ function refreshUI(num) {
     	});
 
 </script>
+
 
 </html>

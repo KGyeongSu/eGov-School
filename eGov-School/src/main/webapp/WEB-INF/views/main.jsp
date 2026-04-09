@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -10,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eGov-School</title>
     <link rel="stylesheet" href="/resources/css/MainPage/main.css">
+    <link rel="stylesheet" href="/resources/css/MainPage/cregist.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Gowun+Batang:wght@400;700&display=swap"
         rel="stylesheet">
@@ -26,15 +28,15 @@
             <div class="slide_list">
                 <ul>
                     <li>
-                            <img src="/resources/images/slide1.png" />
+                            <img src="/resources/images/slide4.png" />
                     </li>
                     
                     <li>
-                            <img src="/resources/images/slide2.png" />
+                            <img src="/resources/images/slide5.png" />
                     </li>
                     
                     <li>
-                            <img src="/resources/images/slide3.png" />
+                            <img src="/resources/images/slide6.png" />
                     </li>
                 </ul>
             </div>
@@ -68,7 +70,7 @@
 			    <c:choose>
 			        <c:when test="${not empty classList}">
 			            <c:forEach var="cls" items="${classList}">
-			                <div class="card">
+			                <div class="card" onclick="openCourseDetail('${cls.claNum}')" style="cursor: pointer;">
 			                    <div class="card_img">
 			                        <c:choose>
 			                            <c:when test="${not empty cls.userPhoto}">
@@ -115,9 +117,142 @@
 				</div>
             </div>
     </content>
-
+	
+	 <!-- 강좌 상세보기 모달 -->
+    <div id="courseModal" class="modal_overlay" style="display:none;">
+        <div class="course_modal">
+            <div class="cm_header">
+                <h3>강좌 상세보기</h3>
+                <button class="cm_close" onclick="closeCourseModal()">&times;</button>
+            </div>
+            <div class="cm_body">
+                <div class="cm_top">
+                    <div class="cm_thumb">
+                        <img id="cm_thumb_img" src="" alt="강사 사진" onerror="this.style.display='none'">
+                    </div>
+                    <div class="cm_info_wrap">
+                        <p class="cm_no"></p>
+                        <h3 class="cm_title"></h3>
+                        <div class="cm_info_grid">
+                            <div class="cm_info_card">
+                                <span class="cm_label">강사</span>
+                                <span class="cm_value cm_teacher"></span>
+                            </div>
+                            <div class="cm_info_card">
+                                <span class="cm_label">카테고리</span>
+                                <span class="cm_value cm_category"></span>
+                            </div>
+                            <div class="cm_info_card">
+                                <span class="cm_label">교육기간</span>
+                                <span class="cm_value cm_date"></span>
+                            </div>
+                            <div class="cm_info_card">
+                                <span class="cm_label">현재인원 / 수강정원</span>
+                                <span class="cm_value cm_status"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cm_bottom">
+                    <div class="cm_curriculum">
+                        <h4>커리큘럼</h4>
+                        <div class="cm_lesson_list"></div>
+                    </div>
+                    <div class="cm_right">
+                        <div class="cm_section">
+                            <h4>학습 목표</h4>
+                            <p class="cm_content_text"></p>
+                        </div>
+                        <div class="cm_section">
+                            <h4>수료 조건</h4>
+                            <div class="cm_conditions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cm_footer">
+                <button class="btn_cregist_modal" onclick="location.href='/page/cregist'">수강신청 페이지로 이동</button>
+            </div>
+        </div>
+    </div>
     
 	<%@ include file="modules/footer.jsp" %>
+	
+	<script>
+    function openCourseDetail(claNum) {
+        $.ajax({
+            url: '/page/classDetail',
+            type: 'get',
+            data: { claNum: claNum },
+            dataType: 'json',
+            success: function(data) {
+                $('.cm_title').text(data.claTitle);
+                $('.cm_teacher').text(data.userName || '-');
+                $('.cm_category').text(data.claCategory || '-');
+                $('.cm_status').text((data.applyCnt || 0) + '/' + data.claMaxStu);
+
+                if (data.claStartDate && data.claEndDate) {
+                    var start = new Date(data.claStartDate);
+                    var end = new Date(data.claEndDate);
+                    var format = function(d) {
+                        return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+                    };
+                    $('.cm_date').text(format(start) + ' ~ ' + format(end));
+                } else {
+                    $('.cm_date').text('-');
+                }
+
+                if (data.userPhoto) {
+                    $('#cm_thumb_img').attr('src', '/display/' + data.userPhoto + '?t=' + new Date().getTime()).show();
+                } else {
+                    $('#cm_thumb_img').attr('src', '/resources/images/default.jpg').show();
+                }
+
+                $('.cm_content_text').text(data.claContent || '정보 없음');
+
+                var conditionsHtml = '';
+                if (data.claComplete) {
+                    var conditions = data.claComplete.split(',');
+                    for (var i = 0; i < conditions.length; i++) {
+                        var text = conditions[i].trim();
+                        if (text) {
+                            conditionsHtml += '<div class="cm_condition"><span class="cm_dot"></span><span>' + text + '</span></div>';
+                        }
+                    }
+                } else {
+                    conditionsHtml = '<div class="cm_condition"><span class="cm_dot"></span><span>수료 조건 미설정</span></div>';
+                }
+                $('.cm_conditions').html(conditionsHtml);
+
+                var lessonHtml = '';
+                if (data.lessonList && data.lessonList.length > 0) {
+                    for (var i = 0; i < data.lessonList.length; i++) {
+                        var lesson = data.lessonList[i];
+                        lessonHtml += '<div class="cm_lesson_item"><span class="cm_lesson_seq">' + lesson.lsnSeq + '강</span><span class="cm_lesson_title">' + lesson.lsnTitle + '</span></div>';
+                    }
+                } else {
+                    lessonHtml = '<p style="color:#999;">등록된 커리큘럼이 없습니다.</p>';
+                }
+                $('.cm_lesson_list').html(lessonHtml);
+
+                $('#courseModal').show();
+            },
+            error: function() {
+                alert('강좌 정보를 불러올 수 없습니다.');
+            }
+        });
+    }
+
+    function closeCourseModal() {
+        $('#courseModal').hide();
+    }
+
+    $(document).on('click', '.modal_overlay', function(e) {
+        if (e.target === this) closeCourseModal();
+    });
+    </script>
+	
 </body>
+
 
 </html>

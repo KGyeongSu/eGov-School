@@ -1,6 +1,57 @@
 @charset "utf-8";
 
+/* 필터 + 검색 가운데 정렬 (오버라이드) */
+        .search_bar {
+            justify-content: center !important;
+        }
 
+        .search_bar form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search_bar form select {
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            background: #fff;
+            cursor: pointer;
+            min-width: 130px;
+        }
+
+        .search_bar form select:focus {
+            border-color: #1a2b4a;
+            outline: none;
+        }
+
+        .category_badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #d6e8f7;
+            color: #1a2b4a;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .recruit_full {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        /* 강좌제목 컬럼을 3번째로 변경 */
+        .course_table td:nth-child(3) {
+            text-align: left;
+            font-weight: 600;
+            color: black;
+        }
+        .course_table td:nth-child(2) {
+            text-align: center;
+            font-weight: 400;
+        }
 /* ===== 검색바 영역 ===== */
 .cregist_search {
     max-width: 1300px;
@@ -319,6 +370,34 @@
     border-radius: 8px;
     padding: 16px;
     flex: 1;
+}
+
+/* 커리큘럼 차시 목록 */
+.cm_lesson_item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cm_lesson_item:last-child {
+    border-bottom: none;
+}
+
+.cm_lesson_seq {
+    background: #e8f4fd;
+    color: #2c7be5;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 12px;
+    white-space: nowrap;
+}
+
+.cm_lesson_title {
+    font-size: 14px;
+    color: #333;
 }
 
 .cm_section h4 {

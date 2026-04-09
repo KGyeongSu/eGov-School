@@ -18,8 +18,9 @@ public class ExamNoticeVO {
 	private String enNum;
 	private String enTitle;
 	private String enContent;
-	private Date enDate;
+	private Date enRegDate;
 	private Integer enViews;
-	private Integer userNum;
+	private String userNum;
 
+	private String userName;
 }

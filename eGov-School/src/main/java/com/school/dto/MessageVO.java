@@ -2,8 +2,6 @@ package com.school.dto;
 
 import java.util.Date;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +19,9 @@ public class MessageVO {
     private String msCheck;
     private String msSenderNum;
     private String msReceiverNum;
+    
+    private String msSenderName; //보낸사람 이름 
+    //강사
     private String tetNum;
     
     // 파일 경로 관리

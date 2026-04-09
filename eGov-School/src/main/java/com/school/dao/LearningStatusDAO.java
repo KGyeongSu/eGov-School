@@ -13,6 +13,6 @@ public interface LearningStatusDAO {
 
     LearningStatusVO selectLearningStatus(LearningStatusVO status) throws SQLException;
 
-
+    int selectLastLearningSeq(LearningStatusVO status) throws SQLException;
 
 }

@@ -20,6 +20,6 @@ public interface JobNoticeDAO {
 	
 	void increaseViewCnt (String jn_num) throws SQLException;
 	
-	int selectJobNoticeSeqNext () throws SQLException;
+	String selectJobNoticeSeqNext () throws SQLException;
 
 }

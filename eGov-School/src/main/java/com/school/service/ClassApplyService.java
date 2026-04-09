@@ -7,6 +7,7 @@ import com.school.cmd.ClassApplyListCommand;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
 import com.school.dto.LessonVO;
+import com.school.dto.ReputationVO;
 
 public interface ClassApplyService {
     
@@ -26,6 +27,10 @@ public interface ClassApplyService {
 
 	List<LessonVO> getLessonListByCoures(String claNum) throws SQLException;
 	
+	int checkDuplicate(String userNum, String claNum) throws SQLException;
 	
+	int checkFull(String claNum) throws SQLException;
+	
+	void registReputation(ReputationVO repo) throws SQLException; //피드백
 	
 }

@@ -55,7 +55,7 @@
   	<insert id="insertExamNotice" parameterType="examNotice">
   	
   		insert into examNotice(en_num, en_title, en_content, en_regdate, en_views, user_num)
-  		values(#{en_num}, #{en_title}, #{en_content}, #{en_regdate}, #{en_views}, #{user_num})
+  		values(#{enNum}, #{enTitle}, #{enContent}, SYSDATE, 0, #{userNum})
   	
   	</insert>
   	
@@ -67,7 +67,7 @@
   	
   	</update>
   	
-  	<select id="selectExamNoticeSeqNext" resultType="int">
+  	<select id="selectExamNoticeSeqNext" resultType="str">
     SELECT SEQ_EXAMNOTICE.NEXTVAL AS en_num FROM DUAL
 </select>
   

@@ -35,8 +35,11 @@ public class ClassApplyVO {
 	// ClassApplyVO.java에 추가
 	private String claName; // JSP ${apply.claName} 매핑용
 	private double progress;   // JSP ${apply.progress} 매핑용
+	private String claThumb;    // DB의 cla_thumb 컬럼과 매핑
+	private String claSaveName; // 실제 저장된 파일명 (예: uuid_thumb.jpg)
+	private String claSavePath; // 파일 저장 경로 (예: /classDisplay)
 	
 	private String feedbackYN;//null인지 아닌지 담는그릇
 	
-	
+	private String lsnThumb; // 썸네일 파일명 매핑용
 }

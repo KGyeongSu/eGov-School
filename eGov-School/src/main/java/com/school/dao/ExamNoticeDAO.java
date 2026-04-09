@@ -20,6 +20,6 @@ public interface ExamNoticeDAO {
 	
 	void increaseViewCnt (String en_num) throws SQLException;
 	
-	int selectExamNoticeSeqNext () throws SQLException;
+	String selectExamNoticeSeqNext () throws SQLException;
 	
 }

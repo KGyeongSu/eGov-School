@@ -1,3 +1,4 @@
+
 @charset 'utf-8';
 
 * {
@@ -700,4 +701,5 @@ span.flatpickr-weekday {
     height: 100%;
     color: #888;
     gap: 12px;
+
 }

@@ -1,11 +1,12 @@
 package com.school.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,7 @@ import com.school.dto.MessageAttachVO;
 import com.school.dto.MessageVO;
 
 public class MessageServiceImpl implements MessageService {
-	
+
 	private final MessageDAO messageDAO;
 	private final MessageAttachDAO mattachDAO;
 
@@ -26,7 +27,35 @@ public class MessageServiceImpl implements MessageService {
 		
 	}
 
-	@Override
+    @Override
+    public List<MessageVO> getReceivedList(String userNum) throws SQLException {
+        // 받은 쪽지 목록 불러오기
+        return messageDAO.selectReceivedList(userNum);
+    }
+
+    @Override
+    @Transactional // 중요: 읽음 표시와 상세 조회를 하나의 트랜잭션으로 처리
+    public MessageVO getMessageUserDetail(String msNum) throws SQLException {
+        // 1. 읽음 상태 업데이트 (MS_CHECK = 'N' -> 'Y')
+        messageDAO.updateMessageCheck(msNum);
+        
+        // 2. 업데이트된 쪽지 상세 내용 조회 및 반환
+        return messageDAO.selectMessageByNum(msNum);
+    }
+
+    @Override
+    public int getUnreadCount(String userNum) throws SQLException {
+        // 안 읽은 쪽지 개수 반환
+        return messageDAO.selectUnreadCount(userNum);
+    }
+
+    @Override
+    public void removeMessage(String msNum) throws SQLException {
+        // 쪽지 삭제
+        messageDAO.deleteMessage(msNum);
+    }
+    
+    @Override
 	public String selectMessageSeqNext() throws SQLException {
 
 		return messageDAO.selectMessageSeqNext();
@@ -134,5 +163,5 @@ public class MessageServiceImpl implements MessageService {
         }
 		
 	}
-		
+    
 }

@@ -1,3 +1,4 @@
+
 package com.school.dto;
 
 import java.util.Date;
@@ -21,3 +22,4 @@ private String cerSavePath;
 private Date cerRegDate;
 
 }
+

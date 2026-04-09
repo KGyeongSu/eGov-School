@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,9 +14,14 @@ import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
 import com.school.dto.ExamNoticeVO;
 import com.school.dto.JobNoticeVO;
+import com.school.dto.LessonVO;
+import com.school.dto.UserVO;
 import com.school.service.ClassService;
 import com.school.service.ExamNoticeService;
 import com.school.service.JobNoticeService;
+import com.school.service.LessonService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/page")
@@ -24,13 +30,16 @@ public class PageController {
     private final ClassService classService;
     private final JobNoticeService jobNoticeService;
     private final ExamNoticeService examNoticeService;
+    private final LessonService lessonService;
 
     public PageController(ClassService classService, 
                           JobNoticeService jobNoticeService,
-                          ExamNoticeService examNoticeService) {
+                          ExamNoticeService examNoticeService,
+                          LessonService lessonService) {
         this.classService = classService;
         this.jobNoticeService = jobNoticeService;
         this.examNoticeService = examNoticeService;
+        this.lessonService = lessonService;
     }
 
     // 기존 수강신청 페이지
@@ -47,6 +56,15 @@ public class PageController {
         model.addAttribute("pageMaker", pageMaker);
 
         return "page/cregist";
+    }
+    
+    @GetMapping("/classDetail")
+    @ResponseBody
+    public ClassVO classDetail(@RequestParam("claNum") String claNum) throws Exception {
+        ClassVO classVO = classService.selectClassByCla_num(claNum);
+        List<LessonVO> lessonList = lessonService.selectLessonList(claNum);
+        classVO.setLessonList(lessonList);
+        return classVO;
     }
 
     // 공무원채용 페이지 (채용공고 + 시험공고 탭)
@@ -103,5 +121,54 @@ public class PageController {
         return examNoticeService.selectExamNoticeByEn_num(enNum);
     }
     
+ // 채용공고 등록
+    @PostMapping("/insertJobNotice")
+    @ResponseBody
+    public String insertJobNotice(@RequestParam("title") String title,
+                                  @RequestParam("content") String content,
+                                  HttpSession session) {
+        try {
+            UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+            if (loginUser == null || !"관리자".equals(loginUser.getUserRole())) {
+                return "denied";
+            }
+
+            JobNoticeVO vo = new JobNoticeVO();
+            vo.setJnTitle(title);
+            vo.setJnContent(content);
+            vo.setUserNum(loginUser.getUserNum());
+
+            jobNoticeService.insertJobNotice(vo);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
+    // 시험공고 등록
+    @PostMapping("/insertExamNotice")
+    @ResponseBody
+    public String insertExamNotice(@RequestParam("title") String title,
+                                   @RequestParam("content") String content,
+                                   HttpSession session) {
+        try {
+            UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+            if (loginUser == null || !"관리자".equals(loginUser.getUserRole())) {
+                return "denied";
+            }
+
+            ExamNoticeVO vo = new ExamNoticeVO();
+            vo.setEnTitle(title);
+            vo.setEnContent(content);
+            vo.setUserNum(loginUser.getUserNum());
+
+            examNoticeService.insertExamNotice(vo);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
 
 }

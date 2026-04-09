@@ -66,8 +66,10 @@
 
 
 	<!-- service -->
-	<bean id="userService" class="com.school.service.UserServiceImpl"
-		c:userDAO-ref="userDAO" />
+	<bean id="userService" class="com.school.service.UserServiceImpl">
+		<constructor-arg index="0" ref="userDAO" />
+	    <constructor-arg index="1" ref="encoder" />
+	</bean>
 
 	<bean id="classService"
 		class="com.school.service.ClassServiceImpl" >

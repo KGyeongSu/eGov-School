@@ -10,42 +10,62 @@
 	</select>
 
 	<insert id="insertMessage" parameterType="message">
-		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM, TET_NUM)
-		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum}, #{tetNum, jdbcType=VARCHAR})
+		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM)
+		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum})
 	</insert>
 
-	<!-- 받은 쪽지 목록 -->
 	<select id="selectReceivedList" parameterType="str" resultType="message">
-		SELECT * FROM MESSAGE
-		WHERE MS_RECEIVER_NUM = #{userNum}
-		ORDER BY MS_SENDDATE DESC
+		SELECT 
+			M.MS_NUM, 
+			M.MS_CONTENT, 
+			M.MS_SENDDATE, 
+			M.MS_CHECK, 
+			M.MS_SENDER_NUM, 
+			M.MS_RECEIVER_NUM,
+			U.USER_NAME AS msSenderName 
+		FROM MESSAGE M
+		LEFT JOIN USERS U ON M.MS_SENDER_NUM = U.USER_NUM 
+		WHERE M.MS_RECEIVER_NUM = #{userNum}
+		ORDER BY M.MS_CHECK ASC, M.MS_SENDDATE DESC
 	</select>
 
-	<!-- 보낸 쪽지 목록 -->
 	<select id="selectSentList" parameterType="str" resultType="message">
 		SELECT * FROM MESSAGE
 		WHERE MS_SENDER_NUM = #{userNum}
 		ORDER BY MS_SENDDATE DESC
 	</select>
 
-	<!-- 쪽지 단건 조회 -->
 	<select id="selectMessageByNum" parameterType="str" resultType="message">
-		SELECT * FROM MESSAGE
-		WHERE MS_NUM = #{msNum}
+		SELECT 
+            M.MS_NUM, 
+            M.MS_CONTENT, 
+            M.MS_SENDDATE, 
+            M.MS_CHECK, 
+            M.MS_SENDER_NUM, 
+            M.MS_RECEIVER_NUM,
+            U.USER_NAME AS msSenderName
+        FROM MESSAGE M
+        LEFT JOIN USERS U ON M.MS_SENDER_NUM = U.USER_NUM
+        WHERE M.MS_NUM = #{msNum}
 	</select>
 
-	<!-- 읽음 처리 -->
 	<update id="updateMessageCheck" parameterType="str">
 		UPDATE MESSAGE
 		SET MS_CHECK = 'Y'
 		WHERE MS_NUM = #{msNum}
 	</update>
 
-	<!-- 쪽지 삭제 -->
 	<delete id="deleteMessage" parameterType="str">
 		DELETE FROM MESSAGE
 		WHERE MS_NUM = #{msNum}
 	</delete>
+
+	<select id="selectUnreadCount" parameterType="str" resultType="int">
+		SELECT COUNT(*)
+		FROM MESSAGE
+		WHERE MS_RECEIVER_NUM = #{userNum}
+		AND MS_CHECK = 'N'
+	</select>
 	
 	<select id="selectPassStudentByUserNum" parameterType="map" resultType="str">
 	    SELECT MAX(ER.ER_PASS) 

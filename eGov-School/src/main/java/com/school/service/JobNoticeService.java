@@ -15,4 +15,6 @@ public interface JobNoticeService {
     int selectSearchJobNoticeListCount(PageMaker pageMaker) throws SQLException;
 
     JobNoticeVO selectJobListByJn_num(String jnNum) throws SQLException;
+    
+    void insertJobNotice(JobNoticeVO vo) throws SQLException;
 }

@@ -20,9 +20,8 @@ public class JobNoticeVO {
 	private String jnContent;
 	private Date jnRegDate;
 	private Integer jnViews;
-	private Integer userNum;
+	private String userNum;
 	
-	//첨부파일
-	//private List <JobNoticeAttachVO> jobNoticeAttachList;
-
+	
+	private String userName;
 }

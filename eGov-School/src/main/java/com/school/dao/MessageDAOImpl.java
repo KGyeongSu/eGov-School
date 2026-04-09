@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.school.dto.MessageAttachVO;
 import com.school.dto.MessageVO;
 
 public class MessageDAOImpl implements MessageDAO {
@@ -54,6 +53,11 @@ public class MessageDAOImpl implements MessageDAO {
 	}
 
 	@Override
+	public int selectUnreadCount(String userNum) throws SQLException {
+	    
+	    return session.selectOne("Message-Mapper.selectUnreadCount", userNum);
+	}
+	@Override
 	public String selectPassStudentByUserNum(String userNum, String claNum) throws SQLException {
 		
 		Map<String, Object> param = new HashMap<> ();
@@ -63,5 +67,5 @@ public class MessageDAOImpl implements MessageDAO {
 		return session.selectOne("Message-Mapper.selectPassStudentByUserNum", param);
 		
 	}
-
+	
 }

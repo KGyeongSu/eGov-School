@@ -55,7 +55,7 @@
 	<insert id="insertJobNotice" parameterType="jobNotice">
 	
 		insert into jobNotice(jn_num, jn_title, jn_content, jn_regdate, jn_views, user_num)
-		values(#{jn_num}, #{jn_title}, #{jn_content}, #{jn_regdate}, #{jn_views}, #{user_num})
+		values(#{jnNum}, #{jnTitle}, #{jnContent}, SYSDATE, 0, #{userNum})
 		
 	</insert>
 	
@@ -67,7 +67,7 @@
 		
 	</update>
 	
-	<select id="selectJobNoticeSeqNext" resultType="int">
+	<select id="selectJobNoticeSeqNext" resultType="str">
     SELECT SEQ_JOBNOTICE.NEXTVAL AS jn_num FROM DUAL
 </select>
 

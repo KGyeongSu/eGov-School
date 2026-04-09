@@ -15,4 +15,6 @@ public interface ExamNoticeService {
     int selectSearchExamNoticeListCount(PageMaker pageMaker) throws SQLException;
 
     ExamNoticeVO selectExamNoticeByEn_num(String enNum) throws SQLException;
+    
+    void insertExamNotice(ExamNoticeVO vo) throws SQLException;
 }

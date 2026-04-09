@@ -1,6 +1,8 @@
+<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -42,6 +44,13 @@
                     <button type="submit" class="notice_search_btn">검색</button>
                 </form>
             </div>
+            
+            <!-- 글쓰기 버튼 (관리자만 보임) -->
+            <sec:authorize access="hasRole('관리자')">
+                <div class="notice_write_btn_wrap">
+                    <button class="btn_write" onclick="openWriteModal()">글쓰기</button>
+                </div>
+            </sec:authorize>
 
             <!-- 채용공고 테이블 -->
             <c:if test="${tab == 'job' || empty tab}">
@@ -60,7 +69,7 @@
                             <c:when test="${not empty jobList}">
                                 <c:forEach var="job" items="${jobList}" varStatus="status">
                                     <tr>
-                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perpageNum) - status.index}</td>
+                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perPageNum) - status.index}</td>
                                         <td class="notice_title" onclick="openJobDetail('${job.jnNum}')">${job.jnTitle}</td>
                                         <td>${job.userName}</td>
                                         <td><fmt:formatDate value="${job.jnRegDate}" pattern="yyyy.MM.dd"/></td>
@@ -95,7 +104,7 @@
                             <c:when test="${not empty examList}">
                                 <c:forEach var="exam" items="${examList}" varStatus="status">
                                     <tr>
-                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perpageNum) - status.index}</td>
+                                        <td>${pageMaker.totalCount - ((pageMaker.page - 1) * pageMaker.perPageNum) - status.index}</td>
                                         <td class="notice_title" onclick="openExamDetail('${exam.enNum}')">${exam.enTitle}</td>
                                         <td>${exam.userName}</td>
                                         <td><fmt:formatDate value="${exam.enRegDate}" pattern="yyyy.MM.dd"/></td>
@@ -150,6 +159,32 @@
 	        </div>
 	    </div>
 	    
+	    <!-- 글쓰기 모달 (관리자 전용) -->
+    <div id="writeModal" class="modal_overlay" style="display:none;">
+        <div class="notice_modal">
+            <div class="nm_header">
+                <h3>공고 등록</h3>
+                <button class="nm_close" onclick="closeWriteModal()">&times;</button>
+            </div>
+            <div class="nm_body">
+                <div class="write_form">
+                    <div class="write_field">
+                        <label>제목</label>
+                        <input type="text" id="writeTitle" placeholder="제목을 입력하세요">
+                    </div>
+                    <div class="write_field">
+                        <label>내용</label>
+                        <textarea id="writeContent" rows="10" placeholder="내용을 입력하세요"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="nm_footer">
+                <button class="nm_close_btn" onclick="closeWriteModal()">취소</button>
+                <button class="btn_write_submit" onclick="submitNotice()">등록</button>
+            </div>
+        </div>
+    </div>
+	    
     </content>
 
     <%@ include file="../modules/footer.jsp" %>
@@ -157,6 +192,63 @@
 </body>
 
 <script>
+	function openWriteModal() {
+	    $('#writeTitle').val('');
+	    $('#writeContent').val('');
+	    $('#writeModal').show();
+	}
+	
+	function closeWriteModal() {
+	    $('#writeModal').hide();
+	}
+	
+	function submitNotice() {
+	    var title = $('#writeTitle').val().trim();
+	    var content = $('#writeContent').val().trim();
+	
+	    if (!title) {
+	        alert('제목을 입력하세요.');
+	        return;
+	    }
+	    if (!content) {
+	        alert('내용을 입력하세요.');
+	        return;
+	    }
+	
+	    // 현재 탭에 따라 채용공고 or 시험공고 구분
+	    var tab = '${tab}' || 'job';
+	    var url = tab === 'exam' ? '/page/insertExamNotice' : '/page/insertJobNotice';
+	
+	    $.ajax({
+	        url: url,
+	        type: 'POST',
+	        data: {
+	            title: title,
+	            content: content
+	        },
+	        success: function(result) {
+	            if (result === 'success') {
+	                alert('공고가 등록되었습니다.');
+	                closeWriteModal();
+	                location.reload();
+	            } else {
+	                alert('등록에 실패했습니다.');
+	            }
+	        },
+	        error: function() {
+	            alert('서버 오류가 발생했습니다.');
+	        }
+	    });
+	}
+	
+	$(document).on('click', '.modal_overlay', function(e) {
+	    if (e.target === this) {
+	        closeNoticeModal();
+	        closeWriteModal();
+	    }
+	});
+
+
     function openJobDetail(jnNum) {
         $.ajax({
             url: '/page/jobDetail',
@@ -192,7 +284,7 @@
                 $('.nm_title').text(data.enTitle);
                 $('.nm_writer').text('작성자: ' + data.userName);
 
-                var date = new Date(data.enDate);
+                var date = new Date(data.enRegDate);
                 var dateStr = date.getFullYear() + '.' + String(date.getMonth()+1).padStart(2,'0') + '.' + String(date.getDate()).padStart(2,'0');
                 $('.nm_date').text('등록일: ' + dateStr);
 
@@ -217,5 +309,6 @@
         }
     });
 </script>
+
 
 </html>

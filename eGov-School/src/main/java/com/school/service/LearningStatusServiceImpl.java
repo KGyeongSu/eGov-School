@@ -28,7 +28,7 @@ public class LearningStatusServiceImpl implements LearningStatusService {
     @Override
     public void updateLearningStatus(LearningStatusVO status) throws SQLException {
         // 개별 차시의 시청 기록 또는 완료 여부 저장 (MERGE INTO 실행)
-        learningStatusDAO.upsertLearningStatus(status);
+    	learningStatusDAO.updateLessonComplete(status);
     }
 
     /**
@@ -38,5 +38,10 @@ public class LearningStatusServiceImpl implements LearningStatusService {
     @Override
     public LearningStatusVO getLearningStatus(LearningStatusVO status) throws SQLException {
         return learningStatusDAO.selectLearningStatus(status);
+    }
+    
+    @Override
+    public int getLastLearningSeq(LearningStatusVO status) throws SQLException {
+        return learningStatusDAO.selectLastLearningSeq(status);
     }
 }
