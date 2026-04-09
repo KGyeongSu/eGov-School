@@ -11,6 +11,7 @@
 	
 	<!-- properties 읽을때 미리 설정해둔것. ex)DB.properties -->
 	<context:property-placeholder location="classpath:com/school/properties/*.properties" />
+	<context:annotation-config />
 	
 	
 	<!-- import시킬 context dd-->

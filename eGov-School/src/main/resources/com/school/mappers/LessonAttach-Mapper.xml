@@ -23,7 +23,7 @@
         VALUES(#{laNum}, #{lsnNum}, #{laName}, #{laSaveName}, #{laType}, #{laPath})
     </insert>
  
-    <select id="selectLessonAttachList" parameterType="str" resultType="lessonAttach" resultMap="lessonAttachMap">
+    <select id="selectLessonAttachList" parameterType="str" resultMap="lessonAttachMap"> <!-- 여기 resultType = lessonAttach -->
         SELECT * FROM LESSON_ATTACH
         WHERE LSN_NUM = #{lsnNum}
         ORDER BY LA_NUM ASC 

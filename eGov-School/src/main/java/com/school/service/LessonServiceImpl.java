@@ -12,7 +12,6 @@ import com.school.dao.LessonDAO;
 import com.school.dto.LessonAttachVO;
 import com.school.dto.LessonVO;
 
-@Service
 public class LessonServiceImpl implements LessonService {
 	
 	private final LessonDAO lessonDAO;

@@ -110,13 +110,5 @@
 	    SET REP_CHECK = 'Y'
 	    WHERE REP_NUM = #{repNum}
 	</update>
-
-    <select id="selectReputationCount" resultType="reputation">
-        SELECT 
-            COUNT(REP_NUM) AS totalCount,
-            SUM(REP_SAT) AS sumScore 
-        FROM REPUTATION
-        WHERE  REP_NUM = #{repNum}
-    </select>
-
+	
 </mapper>

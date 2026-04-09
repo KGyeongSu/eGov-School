@@ -15,7 +15,6 @@ import com.school.dao.MessageDAO;
 import com.school.dto.MessageAttachVO;
 import com.school.dto.MessageVO;
 
-@Service
 public class MessageServiceImpl implements MessageService {
 
 	private final MessageDAO messageDAO;

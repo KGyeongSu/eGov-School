@@ -19,7 +19,6 @@ import com.school.dto.ClassVO;
 import com.school.dto.LessonVO;
 import com.school.dto.UserVO;
 
-@Service
 public class ClassServiceImpl implements ClassService {
 
 	private final ClassDAO classDAO;

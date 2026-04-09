@@ -69,6 +69,8 @@ public class MessageLectererController {
 	public int messageAlarm (HttpSession session) throws SQLException {
 		
 		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+		if (loginUser == null) return 0;
+		
 		String userNum = loginUser.getUserNum();
 		
 	    return reputationService.selectUnreadReputationCount(userNum);
