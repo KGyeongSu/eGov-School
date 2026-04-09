@@ -9,8 +9,7 @@
         SELECT 
             CER_NUM,
             CLA_NUM,
-            CER_NAME,
-            CER_FILE,        
+            CER_NAME,        
             CER_SAVE_NAME, 
             CER_SAVE_PATH,   
             CER_REGDATE
