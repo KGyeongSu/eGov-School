@@ -23,6 +23,7 @@ public interface TestDAO {
 	
 	// 수정시 번호로 불러오기
 	TestVO selectTestbyTetNum(String tetNum) throws SQLException;
+	TestVO selectTestWithQuestions(String claNum) throws SQLException;
 	
 	// 수정
 	void updateTest(TestVO test) throws SQLException;

@@ -1,3 +1,4 @@
+
 @charset 'utf-8';
 
 * {
@@ -280,9 +281,9 @@ div.content .main > .state {
 .q_title {
     flex: 1 !important;
     color: #666 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+
+    white-space: normal !important;   
+    word-break: break-all !important; 
 }
 
 .item.complete {
@@ -300,4 +301,5 @@ div.content .main > .state {
     color: #fff !important;
     padding: 2px 5px !important;
     border-radius: 3px !important;
+
 }

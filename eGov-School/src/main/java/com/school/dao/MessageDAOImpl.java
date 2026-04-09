@@ -1,7 +1,9 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -54,6 +56,16 @@ public class MessageDAOImpl implements MessageDAO {
 	public int selectUnreadCount(String userNum) throws SQLException {
 	    
 	    return session.selectOne("Message-Mapper.selectUnreadCount", userNum);
+	}
+	@Override
+	public String selectPassStudentByUserNum(String userNum, String claNum) throws SQLException {
+		
+		Map<String, Object> param = new HashMap<> ();
+		param.put("userNum", userNum);
+		param.put("claNum", claNum);
+		
+		return session.selectOne("Message-Mapper.selectPassStudentByUserNum", param);
+		
 	}
 	
 }

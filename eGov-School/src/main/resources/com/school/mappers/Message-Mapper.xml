@@ -66,5 +66,12 @@
 		WHERE MS_RECEIVER_NUM = #{userNum}
 		AND MS_CHECK = 'N'
 	</select>
+	
+	<select id="selectPassStudentByUserNum" parameterType="map" resultType="str">
+	    SELECT MAX(ER.ER_PASS) 
+   		FROM EXAM_RESULT ER
+    	JOIN TEST T ON ER.TET_NUM = T.TET_NUM
+    	WHERE T.CLA_NUM = #{claNum}    AND ER.USER_NUM = #{userNum}
+	</select>
 
 </mapper>

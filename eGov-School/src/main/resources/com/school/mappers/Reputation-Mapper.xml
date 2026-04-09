@@ -48,5 +48,75 @@
     <select id="selectReputaioneqNext">
     	SELECT SEQ_REPUTATION.NEXTVAL AS REP_NUM FROM DUAL
 	</select>
+	
+	 <!-- 강사 입장 -->
+    <select id="selectReputationListByLecturer" resultType="reputation">
+    
+	    SELECT 
+	         R.REP_NUM,
+	         R.USER_NUM,
+	         R.CLA_NUM,
+	         R.REP_CONTENT,
+	         R.REP_SAT,
+	         R.REP_REGDATE,
+	         R.REP_CHECK,
+	         U.USER_ROLE AS userRole,      -- 관리자/사용자 구분용
+	         C.CLA_TITLE AS claTitle
+	     FROM REPUTATION R
+	     JOIN USERS U ON R.USER_NUM = U.USER_NUM
+	     JOIN CLASS C ON R.CLA_NUM = C.CLA_NUM
+	     WHERE C.USER_NUM = #{userNum}     -- 로그인한 강사의 번호
+		 <if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+	         AND (C.CLA_TITLE LIKE '%' || #{pageMaker.keyword} || '%' 
+	              OR R.REP_CONTENT LIKE '%' || #{pageMaker.keyword} || '%')
+	     </if>	     
+	     ORDER BY R.REP_REGDATE DESC
+	     
+	</select>
+	
+	<select id="selectReputationCountByLecturer" resultType="int">
+	    SELECT COUNT(R.REP_NUM)
+	    FROM REPUTATION R
+	    JOIN CLASS C ON R.CLA_NUM = C.CLA_NUM
+	    WHERE C.USER_NUM = #{userNum}
+	    <if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+	        AND (C.CLA_TITLE LIKE '%' || #{pageMaker.keyword} || '%' 
+	             OR R.REP_CONTENT LIKE '%' || #{pageMaker.keyword} || '%')
+	    </if>
+	</select>
+	
+	<select id="selectReputationDetailByRepNum" resultType="reputation">
+	    SELECT 
+	        R.*, 
+	        U.USER_NAME AS userName,
+	        U.USER_ROLE AS userRole,
+	        C.CLA_TITLE AS claTitle
+	    FROM REPUTATION R
+	    JOIN USERS U ON R.USER_NUM = U.USER_NUM
+	    JOIN CLASS C ON R.CLA_NUM = C.CLA_NUM
+	    WHERE R.REP_NUM = #{repNum} 
+	</select>
+	
+	<select id="selectUnreadReputationCount" resultType="int">
+	    SELECT COUNT(R.REP_NUM)
+	    FROM REPUTATION R
+	    JOIN CLASS C ON R.CLA_NUM = C.CLA_NUM
+	    WHERE C.USER_NUM = #{userNum}
+	    AND R.REP_CHECK = 'N'  
+    </select>
+
+	<update id="updateReputationCheck" parameterType="str">
+	    UPDATE REPUTATION
+	    SET REP_CHECK = 'Y'
+	    WHERE REP_NUM = #{repNum}
+	</update>
+
+    <select id="selectReputationCount" resultType="reputation">
+        SELECT 
+            COUNT(REP_NUM) AS totalCount,
+            SUM(REP_SAT) AS sumScore 
+        FROM REPUTATION
+        WHERE  REP_NUM = #{repNum}
+    </select>
 
 </mapper>

@@ -1,3 +1,4 @@
+
 package com.school.dto;
 
 import java.util.Date;
@@ -15,7 +16,10 @@ import lombok.Setter;
 public class CertifiCateVO {
 private String	cerNum;
 private String	claNum;
-private String	cerFile;
+private String	cerName;
+private String cerSaveName;
+private String cerSavePath;
 private Date cerRegDate;
 
 }
+

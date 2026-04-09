@@ -3,7 +3,7 @@
 
 
 
-<nav aria-label="Navigation" style="margin-bottom: 40px;">
+<nav aria-label="Navigation" style="margin-top: 40px;">
 	<ul class="pagination justify-content-center m-0">
 		<li class="page-item">
 			<a class="page-link" href="javascript:search_list(1);"> 

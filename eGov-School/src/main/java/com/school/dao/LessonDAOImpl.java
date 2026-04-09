@@ -1,17 +1,13 @@
 package com.school.dao;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
-import com.school.cmd.PageMaker;
 import com.school.dto.LessonAttachVO;
 import com.school.dto.LessonVO;
-import com.school.dto.UserVO;
 
 public class LessonDAOImpl implements LessonDAO {
 

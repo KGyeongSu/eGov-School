@@ -2,6 +2,7 @@
 package com.school.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -53,6 +54,13 @@ public class UserServiceImpl implements UserService {
 		int updatedRows = userDAO.updateLectererProfile(user);
 		
 		return updatedRows > 0;
+		
+	}
+
+	@Override
+	public List<UserVO> getAdminList() throws SQLException {
+
+		return userDAO.getAdminList();
 		
 	}
 

@@ -22,8 +22,14 @@ public class ReputationVO {
 	private String repContent;
 	private Integer repSat;
 	private Date repRegDate;
+	private String repCheck;
 
 	
 	private int totalCount;    // 전체 후기 개수
     private int sumScore;      // 별점 총합 (정수)
+    
+    // 강사
+    private String userRole;
+    private String claTitle;
+    private String userName;
 }

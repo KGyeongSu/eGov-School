@@ -22,4 +22,6 @@ public interface MessageDAO {
 	void deleteMessage(String msNum) throws SQLException;
 
 	int selectUnreadCount(String userNum) throws SQLException; //안읽은 메세지 나타내기위함
+	
+	String selectPassStudentByUserNum (String userNum, String claNum) throws SQLException;
 }

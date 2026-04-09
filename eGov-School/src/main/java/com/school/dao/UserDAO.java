@@ -29,4 +29,6 @@ public interface UserDAO {
 	
 	int updateLectererProfile (UserVO user) throws SQLException;
 	
+	List <UserVO> getAdminList() throws SQLException;
+	
 }

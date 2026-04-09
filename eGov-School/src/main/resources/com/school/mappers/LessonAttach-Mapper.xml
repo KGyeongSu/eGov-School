@@ -23,7 +23,7 @@
         VALUES(#{laNum}, #{lsnNum}, #{laName}, #{laSaveName}, #{laType}, #{laPath})
     </insert>
  
-    <select id="selectLessonAttachList" parameterType="str" resultMap="lessonAttachMap">
+    <select id="selectLessonAttachList" parameterType="str" resultType="lessonAttach" resultMap="lessonAttachMap">
         SELECT * FROM LESSON_ATTACH
         WHERE LSN_NUM = #{lsnNum}
         ORDER BY LA_NUM ASC 
@@ -37,11 +37,6 @@
     <delete id="deleteLessonAttachByParent" parameterType="str">
         DELETE FROM LESSON_ATTACH
         WHERE LSN_NUM = #{lsnNum}
-    </delete>
-    
-    <delete id="deleteLessonAttachBySaveName">
-        DELETE FROM LESSON_ATTACH
-        WHERE LA_SAVE_NAME = #{laSaveName}
     </delete>
     
     <select id="selectLessonAttachByLaNum" resultMap="lessonAttachMap">
@@ -67,5 +62,11 @@
     FROM LESSON_ATTACH 
     WHERE LSN_NUM = #{lsnNum}
 </select>
+
+	<!-- 파일 삭제 -->
+	<delete id="deleteLessonAttachBySaveName">
+    	DELETE FROM lesson_attach
+    	WHERE la_save_name = #{laSaveName}
+	</delete>
     
 </mapper>
