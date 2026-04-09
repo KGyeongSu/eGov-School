@@ -15,12 +15,14 @@
 		<div class="top">
 
 			<div class="icon">
-				<a href=""><i class="fa-regular fa-user"></i></a>
+				<a href="${pageContext.request.contextPath }/lecterer/mainDashBoard"><i class="fa-regular fa-user"></i></a>
 			</div>
 			<div class="state_bar">
-				<p>
-					My 강의실 > <strong style="font: '나눔 고딕'; font-size: 17px;">&nbsp;&nbsp;${roomDetail.claTitle}</strong>
-				</p>
+				<a href="${pageContext.request.contextPath}/lecterer/myRoom">
+					<p>
+						My 강의실 > <strong style="font: '나눔 고딕'; font-size: 17px;">&nbsp;&nbsp;${roomDetail.claTitle}</strong>
+					</p>
+				</a>
 			</div>
 			<div class="logout_dash">
 				<div class="mes" onclick="location.href='reputationHome';" style="cursor: pointer; position: relative; display: inline-block;">
@@ -30,7 +32,7 @@
 				    </span>
 				</div>
 				<div class="out">
-					<button type="button" class="btn btn-sm"
+					<button type="button" class="btn btn-sm" onclick="location.href='${pageContext.request.contextPath}/commons/logout'"
 						style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px; border: none; line-height: 1;">로그아웃
 					</button>
 				</div>
@@ -44,7 +46,7 @@
 			</div>
 			<div class="manage">
 				<a href="/lecterer/roomManage?claNum=${roomDetail.claNum}">
-					<h2>사용자 관리</h2>
+					<h2>수강생 관리</h2>
 				</a>
 			</div>
 		</div>

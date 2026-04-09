@@ -16,7 +16,7 @@
     <div class="content">
         <div class="top">
             <div class="icon">
-                <a href=""><i class="fa-regular fa-user"></i></a>
+                <a href="${pageContext.request.contextPath }/lecterer/mainDashBoard"><i class="fa-regular fa-user"></i></a>
             </div>
             <div class="state_bar">
                 <p>${loginUser.userName}님의 메인 대시보드</p>
@@ -29,7 +29,7 @@
 				    </span>
 				</div>
                	<div class="out">
-					<button type="button" class="btn btn-sm"
+					<button type="button" class="btn btn-sm" onclick="location.href='${pageContext.request.contextPath}/commons/logout'"
 						style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px; border: none; line-height: 1;">로그아웃
 					</button>
 				</div>
