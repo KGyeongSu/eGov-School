@@ -161,7 +161,7 @@
 <script src="/resources/js/commons.js"></script>
 
 <script>
-// 그래디언트 배경색 생성을 위한 유틸리티 함수
+
 function getGradient(ctx, chartArea, color) {
     if (!chartArea) return null;
     const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
@@ -170,7 +170,6 @@ function getGradient(ctx, chartArea, color) {
     return gradient;
 }
 
-// 1. 꺾은선 그래프 (진도율 추이) - 디자인 수정
 const ctx1 = document.getElementById('chart1').getContext('2d');
 const mainColor = '#0e506e'; // 테마 컬러
 
