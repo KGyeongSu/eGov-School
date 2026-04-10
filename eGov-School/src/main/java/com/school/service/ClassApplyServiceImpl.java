@@ -38,7 +38,6 @@ public class ClassApplyServiceImpl implements ClassApplyService {
 
     @Override
     public ClassApplyListCommand getClassApplyList(String userNum, PageMaker pageMaker) throws SQLException {
-        
         pageMaker.setPerPageNum(6);
         pageMaker.setPage(pageMaker.getPage());
         
@@ -49,7 +48,6 @@ public class ClassApplyServiceImpl implements ClassApplyService {
 
         if (applyList != null) {
             for (ClassApplyVO apply : applyList) {
-                // 1. 기존 진도율 로직
                 int totalLessons = lessonDAO.selectTotalLessonCount(apply.getClaNum());
                 LearningStatusVO status = new LearningStatusVO();
                 status.setUserNum(userNum);
@@ -62,7 +60,6 @@ public class ClassApplyServiceImpl implements ClassApplyService {
                 }
                 apply.setProgress(progressPercent);
 
-                // 2. 썸네일 매칭 로직 호출
                 setThumbnail(apply);
             }
         }
@@ -77,7 +74,6 @@ public class ClassApplyServiceImpl implements ClassApplyService {
         
         List<ClassApplyVO> endList = classApplyDAO.selectCompletedClassList(vo);
         
-        // 종료된 강좌 목록에도 썸네일 매칭 로직 적용
         if (endList != null) {
             for (ClassApplyVO apply : endList) {
                 setThumbnail(apply);
@@ -87,9 +83,6 @@ public class ClassApplyServiceImpl implements ClassApplyService {
         return endList;
     }
 
-    /**
-     * 공통 메서드: LessonAttachDAO를 활용하여 이미지 파일을 찾아 lsnThumb에 세팅
-     */
     private void setThumbnail(ClassApplyVO apply) throws SQLException {
         List<LessonAttachVO> fileList = lessonAttachDAO.selectLessonAttachList(apply.getClaNum());
         
@@ -105,60 +98,84 @@ public class ClassApplyServiceImpl implements ClassApplyService {
     }
 
     @Override
-    public LessonVO getLessonDetail(String userNum, String claNum, String lsnSeq) throws SQLException {
-        if (lsnSeq == null || lsnSeq.trim().isEmpty() || lsnSeq.equals("0")) {
-            int resumeSeq = this.getResumeLsnSeq(userNum, claNum);
-            lsnSeq = String.valueOf(resumeSeq);
+    public LessonVO getLessonDetail(String userNum, String claNum, String lsnNum) throws SQLException {
+        // 1. lsnNum이 없거나 0이면 이어보기 로직 작동
+        if (lsnNum == null || lsnNum.trim().isEmpty() || lsnNum.equals("0")) {
+            LearningStatusVO status = new LearningStatusVO();
+            status.setUserNum(userNum);
+            status.setClaNum(claNum);
+            
+            // DB에서 마지막으로 학습한 순서(Seq)를 가져옴
+            int lastSeq = learningStatusDAO.selectLastLearningSeq(status);
+            
+            LessonVO paramVO = new LessonVO();
+            paramVO.setClaNum(claNum);
+            paramVO.setLsnSeq(lastSeq);
+            
+            // 🚩 [중요] Seq로 lesson 정보를 가져옵니다.
+            LessonVO lesson = lessonDAO.selectLessonByNum(paramVO);
+            
+            if (lesson != null) {
+                System.out.println("이어보기로 찾은 강의 번호: " + lesson.getLsnNum());
+  
+            }
+
+            return (lesson != null) ? getLessonFilesAndPath(lesson) : null;
         } 
 
+        // 2. lsnNum이 직접 넘어온 경우
         LessonVO paramVO = new LessonVO();
         paramVO.setClaNum(claNum);
-        try {
-            paramVO.setLsnSeq(Integer.parseInt(lsnSeq));
-        } catch (NumberFormatException e) {
-            paramVO.setLsnSeq(1);
-        }
+        paramVO.setLsnNum(lsnNum); 
 
         LessonVO lesson = lessonDAO.selectLessonByNum(paramVO);
-        
-        if (lesson != null) {
-            List<LessonAttachVO> files = lessonAttachDAO.selectLessonAttachList(lesson.getLsnNum());
-            lesson.setLessonFiles(files);
+        return (lesson != null) ? getLessonFilesAndPath(lesson) : null;
+    }
 
-            if(files != null && !files.isEmpty()) {
-                for (LessonAttachVO file : files) {
-                    if (file.getLaSaveName().toLowerCase().endsWith(".mp4")) {
-                        String folderPath = (file.getLaPath() == null) ? "/resources/upload" : file.getLaPath();
-                        if(!folderPath.startsWith("/")) {
-                            folderPath = "/" + folderPath;
-                        }
-                        lesson.setLsnVideo(folderPath + "/" + file.getLaSaveName());
-                        break;
+    private LessonVO getLessonFilesAndPath(LessonVO lesson) throws SQLException {
+        // 1. 파일 리스트 및 비디오 경로 세팅 (기존 로직)
+        List<LessonAttachVO> files = lessonAttachDAO.selectLessonAttachList(lesson.getLsnNum());
+        lesson.setLessonFiles(files);
+
+        if(files != null && !files.isEmpty()) {
+            for (LessonAttachVO file : files) {
+                if (file.getLaSaveName().toLowerCase().endsWith(".mp4")) {
+                    String folderPath = (file.getLaPath() == null) ? "/resources/upload" : file.getLaPath();
+                    if(!folderPath.startsWith("/")) {
+                        folderPath = "/" + folderPath;
                     }
+                    lesson.setLsnVideo(folderPath + "/" + file.getLaSaveName());
+                    break;
                 }
             }
-            
-            lesson.setPrevLsnNum(String.valueOf(lesson.getLsnSeq() - 1));
-            lesson.setNextLsnNum(String.valueOf(lesson.getLsnSeq() + 1));
         }
+
+   
+        
+        String prevLsnNum = lessonDAO.selectPrevLsnNum(lesson); // Mapper의 selectPrevLsnNum 호출
+        String nextLsnNum = lessonDAO.selectNextLsnNum(lesson); // Mapper의 selectNextLsnNum 호출
+
+        lesson.setPrevLsnNum(prevLsnNum);
+        lesson.setNextLsnNum(nextLsnNum);
 
         return lesson;
     }
 
     @Override
-    public void updateLessonProgress(String userNum, String claNum, int lsnSeq) throws SQLException {
+    public void updateLessonProgress(String userNum, String claNum, String lsnNum) throws SQLException {
+       
         LearningStatusVO status = new LearningStatusVO();
         status.setUserNum(userNum);
         status.setClaNum(claNum);
-        status.setLsnSeq(lsnSeq);
+        status.setLsnNum(lsnNum); 
         status.setPrgComplete("Y");
 
         learningStatusDAO.updateLessonComplete(status);
-        refreshTotalProgress(userNum, claNum);
+        refreshTotalProgress(userNum, claNum,lsnNum);
     }
 
     @Override
-    public void refreshTotalProgress(String userNum, String claNum) throws SQLException {
+    public void refreshTotalProgress(String userNum, String claNum, String lsnNum) throws SQLException {
         int totalLessons = lessonDAO.selectTotalLessonCount(claNum);
 
         LearningStatusVO status = new LearningStatusVO();
@@ -175,6 +192,7 @@ public class ClassApplyServiceImpl implements ClassApplyService {
         ClassApplyVO apply = new ClassApplyVO();
         apply.setUserNum(userNum);
         apply.setClaNum(claNum);
+        apply.setLsnNum(lsnNum);
         apply.setProgress(progressPercent);
 
         classApplyDAO.updateClassProgress(apply);
@@ -200,19 +218,19 @@ public class ClassApplyServiceImpl implements ClassApplyService {
         return lessonDAO.selectLessonListByClaNum(claNum);
     }
 
-	@Override
-	public void registReputation(ReputationVO repo) throws SQLException {
-		classApplyDAO.insertReputation(repo);
-	}
+    @Override
+    public void registReputation(ReputationVO repo) throws SQLException {
+        classApplyDAO.insertReputation(repo);
+    }
 
-	@Override
-	public int checkDuplicate(String userNum, String claNum) throws SQLException {
-		return classApplyDAO.checkDuplicate(userNum, claNum);
-	}
+    @Override
+    public int checkDuplicate(String userNum, String claNum) throws SQLException {
+        return classApplyDAO.checkDuplicate(userNum, claNum);
+    }
 
-	@Override
-	public int checkFull(String claNum) throws SQLException {
-		return classApplyDAO.checkFull(claNum);
-	}
-    
+    @Override
+    public int checkFull(String claNum) throws SQLException {
+        return classApplyDAO.checkFull(claNum);
+    }
+        
 }

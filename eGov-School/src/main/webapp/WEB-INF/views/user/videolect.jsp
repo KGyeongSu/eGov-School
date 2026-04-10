@@ -8,7 +8,6 @@
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user/styleV.css" />
 <%@include file="../modules/userHeader.jsp"%>
 <style>
-
     #lectureVideo {
         background-color: #000;
         display: block;
@@ -51,7 +50,7 @@
                             </video>
                         </c:when>
                         <c:otherwise>
-                            <div style="color: #fff; text-align: center;">
+                            <div style="color: #fff; text-align: center; padding: 100px 0;">
                                 <i class="fa-solid fa-video-slash" style="font-size: 40px; margin-bottom: 10px;"></i><br>
                                 재생 가능한 영상이 없습니다.
                             </div>
@@ -68,10 +67,9 @@
                     </div>
 
                     <div class="lecture-nav">
-                        <%-- 이전 강의 버튼 --%>
                         <c:choose>
-                            <c:when test="${lesson.lsnSeq > 1}">
-                                <a href="?claNum=${lesson.claNum}&lsnSeq=${lesson.lsnSeq - 1}" class="nav-btn prev"> 
+                            <c:when test="${not empty prevLsnNum}">
+                                <a href="?claNum=${lesson.claNum}&lsnNum=${prevLsnNum}" class="nav-btn prev"> 
                                     <i class="fa-solid fa-chevron-left"></i> 이전 강의
                                 </a>
                             </c:when>
@@ -80,10 +78,9 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <%-- 다음 강의 버튼 (lsnSeq와 전체 강의 수 비교) --%>
                         <c:choose>
-                            <c:when test="${not empty lesson.lsnSeq and lesson.lsnSeq < totalLsnCount}"> 
-                                <a href="?claNum=${lesson.claNum}&lsnSeq=${lesson.lsnSeq + 1}" class="nav-btn next"> 
+                            <c:when test="${not empty nextLsnNum}"> 
+                                <a href="?claNum=${lesson.claNum}&lsnNum=${nextLsnNum}" class="nav-btn next"> 
                                     다음 강의 <i class="fa-solid fa-chevron-right"></i>
                                 </a>
                             </c:when>
@@ -99,31 +96,55 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            const video = document.getElementById('lectureVideo');
-            if (!video) return;
+    $(document).ready(function() {
+        const video = document.getElementById('lectureVideo');
+        if (!video) {
+            console.error("비디오 태그를 찾을 수 없습니다.");
+            return;
+        }
 
-            let isSubmitted = false;
-            video.onended = function() {
-                if (!isSubmitted) {
-                    $.ajax({
-                        url : '${pageContext.request.contextPath}/user/updateProgress',
-                        type : 'POST',
-                        data : {
-                            claNum : '${lesson.claNum}',
-                            lsnSeq : '${lesson.lsnSeq}'
-                        },
-                        success : function(res) {
-                            if(res === "success") {
-                                isSubmitted = true;
-                                alert("이번 차시 학습을 완료했습니다!");
-                                location.reload(); 
-                            }
-                        }
-                    });
+        // EL 태그의 값이 비어있을 경우를 대비해 기본값 처리
+        const claNum = "${lesson.claNum}";
+        const lsnNum = "${lesson.lsnNum}";
+
+        console.log("학습 정보 로드됨 - 과목번호:", claNum, "강의번호:", lsnNum);
+
+        let isSubmitted = false;
+        
+        video.onended = function() {
+            if (!isSubmitted) {
+                // lsnNum이 비어있는지 마지막으로 체크
+                if(!lsnNum || lsnNum === "") {
+                    alert("강의 정보를 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.");
+                    return;
                 }
-            };
-        });
-    </script>
+
+                $.ajax({
+                    url : '${pageContext.request.contextPath}/user/updateProgress',
+                    type : 'POST',
+                    data : {
+                        claNum : claNum,
+                        lsnNum : lsnNum
+                    },
+                    success : function(res) {
+                        console.log("서버 응답:", res);
+                        if(res.trim() === "success") {
+                            isSubmitted = true;
+                            alert("이번 차시 학습을 완료했습니다!");
+                            // 새로고침을 하면 서버에서 다음 강의 버튼을 활성화해서 다시 그려줄 겁니다.
+                            location.reload(); 
+                        } else {
+                            alert("진도 저장에 실패했습니다. (응답: " + res + ")");
+                        }
+                    },
+                    error : function(xhr) {
+                        console.error("에러 발생:", xhr.responseText);
+                        alert("서버 통신 중 오류가 발생했습니다.");
+                    }
+                });
+            }
+        };
+    });
+</script>
 </body>
 </html>

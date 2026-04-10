@@ -111,6 +111,4 @@
 	    WHERE REP_NUM = #{repNum}
 	</update>
 
-    
-
 </mapper>
