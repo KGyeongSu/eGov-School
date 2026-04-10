@@ -19,6 +19,7 @@ public class ClassApplyVO {
 	private String userNum;
 	private String claNum;
 	private Date caDate;
+	private String lsnNum;
 	
 	
 	private String claTitle;   // JOIN으로 가져온 강의명

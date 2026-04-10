@@ -10,8 +10,8 @@
 	</select>
 
 	<insert id="insertMessage" parameterType="message">
-		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM)
-		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum})
+		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM, TET_NUM)
+		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum}, #{tetNum})
 	</insert>
 
 	<select id="selectReceivedList" parameterType="str" resultType="message">
