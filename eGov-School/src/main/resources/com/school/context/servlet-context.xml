@@ -18,7 +18,7 @@
 	<view-controller path="/admin/curriculum" />
 	<view-controller path="/admin/curriculum_detail" />
 	
-	<view-controller path="/user/dashBoard" view-name="user/dashBoard"/>
+	
 	<view-controller path="/lecterer/testMake" />
 	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
