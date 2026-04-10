@@ -19,11 +19,9 @@ public interface ClassApplyService {
 
     LessonVO getLessonDetail(String userNum, String claNum, String lsnSeq) throws SQLException;
 
-    void refreshTotalProgress(String userNum, String claNum) throws SQLException;
     
     Integer getResumeLsnSeq(String userNum, String claNum) throws SQLException;
 
-    void updateLessonProgress(String userNum, String claNum, int lsnSeq) throws SQLException;
 
 	List<LessonVO> getLessonListByCoures(String claNum) throws SQLException;
 	
@@ -32,5 +30,9 @@ public interface ClassApplyService {
 	int checkFull(String claNum) throws SQLException;
 	
 	void registReputation(ReputationVO repo) throws SQLException; //피드백
+
+	void updateLessonProgress(String userNum, String claNum, String lsnNum) throws SQLException;
+
+	void refreshTotalProgress(String userNum, String claNum, String lsnNum) throws SQLException;
 	
 }

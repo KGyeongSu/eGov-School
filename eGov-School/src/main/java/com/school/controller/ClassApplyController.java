@@ -85,22 +85,43 @@ public class ClassApplyController {
     @RequestMapping("/videolect")
     public String videolect(
             @RequestParam("claNum") String claNum, 
-            @RequestParam(value="lsnSeq", required = false) String lsnSeq, 
+            @RequestParam(value="lsnNum", required = false) String lsnNum, 
             HttpSession session, Model model) throws Exception {
         
         UserVO loginUser = (UserVO) session.getAttribute("loginUser");
         if (loginUser == null) return "redirect:/commons/login";
         String userNum = String.valueOf(loginUser.getUserNum());
 
-        if (lsnSeq == null || lsnSeq.isEmpty()) {
+        // 1. 해당 강좌의 전체 강의 목록 가져오기
+        List<LessonVO> lessonList = classApplyService.getLessonListByCoures(claNum);
+        
+        // 2. lsnNum이 없을 때(학습 시작/이어하기 클릭 시) 처리 로직
+        if (lsnNum == null || lsnNum.isEmpty() || lsnNum.equals("0")) {
             LearningStatusVO status = new LearningStatusVO();
             status.setUserNum(userNum);
             status.setClaNum(claNum);
+            
+            // DB에서 가장 마지막에 학습한 순서(Seq) 가져오기
             int lastSeq = learningStatusService.getLastLearningSeq(status);
-            lsnSeq = String.valueOf(lastSeq);
+            
+            if (lastSeq == 0) {
+                // 신규 수강생인 경우 첫 번째 강의로 설정
+                if (lessonList != null && !lessonList.isEmpty()) {
+                    lsnNum = lessonList.get(0).getLsnNum();
+                }
+            } else {
+                // 이어보기 사용자: 마지막 Seq와 일치하는 lsnNum 찾기
+                for (LessonVO vo : lessonList) {
+                    if (vo.getLsnSeq() == lastSeq) {
+                        lsnNum = vo.getLsnNum();
+                        break;
+                    }
+                }
+            }
         }
-        
-        LessonVO lesson = classApplyService.getLessonDetail(userNum, claNum, lsnSeq);
+
+        // 3. 강의 상세 정보 및 비디오 정보 조회
+        LessonVO lesson = classApplyService.getLessonDetail(userNum, claNum, lsnNum);
         
         if (lesson != null) {
             List<LessonAttachVO> fileList = lessonService.getLessonFileList(lesson.getLsnNum());
@@ -108,8 +129,7 @@ public class ClassApplyController {
             
             if (fileList != null && !fileList.isEmpty()) {
                 for (LessonAttachVO attach : fileList) {
-                    String saveName = attach.getLaSaveName().toLowerCase();
-                    if (saveName.contains(".mp4")) { 
+                    if (attach.getLaSaveName().toLowerCase().contains(".mp4")) { 
                         lesson.setLsnVideo(attach.getLaSaveName());
                         break; 
                     }
@@ -117,74 +137,63 @@ public class ClassApplyController {
             }
         }
 
-        List<LessonVO> lessonList = classApplyService.getLessonListByCoures(claNum);
-        model.addAttribute("totalLsnCount", lessonList.size());
+        // 4. 모델 데이터 주입
+        model.addAttribute("totalLsnCount", lessonList != null ? lessonList.size() : 0);
         model.addAttribute("lesson", lesson);
         model.addAttribute("lessonList", lessonList);
         model.addAttribute("claNum", claNum);
+        if (lesson != null) {
+            model.addAttribute("prevLsnNum", lesson.getPrevLsnNum());
+            model.addAttribute("nextLsnNum", lesson.getNextLsnNum());
+        }
 
         return "user/videolect";
     }
-    
+
+    @RequestMapping("/updateProgress")
+    @ResponseBody 
+    public String updateProgress(
+            @RequestParam("claNum") String claNum, 
+            @RequestParam("lsnNum") String lsnNum, 
+            HttpSession session) {
+        
+        UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        if (loginUser == null) return "fail";
+        String userNum = String.valueOf(loginUser.getUserNum());
+
+        try {
+            classApplyService.updateLessonProgress(userNum, claNum, lsnNum);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
     @RequestMapping("/common/download")
     public void download(@RequestParam("laNum") String laNum, HttpServletResponse response) throws Exception {
         LessonAttachVO fileInfo = lessonService.getLessonAttachByLaNum(laNum);
-        
-        if (fileInfo == null) {
-            response.setContentType("text/html; charset=UTF-8");
-            response.getWriter().println("<script>alert('파일 정보가 없습니다.'); history.back();</script>");
-            return;
-        }
+        if (fileInfo == null) return;
 
         File file = new File(EXTERNAL_PATH, fileInfo.getLaSaveName());
-        
-        if (!file.exists()) {
-            file = new File(fileInfo.getLaPath(), fileInfo.getLaSaveName());
-        }
-        if (!file.exists()) {
-            String fallbackPath = servletContext.getRealPath("/resources/upload/lesson");
-            file = new File(fallbackPath, fileInfo.getLaSaveName());
-        }
-
         if (file.exists()) {
             String fileName = URLEncoder.encode(fileInfo.getLaName(), "UTF-8").replaceAll("\\+", "%20");
             response.setContentType("application/octet-stream");
             response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
-            response.setContentLength((int) file.length());
-
-            try (FileInputStream fis = new FileInputStream(file);
-                 OutputStream os = response.getOutputStream()) {
-                FileCopyUtils.copy(fis, os);
-                os.flush();
-            }
-        } else {
-            response.setContentType("text/html; charset=UTF-8");
-            response.getWriter().println("<script>alert('파일을 찾을 수 없습니다.'); history.back();</script>");
+            FileCopyUtils.copy(new FileInputStream(file), response.getOutputStream());
         }
     }
 
-    /**
-     * 피드백 등록 (JSP 모달에서 넘어온 별점 점수를 포함하여 저장)
-     */
     @RequestMapping(value = "/registFeedback", method = RequestMethod.POST)
     @ResponseBody
     public String registFeedback(ReputationVO reputation, HttpSession session) {
         UserVO loginUser = (UserVO) session.getAttribute("loginUser");
         if (loginUser == null) return "fail";
-
         try {
-          
             reputation.setUserNum(String.valueOf(loginUser.getUserNum()));
-            
-            /* * 
-           
-             * 이제 JSP의 Ajax를 통해 전달된 repSat 값이 자동으로 커맨드 객체(reputation)에 매핑됩니다.
-             */
-            
             classApplyService.registReputation(reputation);
             return "success";
         } catch (Exception e) {
-            e.printStackTrace();
             return "error";
         }
     }
@@ -201,25 +210,6 @@ public class ClassApplyController {
         return classApplyService.getLessonListByCoures(claNum);
     }
     
-    @RequestMapping("/updateProgress")
-    @ResponseBody 
-    public String updateProgress(
-            @RequestParam("claNum") String claNum, 
-            @RequestParam("lsnSeq") int lsnSeq,
-            HttpSession session) {
-        
-        UserVO loginUser = (UserVO) session.getAttribute("loginUser");
-        if (loginUser == null) return "fail";
-        String userNum = String.valueOf(loginUser.getUserNum());
-
-        try {
-            classApplyService.updateLessonProgress(userNum, claNum, lsnSeq);
-            return "success";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "fail";
-        }
-    }
     @RequestMapping(value = "/classApply", method = RequestMethod.POST)
     @ResponseBody
     public String classApply(@RequestParam("claNum") String claNum, HttpSession session) {
