@@ -110,5 +110,6 @@
 	    SET REP_CHECK = 'Y'
 	    WHERE REP_NUM = #{repNum}
 	</update>
-	
+
+
 </mapper>

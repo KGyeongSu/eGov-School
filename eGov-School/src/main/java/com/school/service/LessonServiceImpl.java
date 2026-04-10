@@ -12,6 +12,7 @@ import com.school.dao.LessonDAO;
 import com.school.dto.LessonAttachVO;
 import com.school.dto.LessonVO;
 
+@Service
 public class LessonServiceImpl implements LessonService {
 	
 	private final LessonDAO lessonDAO;
@@ -41,6 +42,18 @@ public class LessonServiceImpl implements LessonService {
 		lessonDAO.insertLesson(lesson);
 
 		for (LessonAttachVO attach : attachList) {
+			
+			String contentType = attach.getLaType();
+	        if (contentType != null && contentType.startsWith("video")) {
+	        	
+	            attach.setLaType("VIDEO");
+	            
+	        } else {
+	        	
+	            attach.setLaType("FILE");
+	            
+	        }
+			
 			String laNum = lessonAttachDAO.selectLessonAttachSeqNext();
 			attach.setLaNum(laNum);
 			attach.setLsnNum(lsnNum);
@@ -82,20 +95,40 @@ public class LessonServiceImpl implements LessonService {
 		lessonDAO.updateLesson(lesson);
 		
 		if (deleteFiles != null && !deleteFiles.trim().isEmpty()) {
+			
 			String[] saveNames = deleteFiles.split(",");
+			
 			for (String saveName : saveNames) {
+				
 				File file = new File(lessonFilePath, saveName);
+				
 				if (file.exists()) file.delete();
 				lessonAttachDAO.deleteLessonAttachBySaveName(saveName); 
+				
 			}
 		}
 		
 		if (attachList != null && !attachList.isEmpty()) {
+			
 			for (LessonAttachVO attach : attachList) {
+				
+				String contentType = attach.getLaType();
+				
+		        if (contentType != null && contentType.startsWith("video")) {
+		        	
+		            attach.setLaType("VIDEO");
+		            
+		        } else {
+		        	
+		            attach.setLaType("FILE");
+		            
+		        }
+				
 				String laNum = lessonAttachDAO.selectLessonAttachSeqNext();
 				attach.setLaNum(laNum);
 				attach.setLsnNum(lesson.getLsnNum());
 				lessonAttachDAO.insertLessonAttach(attach);
+				
 			}
 		}
 	}
