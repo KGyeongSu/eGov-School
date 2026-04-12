@@ -18,10 +18,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
+import com.school.dto.LearningStatusVO;
 import com.school.dto.LessonAttachVO;
 import com.school.dto.LessonVO;
 import com.school.dto.UserVO;
 import com.school.service.ClassService;
+import com.school.service.LearningStatusService;
 import com.school.service.LessonService;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,11 +34,13 @@ public class ClassController {
 	
 	private final ClassService classService;
 	private final LessonService lessonService;
+	private final LearningStatusService learningStatusService;
 	
-	public ClassController(ClassService classService, LessonService lessonService) {
+	public ClassController(ClassService classService, LessonService lessonService, LearningStatusService learningStatusService) {
 
 		this.classService = classService;
 		this.lessonService = lessonService;
+		this.learningStatusService = learningStatusService;
 		
 	}
 
@@ -61,7 +65,18 @@ public class ClassController {
 		
 		// 서비스 부르기
 		List <ClassVO> classList = classService.selectClassList(pageMaker, userNum);
-		List<ClassVO> testClassList = classService.selectTestClassList(testList, userNum);
+		// 등록률 추가해주기
+		if (classList != null) {
+			
+		    for (ClassVO classs : classList) {
+		    	
+		        int rate = classService.selectRegiRate(classs.getClaNum());
+		        classs.setRegiRate(rate);
+		        
+		    }
+		}
+		
+		List<ClassVO> testClassList = classService.selectTestClassListForDashboard(userNum);
 		
 		// 모델에 담아서 보여주기
 		model.addAttribute("classList", classList);
@@ -83,6 +98,16 @@ public class ClassController {
 		String userNum = loginUser.getUserNum();
 		
 		List <ClassVO> classList = classService.selectClassList(pageMaker, userNum);
+		// 등록률 추가해주기
+		if (classList != null) {
+			
+		    for (ClassVO classs : classList) {
+		    	
+		        int rate = classService.selectRegiRate(classs.getClaNum());
+		        classs.setRegiRate(rate);
+		        
+		    }
+		}
 		
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("classList", classList);
@@ -183,8 +208,31 @@ public class ClassController {
 	    // 수강 중인 학생 목록 가져오기
 	    List<UserVO> studentList = classService.selectStdentListByClaNum(pageMaker, claNum);
 	    
+	    // 학생별 실제 학습 데이터 넣기
+	    if (studentList != null) {
+	    	
+	        for (UserVO student : studentList) {
+	        	
+	            // 아까 만든 서비스 호출
+	            LearningStatusVO statusManage = learningStatusService.selectStudentLearningStatusAtManage(student.getUserNum(), claNum);
+	            
+	            // UserVO의 필드에 실제 값 셋팅
+	            student.setProgress((int)statusManage.getProgress());     
+	            student.setStatus(statusManage.getStatus());              
+	            student.setPrgLastdate(statusManage.getPrgLastdate());   
+	        }
+	    }
+	    
+	    // 진도율 그래프
+	    List<ClassVO> weeklyProgress = classService.selectWeeklyAverageProgress(claNum);
+	    
+	    // 시험 응시율
+	    double claTestRate = classService.selectTestRateByClaNum(claNum);
+	    roomManage.setTestRate(claTestRate);
+	    
 	    model.addAttribute("roomDetail", roomManage);
 	    model.addAttribute("studentList", studentList);
+	    model.addAttribute("weeklyProgress", weeklyProgress);
 	    
 	    return "lecterer/roomManage";
 		

@@ -111,7 +111,7 @@
 					                    </span>
 					                    <c:choose>
 					                        <c:when test="${rep.repCheck eq 'Y'}">
-					                            <button type="button" style="background-color: #e9ecef; color: #6c757d; border: 1px solid #dee2e6; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: default;">
+					                            <button type="button" onclick="OpenWindow('/lecterer/reputationDetail?repNum=${rep.repNum}', '피드백 상세', 900, 650);" style="background-color: #e9ecef; color: #6c757d; border: 1px solid #dee2e6; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">
 					                                확인완료
 					                            </button>
 					                        </c:when>

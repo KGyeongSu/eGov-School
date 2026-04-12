@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.ibatis.session.RowBounds;
@@ -224,6 +225,34 @@ public class ClassServiceImpl implements ClassService {
 	public List<UserVO> selectUnsentStudentList(String claNum, String tetNum) throws SQLException {
 
 		return classDAO.selectUnsentStudentList(claNum, tetNum);
+		
+	}
+
+	@Override
+	public List<ClassVO> selectTestClassListForDashboard(String userNum) throws SQLException {
+
+		return classDAO.selectTestClassListForDashboard(userNum);
+		
+	}
+
+	@Override
+	public List<ClassVO> selectWeeklyAverageProgress(String claNum) throws SQLException {
+
+		return classDAO.selectWeeklyAverageProgress(claNum);
+		
+	}
+
+	@Override
+	public double selectTestRateByClaNum(String claNum) throws SQLException {
+
+		return classDAO.selectTestRateByClaNum(claNum);
+		
+	}
+
+	@Override
+	public int selectRegiRate(String claNum) throws SQLException {
+
+		return classDAO.selectRegiRate(claNum);
 		
 	}
 

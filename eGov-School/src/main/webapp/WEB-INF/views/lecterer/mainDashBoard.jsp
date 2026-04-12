@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ include file="../modules/lecHeader.jsp"%>
 
@@ -81,10 +82,10 @@
 										<div class="card-body">
 											<h3 class="course-title">${classs.claTitle}</h3>
 											<div class="course-status-text">
-												<span>등록 강좌율</span><span class="percent-text">${classs.claGoal }</span>
+												<span>등록 강좌율</span><span class="percent-text">${classs.regiRate}%</span>
 											</div>
 											<div class="progress custom-progress-v2" style="height: 20px; background-color: #eee;">
-												<div class="progress-bar" style="width: ${classs.claGoal}!important; height: 100%; background-color: #1a6d91 !important; "></div>
+												<div class="progress-bar" style="width: ${classs.regiRate}% !important; height: 100%; background-color: #1a6d91 !important; "></div>
 											</div>
 										</div>
 									</div>
@@ -131,13 +132,13 @@
 							                            </td>
 							                            <td>
 							                                <div style="display: flex; align-items: center;">
-							                                    <c:set var="fakeRate" value="${95 - (vs.count * 6)}" />
-							                                    
 							                                    <div class="progress progress-xs" style="flex: 1; margin-right: 15px; margin-bottom: 0; background-color: #eee;">
-							                                        <div class="progress-bar ${fakeRate > 80 ? 'bg-success' : 'bg-primary'}" 
-							                                             style="width: ${fakeRate}%"></div>
+							                                        <div class="progress-bar ${exam.testRate > 80 ? 'bg-success' : 'bg-primary'}" 
+							                                             style="width: ${exam.testRate}%"></div>
 							                                    </div>
-							                                    <span class="badge ${fakeRate > 80 ? 'bg-success' : 'bg-primary'}">${fakeRate}%</span>
+							                                    <span class="badge ${exam.testRate > 80 ? 'bg-success' : 'bg-primary'}">
+							                                    	<fmt:formatNumber value="${exam.testRate}" pattern="0" />%
+							                                    </span>
 							                                </div>
 							                            </td>
 							                        </tr>

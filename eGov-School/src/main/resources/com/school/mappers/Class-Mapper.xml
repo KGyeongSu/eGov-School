@@ -36,6 +36,16 @@
 	    
 	</select>
 	
+	<select id="selectRegiRate" resultType="int">
+	    SELECT 
+	        CASE 
+	            WHEN COUNT(*) = 0 THEN 0
+	            ELSE ROUND(COUNT(lsn_content) * 100.0 / COUNT(*), 0)
+	        END
+	    FROM lesson
+	    WHERE cla_num = #{claNum}
+	</select>
+	
 	<select id="selectSearchClassList" resultType="classs">
 	
 		select cla_num, cla_title, cla_goal, user_name, cla_status, cla_startdate, cla_enddate, cla_maxstu, cla_views, cla_thumb, cla_save_name, cla_save_path
@@ -77,6 +87,63 @@
 	    on c.user_num = u.user_num
 	    where cla_num = #{claNum}
 	
+	</select>
+	
+	<select id="selectTestClassListForDashboard" resultType="classs">
+	    SELECT * FROM (
+	        SELECT 
+	            C.CLA_NUM, 
+	            C.CLA_TITLE,
+	            NVL(ROUND(
+	                (SELECT COUNT(DISTINCT ER.USER_NUM) 
+	                 FROM EXAM_RESULT ER 
+	                 WHERE ER.TET_NUM IN (SELECT TET_NUM FROM TEST WHERE CLA_NUM = C.CLA_NUM)) 
+	                / 
+	                NULLIF((SELECT COUNT(*) FROM CLASSAPPLY CA WHERE CA.CLA_NUM = C.CLA_NUM), 0) 
+	                * 100, 0), 0) AS testRate
+	        FROM CLASS C
+	        WHERE C.USER_NUM = #{userNum}
+	        ORDER BY C.CLA_REGDATE DESC
+	    ) WHERE ROWNUM &lt;= 5
+	</select>
+	
+	<select id="selectWeeklyAverageProgress" resultType="classs">
+	    SELECT 
+	        B.WEEK_NO || '주차' AS label,
+	        ROUND(AVG(B.CUMULATIVE_RATE), 1) AS value
+	    FROM (
+	        SELECT 
+	            A.USER_NUM,
+	            A.WEEK_NO,
+	            SUM(A.WEEKLY_RATE) OVER(PARTITION BY A.USER_NUM ORDER BY A.WEEK_NO) AS CUMULATIVE_RATE
+	        FROM (
+	            SELECT 
+	                P.USER_NUM,
+	                CEIL((TRUNC(P.PRG_LASTDATE) - TRUNC(C.CLA_STARTDATE) + 1) / 7) AS WEEK_NO,
+	                (COUNT(CASE WHEN P.PRG_COMPLETE = 'Y' THEN 1 END) * 100.0 / 
+	                 NULLIF((SELECT COUNT(*) FROM LESSON L WHERE L.CLA_NUM = P.CLA_NUM), 0)) AS WEEKLY_RATE
+	            FROM PROGRESS P
+	            INNER JOIN CLASS C ON P.CLA_NUM = C.CLA_NUM
+	            WHERE P.CLA_NUM = #{claNum}
+	              AND P.PRG_LASTDATE >= C.CLA_STARTDATE
+	            GROUP BY P.USER_NUM, P.CLA_NUM, C.CLA_STARTDATE, P.PRG_LASTDATE
+	        ) A
+	    ) B
+	    WHERE B.WEEK_NO BETWEEN 1 AND 4
+	    GROUP BY B.WEEK_NO
+	    ORDER BY B.WEEK_NO
+	</select>
+	
+	<select id="selectTestRateByClaNum" resultType="double">
+	    SELECT 
+	        NVL(ROUND(
+	            (SELECT COUNT(DISTINCT ER.USER_NUM) 
+	             FROM EXAM_RESULT ER 
+	             WHERE ER.TET_NUM IN (SELECT TET_NUM FROM TEST WHERE CLA_NUM = #{claNum})) 
+	            / 
+	            NULLIF((SELECT COUNT(*) FROM CLASSAPPLY CA WHERE CA.CLA_NUM = #{claNum}), 0) 
+	            * 100, 1), 0) AS testRate -- 소수점 첫째자리까지 표시하려면 1로 변경
+	    FROM DUAL
 	</select>
 	
 	<insert id="insertClass" parameterType="classs">

@@ -96,10 +96,10 @@
 											        </c:choose>
 												</h3>
 												<div class="course-status-text">
-													<span>등록 강좌율</span><span class="percent-text">${classs.claGoal }</span>
+													<span>등록 강좌율</span><span class="percent-text">${classs.regiRate}%</span>
 												</div>
 												<div class="progress custom-progress-v2" style="height: 20px; background-color: #eee;">
-													<div class="progress-bar" style="width: ${classs.claGoal}!important; height: 100%; background-color: #1a6d91 !important; "></div>
+													<div class="progress-bar" style="width: ${classs.regiRate}% !important; height: 100%; background-color: #1a6d91 !important; "></div>
 												</div>
 											</div>
 										</div>

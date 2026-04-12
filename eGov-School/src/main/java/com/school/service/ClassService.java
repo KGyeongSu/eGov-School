@@ -2,6 +2,9 @@ package com.school.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
@@ -37,6 +40,19 @@ public interface ClassService {
 	
 	// 메시지 중복 발송 방지
 	List <UserVO> selectUnsentStudentList (String claNum, String tetNum) throws SQLException;
+	
+	// 메인대시보드 출제 평가 리스트 응시율 뿌려주기 목적
+	List <ClassVO> selectTestClassListForDashboard (@Param("userNum") String userNum) throws SQLException;
+	
+	// my 강의실 수강생 관리 주차별 진도율 뿌려주기 목적
+	List<ClassVO> selectWeeklyAverageProgress(String claNum) throws SQLException;
+	
+	// my 강의실 수강생 관리 각 강의별 테스트 응시율 뿌려주기 목적
+	double selectTestRateByClaNum (String claNum) throws SQLException;
+	
+	// 강의실 강의 등록률
+	int selectRegiRate (String claNum) throws SQLException;
+
   
   // 사용자
 	// 수강신청 페이지용 (승인완료 강좌)

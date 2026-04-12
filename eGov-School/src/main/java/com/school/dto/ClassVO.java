@@ -47,6 +47,13 @@ public class ClassVO {
 	private String cerNum;
 	// 강의 썸네일 받아두는 그릇
 	private MultipartFile thumb;
+	// 메인 대시보드에 평가 응시율 보여주는 목적
+	private double testRate;
+	// 강의실 수강생 관리 탭 > 진도율
+	private String label; 
+	private double value;
+	// 강의실 강좌 등록률
+	private int regiRate;
   
 	// 사용자
   // join문으로 가져오는 user정보를 담을 그릇
