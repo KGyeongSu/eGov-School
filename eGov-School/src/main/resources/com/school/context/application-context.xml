@@ -94,6 +94,8 @@
    </bean>
    <bean id="messageService" class="com.school.service.MessageServiceImpl"
    		c:messageDAO-ref="messageDAO" />
+   <bean id="bonusCriteriaService" class="com.school.service.BonusCriteriaServiceImpl"
+    	c:bonusCriteriaDAO-ref="bonusCriteriaDAO" />
 
 	
 

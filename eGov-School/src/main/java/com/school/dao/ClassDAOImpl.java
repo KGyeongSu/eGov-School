@@ -153,4 +153,31 @@ public class ClassDAOImpl implements ClassDAO {
 		
 	}
 
+	
+	// 관리자 DAO 3개 method
+	@Override
+	public List<ClassVO> selectPendingClassList(PageMaker pageMaker) throws SQLException {
+		int offset = pageMaker.getStartRow() - 1;
+	    int limit = pageMaker.getPerPageNum();
+	    RowBounds rows = new RowBounds(offset, limit);
+
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("pageMaker", pageMaker);
+
+	    return session.selectList("Class-Mapper.selectPendingClassList", param, rows);
+	}
+
+	@Override
+	public int selectPendingClassListCount(PageMaker pageMaker) throws SQLException {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("pageMaker", pageMaker);
+
+	    return session.selectOne("Class-Mapper.selectPendingClassListCount", param);
+	}
+
+	@Override
+	public void approveClass(ClassVO classVO) throws SQLException {
+		session.update("Class-Mapper.approveClass", classVO);
+	}
+
 }

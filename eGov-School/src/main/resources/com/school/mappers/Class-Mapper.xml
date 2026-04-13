@@ -196,7 +196,7 @@
             ORDER BY (SELECT COUNT(*) FROM classapply ca WHERE ca.cla_num = c.cla_num) / c.cla_maxstu DESC
         </when>
         <otherwise>
-            ORDER BY c.cla_num DESC
+            ORDER BY c.cla_regdate DESC
         </otherwise>
     </choose>
 </select>
@@ -217,6 +217,66 @@
 	</where>
 </select>
 
+	
+	<!-- 관리자용: 강좌 커리큘럼 리스트 (승인대기 강좌) -->
+	<select id="selectPendingClassList" resultType="classs">
+	    SELECT 
+	        c.cla_num,
+	        c.cla_title,
+	        c.cla_category,
+	        c.cla_content,
+	        c.cla_goal,
+	        c.cla_complete,
+	        c.cla_startdate,
+	        c.cla_enddate,
+	        c.cla_maxstu,
+	        c.cla_bonus,
+	        c.cla_status,
+	        c.cla_views,
+	        c.cla_thumb,
+	        c.cla_save_name,
+	        c.cla_save_path,
+	        u.user_name
+	    FROM class c
+	    INNER JOIN users u ON c.user_num = u.user_num
+	    <where>
+	        c.cla_status = '승인대기'
+	        <if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+	            AND (c.cla_title LIKE '%' || #{pageMaker.keyword} || '%'
+	                 OR u.user_name LIKE '%' || #{pageMaker.keyword} || '%')
+	        </if>
+	    </where>
+	    ORDER BY c.cla_num DESC
+	</select>
+
+	<!-- 관리자용: 승인대기 강좌 개수 (페이징용) -->
+	<select id="selectPendingClassListCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM class c
+	    INNER JOIN users u ON c.user_num = u.user_num
+	    <where>
+	        c.cla_status = '승인대기'
+	        <if test="pageMaker.keyword != null and pageMaker.keyword != ''">
+	            AND (c.cla_title LIKE '%' || #{pageMaker.keyword} || '%'
+	                 OR u.user_name LIKE '%' || #{pageMaker.keyword} || '%')
+	        </if>
+	    </where>
+	</select>
+	
+	<!-- 관리자용: 강좌 승인 처리 (빈 컬럼 채우기 + 상태 변경) -->
+	<update id="approveClass" parameterType="classs">
+	    UPDATE class
+	    SET cla_status = '승인완료',
+	    	cla_regdate = SYSDATE,
+	        cla_startdate = #{claStartDate},
+	        cla_enddate = #{claEndDate},
+	        cla_maxstu = #{claMaxStu},
+	        cla_complete = #{claComplete},
+	        cla_bonus = #{claBonus}
+	    WHERE cla_num = #{claNum}
+	      AND cla_status = '승인대기'
+	</update>
+	
 	
 	
 </mapper>

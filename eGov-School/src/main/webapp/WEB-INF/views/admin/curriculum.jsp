@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-    <!DOCTYPE html>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -52,21 +54,15 @@
             <div class="section-body">
 
                 <!-- 검색 -->
-                <!--
-                    DB 연결 시 (PHP 예시):
-                    $sql = "SELECT c.id, i.name AS 강사명, c.course_no, c.course_name, c.summary
-                            FROM courses c
-                            JOIN instructors i ON c.instructor_id = i.id
-                            WHERE c.course_name LIKE ?
-                            ORDER BY c.id DESC";
-                -->
                 <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="강좌명, 강사명 검색">
-                    <button class="btn btn-blue btn-sm" onclick="filterList()">검색</button>
-                    <button class="btn btn-sm" onclick="resetList()">초기화</button>
-                </div>
+				    <form id="searchForm" action="/admin/curriculum" method="get" style="display:flex; gap:6px; align-items:center;">
+				        <input type="text" name="keyword" id="searchInput" placeholder="강좌명, 강사명 검색" value="${pageMaker.keyword}">
+				        <button type="submit" class="btn btn-blue btn-sm">검색</button>
+				        <button type="button" class="btn btn-sm" onclick="location.href='/admin/curriculum'">초기화</button>
+				    </form>
+				</div>
 
-                <!-- 커리큘럼 목록 테이블 -->
+                <!-- 커리큘럼 목록 테이블 (경수65~100) -->
                 <table class="board-table">
                     <thead>
                         <tr>
@@ -77,79 +73,47 @@
                             <th style="width:70px;">더보기</th>
                         </tr>
                     </thead>
+                    
                     <tbody id="curriculumBody">
-                        <!--
-                            DB 연결 시:
-                            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo '<tr>';
-                                echo '<td>'.$row['강사명'].'</td>';
-                                echo '<td>'.$row['course_no'].'</td>';
-                                echo '<td class="left">'.$row['course_name'].'</td>';
-                                echo '<td class="left">'.$row['summary'].'</td>';
-                                echo '<td><a href="/admin/curriculum/'.$row['id'].'" class="btn btn-sm">상세보기</a></td>';
-                                echo '</tr>';
-                            }
-                        -->
-                        <tr>
-                            <td>김강사</td>
-                            <td>C-2026-001</td>
-                            <td class="left">공무원 행정법 기초 과정</td>
-                            <td class="left">행정법 개요, 행정행위, 행정절차법 등</td>
-                            <td><a href="/admin/curriculum/1" class="btn btn-sm">상세보기</a></td>
-                        </tr>
-                        <tr>
-                            <td>이강사</td>
-                            <td>C-2026-002</td>
-                            <td class="left">세무직 실무 완성 과정</td>
-                            <td class="left">부가세, 소득세, 법인세 실무 처리</td>
-                            <td><a href="/admin/curriculum/2" class="btn btn-sm">상세보기</a></td>
-                        </tr>
-                        <tr>
-                            <td>김강사</td>
-                            <td>C-2026-003</td>
-                            <td class="left">관세법 핵심 정리</td>
-                            <td class="left">관세법 체계, 수출입 통관, 관세 계산</td>
-                            <td><a href="/admin/curriculum/3" class="btn btn-sm">상세보기</a></td>
-                        </tr>
-                        <tr>
-                            <td>박강사</td>
-                            <td>C-2026-004</td>
-                            <td class="left">보건직 전문 과정</td>
-                            <td class="left">공중보건, 역학, 보건행정 실무</td>
-                            <td><a href="/admin/curriculum/4" class="btn btn-sm">상세보기</a></td>
-                        </tr>
-                        <tr>
-                            <td>이강사</td>
-                            <td>C-2026-005</td>
-                            <td class="left">농촌지도사 실무 과정</td>
-                            <td class="left">농업정책, 농촌개발, 현장 지도 실무</td>
-                            <td><a href="/admin/curriculum/5" class="btn btn-sm">상세보기</a></td>
-                        </tr>
-                        <tr>
-                            <td>박강사</td>
-                            <td>C-2026-006</td>
-                            <td class="left">기술직 입문 과정</td>
-                            <td class="left">토목·건축 기초, 기술직 공무원 실무</td>
-                            <td><a href="/admin/curriculum/6" class="btn btn-sm">상세보기</a></td>
-                        </tr>
-                        <tr>
-                            <td>김강사</td>
-                            <td>C-2026-007</td>
-                            <td class="left">디지털 행정 기초</td>
-                            <td class="left">전자정부, 정보보안, 디지털 문서 처리</td>
-                            <td><a href="/admin/curriculum/7" class="btn btn-sm">상세보기</a></td>
-                        </tr>
-                    </tbody>
+					    <c:choose>
+					        <c:when test="${not empty classList}">
+					            <c:forEach var="cls" items="${classList}" varStatus="status">
+					                <tr>
+					                    <td>${cls.userName}</td>
+					                    <td>${cls.claNum}</td>
+					                    <td class="left">${cls.claTitle}</td>
+					                    <td class="left">${cls.claContent}</td>
+					                    <td>
+					                        <a href="/admin/curriculum_detail?claNum=${cls.claNum}" class="btn btn-sm">상세보기</a>
+					                    </td>
+					                </tr>
+					            </c:forEach>
+					        </c:when>
+					        <c:otherwise>
+					            <tr>
+					                <td colspan="5" style="text-align:center; padding:30px; color:#999;">
+					                    승인대기 중인 강좌가 없습니다.
+					                </td>
+					            </tr>
+					        </c:otherwise>
+					    </c:choose>
+					</tbody>
+					
                 </table>
 
-                <!-- 페이지네이션 -->
+                <!-- 페이지네이션 (경수105~116) -->
                 <div class="paging">
-                    <a href="#">&lt;</a>
-                    <span class="on">1</span>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">&gt;</a>
-                </div>
+				    <c:if test="${pageMaker.prev}">
+				        <a href="/admin/curriculum?page=${pageMaker.startPage - 1}&keyword=${pageMaker.keyword}">&lt;</a>
+				    </c:if>
+				    <c:forEach var="pageNum" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+				        <a href="/admin/curriculum?page=${pageNum}&keyword=${pageMaker.keyword}"
+				           class="${pageMaker.page == pageNum ? 'on' : ''}">${pageNum}</a>
+				    </c:forEach>
+				    <c:if test="${pageMaker.next}">
+				        <a href="/admin/curriculum?page=${pageMaker.endPage + 1}&keyword=${pageMaker.keyword}">&gt;</a>
+				    </c:if>
+				</div>
 
             </div>
         </div>

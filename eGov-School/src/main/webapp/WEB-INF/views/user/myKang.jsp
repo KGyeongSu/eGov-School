@@ -141,7 +141,6 @@
         </div>
     </div>
 
-    <!-- 강좌 상세 모달 -->
     <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content" style="border-radius:12px; overflow:hidden;">
@@ -158,7 +157,6 @@
         </div>
     </div>
 
-    <!-- 피드백 모달 -->
     <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
@@ -193,9 +191,6 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         수료증 모달 (고도화)
-    ══════════════════════════════════════ -->
     <div class="modal fade" id="certModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
@@ -207,18 +202,12 @@
                     <button type="button" class="close" data-dismiss="modal" style="color:#fff; opacity:0.8;">&times;</button>
                 </div>
                 <div class="modal-body d-flex justify-content-center" style="background:#f1f5f9; padding:40px 20px; overflow-x:auto;">
-
-                    <!-- 수료증 본체 -->
                     <div id="certContent">
-
-                        <!-- 헤더 -->
                         <div class="cert-header">
                             <div class="cert-badge">CERTIFICATE OF COMPLETION</div>
                             <h1>수 료 증</h1>
                             <div class="cert-underline"></div>
                         </div>
-
-                        <!-- 수료자 정보 -->
                         <table class="cert-info-table">
                             <tr>
                                 <td>성&nbsp;&nbsp;&nbsp;&nbsp;명</td>
@@ -229,15 +218,11 @@
                                 <td id="c_claName" style="font-weight:700; color:#0e506e;"></td>
                             </tr>
                         </table>
-
-                        <!-- 본문 -->
                         <div class="cert-body-text">
                             위 사람은 본 기관에서 주관하는<br>
                             <span class="highlight" id="c_claName2"></span> 과정을<br>
                             성실히 이수하였으므로 이 증서를 수여합니다.
                         </div>
-
-                        <!-- 푸터: 날짜 + 서명 -->
                         <div class="cert-footer">
                             <div class="cert-date">
                                 <i class="fa-regular fa-calendar" style="margin-right:5px; color:#0e506e;"></i>
@@ -248,16 +233,11 @@
                                 <div class="sign-stamp">인</div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal"
-                            style="border:1px solid #e2e8f0; font-weight:600; border-radius:8px; padding:8px 20px;">닫기</button>
-                    <button type="button" class="btn btn-cert" onclick="downloadPDF()"
-                            style="border-radius:8px; padding:8px 20px;">
-                        <i class="fa-solid fa-file-pdf mr-1"></i> PDF 저장
-                    </button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-cert" onclick="downloadPDF()">PDF 저장</button>
                 </div>
             </div>
         </div>
@@ -296,7 +276,7 @@
                                          style="padding:15px; border-bottom:1px solid #eee;">
                                         <span style="font-size:14px; color:#333;">\${item.lsnSeq}차시 : \${item.lsnTitle}</span>
                                         <button class="btn btn-sm btn-cert"
-                                            onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=\${item.claNum}&lsnSeq=\${item.lsnSeq}'">
+                                            onclick="location.href='${pageContext.request.contextPath}/user/videolect?claNum=\${item.claNum}&lsnNum=\${item.lsnNum}'">
                                             학습하기
                                         </button>
                                      </li>`;

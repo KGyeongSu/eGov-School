@@ -50,6 +50,7 @@ public class MessageLectererController {
 	
 	@GetMapping("/reputationDetail")
 	public String messageDetail(@RequestParam("repNum") String repNum, Model model) throws Exception {
+
 		
 		// 메시지 읽음 처리
 		reputationService.updateReputationCheck(repNum);
