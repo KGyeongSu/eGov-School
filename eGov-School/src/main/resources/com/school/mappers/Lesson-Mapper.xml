@@ -31,6 +31,21 @@
     WHERE A.CLA_NUM = #{claNum}
       AND A.LSN_SEQ = #{lsnSeq}
 </select>
+<select id="selectLessonListByClaNum" parameterType="str" resultMap="lessonMap1">
+    SELECT
+        A.LSN_NUM,
+        A.CLA_NUM,
+        A.LSN_SEQ,
+        A.LSN_TITLE,
+        B.LA_SAVE_NAME,
+        C.CLA_TITLE
+    FROM LESSON A
+    LEFT JOIN LESSON_ATTACH B ON A.LSN_NUM = B.LSN_NUM AND B.LA_TYPE = 'VIDEO'
+    JOIN CLASS C ON A.CLA_NUM = C.CLA_NUM
+    WHERE A.CLA_NUM = #{claNum}
+    ORDER BY A.LSN_SEQ ASC
+</select>
+
     <select id="selectLessonFileList" parameterType="str" resultType="lessonAttach">
         SELECT
             LA_NUM,
@@ -80,20 +95,7 @@
     
     
     
-    <select id="selectLessonListByClaNum" parameterType="str" resultMap="lessonMap1">
-    SELECT
-        A.LSN_NUM,
-        A.CLA_NUM,
-        A.LSN_SEQ,
-        A.LSN_TITLE,
-        B.LA_SAVE_NAME,
-        C.CLA_TITLE
-    FROM LESSON A
-    LEFT JOIN LESSON_ATTACH B ON A.LSN_NUM = B.LSN_NUM AND B.LA_TYPE = 'VIDEO'
-    JOIN CLASS C ON A.CLA_NUM = C.CLA_NUM
-    WHERE A.CLA_NUM = #{claNum}
-    ORDER BY A.LSN_SEQ ASC
-</select>
+    
 	<select id="selectLessonSeqNext" resultType="str">
 		SELECT
 		SEQ_LESSON.NEXTVAL FROM DUAL

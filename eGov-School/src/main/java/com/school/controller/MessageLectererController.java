@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.school.cmd.PageMaker;
@@ -48,7 +49,7 @@ public class MessageLectererController {
 	}
 	
 	@GetMapping("/reputationDetail")
-	public String messageDetail (String repNum, Model model) throws Exception {
+	public String messageDetail(@RequestParam("repNum") String repNum, Model model) throws Exception {
 		
 		// 메시지 읽음 처리
 		reputationService.updateReputationCheck(repNum);
