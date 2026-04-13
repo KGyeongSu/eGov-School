@@ -228,4 +228,24 @@ public class ClassServiceImpl implements ClassService {
 		
 	}
 
+	
+ //관리자
+	@Override
+	public List<ClassVO> selectPendingClassList(PageMaker pageMaker) throws SQLException {
+		pageMaker.setPerPageNum(10);
+	    int totalCount = classDAO.selectPendingClassListCount(pageMaker);
+	    pageMaker.setTotalCount(totalCount);
+	    return classDAO.selectPendingClassList(pageMaker);
+	}
+	
+	@Override
+	public int selectPendingClassListCount(PageMaker pageMaker) throws SQLException {
+		return classDAO.selectPendingClassListCount(pageMaker);
+	}
+	
+	@Override
+	public void approveClass(ClassVO classVO) throws SQLException {
+		classDAO.approveClass(classVO);
+	}
+
 }

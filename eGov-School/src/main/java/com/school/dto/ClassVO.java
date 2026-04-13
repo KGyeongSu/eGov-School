@@ -4,6 +4,7 @@ package com.school.dto;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -32,8 +33,12 @@ public class ClassVO {
 	private Date appDate;
 	private String claStatus;
 	private Integer claViews;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date claStartDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date claEndDate;
+	
 	private Integer claMaxStu;
 	private String claComplete;
 	private Integer claBonus;

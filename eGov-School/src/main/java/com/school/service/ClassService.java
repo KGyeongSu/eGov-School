@@ -43,5 +43,16 @@ public interface ClassService {
 	List<ClassVO> selectApprovedClassList(PageMaker pageMaker) throws SQLException;
 	// PageMaker 페이지 계산할때 쓰임.
 	int selectApprovedClassListCount(PageMaker pageMaker) throws SQLException;
+	
+
+ // 관리자
+	// 관리자용: 승인대기 강좌 목록
+	List<ClassVO> selectPendingClassList(PageMaker pageMaker) throws SQLException;
+
+	// 관리자용: 승인대기 강좌 개수 (페이징)
+	int selectPendingClassListCount(PageMaker pageMaker) throws SQLException;
+
+	// 관리자용: 강좌 승인 처리
+	void approveClass(ClassVO classVO) throws SQLException;
 
 }

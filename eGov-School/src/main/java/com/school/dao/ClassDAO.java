@@ -45,5 +45,13 @@ public interface ClassDAO {
 	// 메시지 중복 발송 방지 학생 리스트
 	List <UserVO> selectUnsentStudentList (@Param("claNum") String claNum, @Param("tetNum") String tetNum);
 
+	
+	
+	// 관리자용: 승인대기 강좌 목록
+	List<ClassVO> selectPendingClassList(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
+	// 관리자용: 승인대기 강좌 개수 (페이징)
+	int selectPendingClassListCount(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
+	// 관리자용: 강좌 승인 처리
+	void approveClass(ClassVO classVO) throws SQLException;
 }
  
