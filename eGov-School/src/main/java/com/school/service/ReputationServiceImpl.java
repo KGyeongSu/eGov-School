@@ -67,4 +67,10 @@ public class ReputationServiceImpl implements ReputationService {
 		
 	}
 
+	@Override
+	public List<ReputationVO> selectReputationListForAdmin(ReputationVO searchVO) throws SQLException {
+		
+		return reputationDAO.selectReputationListForAdmin(searchVO);
+	}
+
 }

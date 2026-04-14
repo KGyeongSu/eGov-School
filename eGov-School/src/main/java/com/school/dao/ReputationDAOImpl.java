@@ -93,6 +93,12 @@ public class ReputationDAOImpl implements ReputationDAO{
 		
 	}
 
+	@Override
+	public List<ReputationVO> selectReputationListForAdmin(ReputationVO searchVO) throws SQLException {
+		
+		return session.selectList("Reputation-Mapper.selectReputationListForAdmin",searchVO);
+	}
+
 	
 
 }

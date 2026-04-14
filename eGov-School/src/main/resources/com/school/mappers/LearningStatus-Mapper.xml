@@ -87,4 +87,17 @@
       AND P.PRG_COMPLETE = 'Y'
 </select>
 
+<select id="selectLearningStatusList" parameterType="learningstatus" resultType="learningstatus">
+    SELECT 
+        PRG_NUM as prgNum,
+        USER_NUM as userNum, 
+        LSN_NUM as lsnNum, 
+        CLA_NUM as claNum, 
+        PRG_COMPLETE as prgComplete, 
+        PRG_LASTDATE as prgLastdate
+    FROM PROGRESS
+    WHERE USER_NUM = #{userNum, jdbcType=VARCHAR} 
+      AND CLA_NUM = #{claNum, jdbcType=VARCHAR}
+</select>
+
 </mapper>

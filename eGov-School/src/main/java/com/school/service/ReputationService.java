@@ -18,4 +18,7 @@ public interface ReputationService {
 	void updateReputationCheck (String repNum) throws SQLException;
 	
 	int selectUnreadReputationCount (String userNum) throws SQLException;
+	
+	//관리자
+	List<ReputationVO>selectReputationListForAdmin(ReputationVO searchVO)throws SQLException;
 }

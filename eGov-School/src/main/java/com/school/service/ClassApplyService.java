@@ -6,6 +6,7 @@ import java.util.List;
 import com.school.cmd.ClassApplyListCommand;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
+import com.school.dto.LearningStatusVO;
 import com.school.dto.LessonVO;
 import com.school.dto.ReputationVO;
 
@@ -34,5 +35,7 @@ public interface ClassApplyService {
 	void updateLessonProgress(String userNum, String claNum, String lsnNum) throws SQLException;
 
 	void refreshTotalProgress(String userNum, String claNum, String lsnNum) throws SQLException;
+	
+	List<LearningStatusVO> getUserProgressList(String userNum, String claNum) throws SQLException;
 	
 }

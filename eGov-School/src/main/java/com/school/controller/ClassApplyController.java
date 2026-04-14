@@ -2,7 +2,6 @@ package com.school.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.List;
@@ -66,19 +65,34 @@ public class ClassApplyController {
     }
 
     @RequestMapping("/myKang")
-    public String list(PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
+    public String list(
+            @RequestParam(value="page", defaultValue="1") int page, // 페이지 번호를 직접 받음
+            PageMaker pageMaker, 
+            HttpSession session, 
+            Model model) throws SQLException {
+            
         UserVO loginUser = (UserVO) session.getAttribute("loginUser");
         if (loginUser == null) return "redirect:/commons/login";
         
         String userNum = String.valueOf(loginUser.getUserNum());
-        pageMaker.setPerPageNum(6);
-        
+
+        // ⭐ [중요] 넘어온 페이지 번호를 PageMaker에 강제로 주입
+        pageMaker.setPage(page);
+        pageMaker.setPerPageNum(6); // 한 페이지에 6개씩
+
+        // 서비스 호출 (이 안에서 pageMaker.getStartRow() 등을 사용하여 쿼리가 날아가야 함)
         ClassApplyListCommand result = classApplyService.getClassApplyList(userNum, pageMaker);
+        
+        // 종료된 강좌 리스트
         List<ClassApplyVO> endList = classApplyService.getCompletedClassList(userNum);
         result.setEndList(endList); 
         
+        // 결과 데이터를 모델에 주입
         model.addAttribute("result", result);
+        
+        // ⭐ [중요] 서비스에서 계산이 완료된(totalCount가 세팅된) pageMaker를 다시 보냄
         model.addAttribute("pageMaker", result.getPageMaker());
+        
         return "user/myKang";
     }
 
@@ -94,6 +108,8 @@ public class ClassApplyController {
 
         // 1. 해당 강좌의 전체 강의 목록 가져오기
         List<LessonVO> lessonList = classApplyService.getLessonListByCoures(claNum);
+        
+        List<LearningStatusVO> userProgressList = classApplyService.getUserProgressList(userNum, claNum);
         
         // 2. lsnNum이 없을 때(학습 시작/이어하기 클릭 시) 처리 로직
         if (lsnNum == null || lsnNum.isEmpty() || lsnNum.equals("0")) {
@@ -141,6 +157,7 @@ public class ClassApplyController {
         model.addAttribute("totalLsnCount", lessonList != null ? lessonList.size() : 0);
         model.addAttribute("lesson", lesson);
         model.addAttribute("lessonList", lessonList);
+        model.addAttribute("userProgressList", userProgressList);
         model.addAttribute("claNum", claNum);
         if (lesson != null) {
             model.addAttribute("prevLsnNum", lesson.getPrevLsnNum());

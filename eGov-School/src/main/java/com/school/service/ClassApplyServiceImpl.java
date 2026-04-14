@@ -232,5 +232,14 @@ public class ClassApplyServiceImpl implements ClassApplyService {
     public int checkFull(String claNum) throws SQLException {
         return classApplyDAO.checkFull(claNum);
     }
+
+	@Override
+	public List<LearningStatusVO> getUserProgressList(String userNum, String claNum) throws SQLException {
+		LearningStatusVO status = new LearningStatusVO();
+	    status.setUserNum(userNum);
+	    status.setClaNum(claNum);
+	    // 이미 Mapper/DAO에 해당 강좌의 수강 내역을 가져오는 쿼리가 있을 것입니다.
+	    return learningStatusDAO.selectLearningStatusList(status);
+	}
         
 }
