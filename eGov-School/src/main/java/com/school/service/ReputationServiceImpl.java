@@ -67,4 +67,46 @@ public class ReputationServiceImpl implements ReputationService {
 		
 	}
 
+	@Override
+	public List<ReputationVO> selectLClassRep(String userNum) throws SQLException {
+		
+		List<ReputationVO> reputationList = reputationDAO.selectLClassRep(userNum);
+
+	    if (reputationList != null && !reputationList.isEmpty()) {
+	        double totalSumScore = 0;
+	        int totalStudentCount = 0;
+
+	        // 강좌별 데이터를 돌며 전체 합계 계산
+	        for (ReputationVO vo : reputationList) {
+	            totalSumScore += vo.getAvgScore();
+	            totalStudentCount += vo.getStudentCount();
+	        }
+
+	        // 전체 평균 계산 (소수점 첫째자리)
+	        double totalAvg = Math.round((totalSumScore / reputationList.size()) * 10.0) / 10.0;
+
+	        for (ReputationVO vo : reputationList) {
+	        	
+	        	vo.setTotalAvg(totalAvg);
+	            vo.setSumScore(totalStudentCount);
+	            
+	        }
+	        
+	    }
+
+	    return reputationList;
+		
+	}
+
+	@Override
+	public void insertReputation(ReputationVO reputation) throws SQLException {
+
+		String repNum = reputationDAO.selectReputaionSeqNext();
+		
+		reputation.setRepNum(repNum);
+		
+		reputationDAO.insertReputation(reputation);
+		
+	}
+
 }

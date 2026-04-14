@@ -33,6 +33,7 @@ public class ReputationDAOImpl implements ReputationDAO{
 
 	@Override
 	public void insertReputation(ReputationVO reputation) throws SQLException {
+		
 		session.insert("Reputation-Mapper.insertReputation", reputation);
 		
 	}
@@ -44,9 +45,9 @@ public class ReputationDAOImpl implements ReputationDAO{
 	}
 
 	@Override
-	public int selectReputaioneqNext() throws SQLException {
+	public String selectReputaionSeqNext() throws SQLException {
 		
-		return session.selectOne("Reputation-Mapper.selectReputaioneqNext");
+		return session.selectOne("Reputation-Mapper.selectReputationSeqNext");
 	}
 	
 	// 강사
@@ -90,6 +91,13 @@ public class ReputationDAOImpl implements ReputationDAO{
 		reputationCount.put("userNum", userNum);
 		
 		return session.selectOne("Reputation-Mapper.selectReputationCountByLecturer", reputationCount);
+		
+	}
+
+	@Override
+	public List<ReputationVO> selectLClassRep(String userNum) throws SQLException {
+
+		return session.selectList("Reputation-Mapper.selectLClassRep", userNum);
 		
 	}
 

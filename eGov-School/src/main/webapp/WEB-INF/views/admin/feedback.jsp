@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
     <!DOCTYPE html>
 <html lang="ko">
@@ -128,145 +130,237 @@
 
         <!-- ===== 탭2: 강사 피드백 종합 (ES-A04-007, 008) ===== -->
         <div class="tab-content" id="tab-fb-general" data-group="fb">
-            <div class="cur-tab">강사 피드백 종합</div>
-
-            <div class="three-col">
-
-                <!-- 사용자 평가 및 테스트 결과 (ES-A04-007) -->
-                <div class="section-box" style="margin-bottom:0;">
-                    <div class="section-head">사용자 평가 및 테스트 결과</div>
-                    <div class="section-body">
-                        <span class="stat-num">4.2</span>
-                        <span class="stat-label">평균 평가 점수</span>
-                        <br>
-                        <!-- DB: SELECT course_name, AVG(score) FROM feedback GROUP BY course_id -->
-                        <table class="board-table" style="margin-top:10px;">
-                            <thead><tr><th>강좌</th><th>평점</th></tr></thead>
-                            <tbody>
-                                <tr><td class="left">행정법 기초</td><td>4.5</td></tr>
-                                <tr><td class="left">세무직 실무</td><td>4.9</td></tr>
-                                <tr><td class="left">관세법 정리</td><td>3.8</td></tr>
-                                <tr><td class="left">보건직 과정</td><td>4.0</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 강좌 사용자 수 -->
-                <div class="section-box" style="margin-bottom:0;">
-                    <div class="section-head">강좌 사용자 수</div>
-                    <div class="section-body">
-                        <span class="stat-num">1,248</span>
-                        <span class="stat-label">전체 수강생</span>
-                        <br>
-                        <!-- DB: SELECT course_name, COUNT(*) FROM enrollments GROUP BY course_id -->
-                        <table class="board-table" style="margin-top:10px;">
-                            <thead><tr><th>강좌</th><th>수강생</th></tr></thead>
-                            <tbody>
-                                <tr><td class="left">행정법 기초</td><td>312명</td></tr>
-                                <tr><td class="left">세무직 실무</td><td>280명</td></tr>
-                                <tr><td class="left">관세법 정리</td><td>198명</td></tr>
-                                <tr><td class="left">보건직 과정</td><td>180명</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 사용자 만족도 및 수강평 -->
-                <div class="section-box" style="margin-bottom:0;">
-                    <div class="section-head">사용자 만족도 및 수강평</div>
-                    <div class="section-body">
-                        <!-- DB: SELECT category, AVG(score) FROM satisfaction GROUP BY category -->
-                        <table class="board-table">
-                            <thead><tr><th>항목</th><th>점수</th></tr></thead>
-                            <tbody>
-                                <tr><td class="left">강의 내용</td><td>4.5</td></tr>
-                                <tr><td class="left">강의 구성</td><td>4.2</td></tr>
-                                <tr><td class="left">강사 전달력</td><td>4.8</td></tr>
-                                <tr><td class="left">실무 활용도</td><td>4.0</td></tr>
-                                <tr><td class="left">전반적 만족</td><td>4.3</td></tr>
-                            </tbody>
-                        </table>
-                        <!-- 알림 전송 버튼 (ES-A04-008) -->
-                        <div style="text-align:right; margin-top:10px;">
-                            <button class="btn btn-blue btn-sm" onclick="openModal('modal-send')">
-                                강좌 피드백 알림 전송
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div><!-- /.three-col -->
-        </div><!-- /#tab-fb-general -->
-
-    </div><!-- /.main -->
-</div><!-- /.layout -->
-
-<footer>
-    <strong>대전광역시 인재개발원</strong> | eGov-School 관리자 페이지 &nbsp;|&nbsp; Copyright &copy; 2026
-</footer>
-
-<!-- ===== 모달: 수강생 피드백 상세 (ES-A04-006) ===== -->
-<div class="modal-overlay" id="modal-fb">
-    <div class="modal-box">
-        <div class="modal-head">
-            수강생 피드백 상세
-            <div class="modal-btns">
-                <button class="mbtn-cancel" onclick="closeModal('modal-fb')">닫기</button>
-            </div>
-        </div>
-        <div class="modal-body">
-            <div class="form-row">
-                <label>수강생 / 강사 / 강좌</label>
-                <div class="preview-area" id="fb-info"></div>
-            </div>
-            <div class="form-row">
-                <label>피드백 내용</label>
-                <div class="preview-area" id="fb-content"></div>
-            </div>
-            <div class="form-row">
-                <label>평점</label>
-                <div class="preview-area" id="fb-score"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ===== 모달: 강좌 피드백 알림 전송 (ES-A04-008) ===== -->
-<div class="modal-overlay" id="modal-send">
-    <div class="modal-box">
-        <div class="modal-head">
-            강좌 피드백 알림 전송
-            <div class="modal-btns">
-                <button class="mbtn-ok" onclick="doSend()">전송</button>
-                <button class="mbtn-cancel" onclick="closeModal('modal-send')">취소</button>
-            </div>
-        </div>
-        <div class="modal-body">
-            <!-- DB: SELECT course_name FROM courses / SELECT AVG(score) FROM feedback WHERE course_id=? -->
-            <div class="form-row">
-                <label>강좌명</label>
-                <select id="send-course" class="full">
-                    <option>공무원 행정법 기초</option>
-                    <option>세무직 실무 완성</option>
-                    <option>관세법 핵심 정리</option>
-                    <option>보건직 전문 과정</option>
-                </select>
-            </div>
-            <div class="form-row">
-                <label>사용자 피드백 (만족도 및 수강평)</label>
-                <div class="preview-area">만족도: ★★★★☆ 4.2 &nbsp;|&nbsp; 수강평: 강의가 유익합니다.</div>
-            </div>
-            <div class="form-row">
-                <label>강좌 이용자 수</label>
-                <div class="preview-area">수강생 312명</div>
-            </div>
-        </div>
-    </div>
-</div>
+		    <div class="cur-tab">강사 피드백 종합</div>
+		
+		    <div class="search-bar" style="display: flex !important; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; border: 1px solid #ddd;">
+		        <div class="filter-side">
+		            <label style="font-weight: bold; margin-right: 10px;">강사 선택</label>
+		            <select id="selectLecterer" onchange="getLecturerStats(this)" style="min-width: 200px; padding: 5px; border-radius: 4px;">
+					    <option value="">강사를 선택하세요</option>
+					    <c:forEach var="lec" items="${lectererList}">
+					        <option value="${lec.userNum}">${lec.userName}(${lec.userEmail})</option>
+					    </c:forEach>
+					</select>
+		        </div>
+		        <div class="action-side">
+		            <button class="btn btn-blue" style="padding: 10px 20px; font-weight: bold;" onclick="openModal('modal-send')">
+		                강좌 피드백 발송
+		            </button>
+		        </div>
+		    </div>
+		
+		    <div class="full-stats-layout" style="display: flex; flex-direction: column; gap: 20px;">
+		        
+		        <div class="section-box" style="margin:0; width: 100%; border: 1px solid #ddd !important; overflow: hidden;">
+		            <div class="section-head" style="display: flex !important; height: 50px !important; align-items: center !important; padding: 0 !important; background: #004d73; color: #fff; border: none;">
+		                <div style="flex: 0 0 220px; padding-left: 20px; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.2); box-sizing: border-box;">
+		                    수강생 만족도 평균
+		                </div>
+		                <div style="flex: 1; display: flex; text-align: center; font-size: 14px; font-weight: bold;">
+		                    <span style="width: 75%;">강좌명</span>
+		                    <span style="width: 25%;">평점</span>
+		                </div>
+		            </div>
+		            
+		            <div class="section-body" style="display: flex !important; align-items: stretch !important; padding: 0 !important; height: 245px; background: #fff;">
+		                <div style="flex: 0 0 220px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; border-right: 1px solid #eee; background: #fafafa; box-sizing: border-box;">
+		                    <span id="avgScoreDisplay" style="font-size: 48px; font-weight: bold; color: #0056b3; line-height: 1;">-</span>
+		                    <span style="font-size: 13px; color: #666; margin-top: 10px; white-space: nowrap;">평균 평점</span>
+		                </div>
+		                <div style="flex: 1; padding: 0 20px; display: flex; flex-start; overflow-y: auto;">
+		                    <table class="board-table" style="width: 100%; table-layout: fixed; border: none !important; margin: 0 !important;">
+		                        <tbody id="scoreTableBody">
+		                            <tr><td colspan="2" style="text-align:center; color:#ccc; border: none !important;">강사를 선택해 주세요.</td></tr>
+		                        </tbody>
+		                    </table>
+		                </div>
+		            </div>
+		        </div>
+		
+		        <div class="section-box" style="margin:0; width: 100%; border: 1px solid #ddd !important; overflow: hidden;">
+		            <div class="section-head" style="display: flex !important; height: 50px !important; align-items: center !important; padding: 0 !important; background: #004d73; color: #fff; border: none;">
+		                <div style="flex: 0 0 220px; padding-left: 20px; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.2); box-sizing: border-box;">
+		                    전체 수강생 수
+		                </div>
+		                <div style="flex: 1; display: flex; text-align: center; font-size: 14px; font-weight: bold;">
+		                    <span style="width: 75%;">강좌명</span>
+		                    <span style="width: 25%;">수강생</span>
+		                </div>
+		            </div>
+		            
+		            <div class="section-body" style="display: flex !important; align-items: stretch !important; padding: 0 !important; height: 245px; background: #fff;">
+		                <div style="flex: 0 0 220px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; border-right: 1px solid #eee; background: #fafafa; box-sizing: border-box;">
+		                    <span id="totalStudentDisplay" style="font-size: 48px; font-weight: bold; color: #0056b3; line-height: 1;">-</span>
+		                    <span style="font-size: 13px; color: #666; margin-top: 10px; white-space: nowrap;">전체 수강생</span>
+		                </div>
+		                <div style="flex: 1; padding: 0 20px; display: flex; flex-start; overflow-y: auto;">
+		                    <table class="board-table" style="width: 100%; table-layout: fixed; border: none !important; margin: 0 !important;">
+		                        <tbody id="studentTableBody">
+		                            <tr><td colspan="2" style="text-align:center; color:#ccc; border: none !important;">강사를 선택해 주세요.</td></tr>
+		                        </tbody>
+		                    </table>
+		                </div>
+		            </div>
+		        </div>
+		
+		    </div>
+		</div><!-- /#tab-fb-general -->
+		
+		    </div><!-- /.main -->
+		</div><!-- /.layout -->
+		
+		<!-- ===== 모달: 수강생 피드백 상세 (ES-A04-006) ===== -->
+		<div class="modal-overlay" id="modal-fb">
+		    <div class="modal-box">
+		        <div class="modal-head">
+		            수강생 피드백 상세
+		            <div class="modal-btns">
+		                <button class="mbtn-cancel" onclick="closeModal('modal-fb')">닫기</button>
+		            </div>
+		        </div>
+		        <div class="modal-body">
+		            <div class="form-row">
+		                <label>수강생 / 강사 / 강좌</label>
+		                <div class="preview-area" id="fb-info"></div>
+		            </div>
+		            <div class="form-row">
+		                <label>피드백 내용</label>
+		                <div class="preview-area" id="fb-content"></div>
+		            </div>
+		            <div class="form-row">
+		                <label>평점</label>
+		                <div class="preview-area" id="fb-score"></div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
+		<!-- ===== 모달: 강좌 피드백 알림 전송 (ES-A04-008) ===== -->
+		<div class="modal-overlay" id="modal-send">
+		    <div class="modal-box">
+		        <div class="modal-head">
+		            강좌 피드백 발송
+		            <div class="modal-btns">
+		                <button class="mbtn-ok" onclick="doSend()">전송</button>
+		                <button class="mbtn-cancel" onclick="closeModal('modal-send')">취소</button>
+		            </div>
+		        </div>
+		        <div class="modal-body">
+		            <!-- DB: SELECT course_name FROM courses / SELECT AVG(score) FROM feedback WHERE course_id=? -->
+		            <div class="form-row">
+		                <label>강좌명</label>
+				        <div class="select-wrapper" style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+				        <select id="send-course" class="full" style="border: none; outline: none;">
+				            <option value="">강사를 먼저 선택해주세요</option>
+				        </select>
+				    </div>
+		            </div>
+		            <div class="form-row">
+		                <label>평가 내용</label>
+		                <textarea id="send-comment" class="full" 
+                          placeholder="강사에게 전달할 평가 내용을 입력하세요." 
+                          style="width: 100%; height: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: none;"></textarea>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 
 
 <script>
+	
+	window.getLecturerStats = function(el) {
+	    console.log("=== 통계 함수 실행 시작 ===");
+	    
+	    // 1. 전달받은 el이 있으면 그것을 쓰고, 없으면 ID로 찾음
+	    var selectEl = el || document.getElementById('selectLecterer');
+	    if (!selectEl) {
+	        console.error("강사 선택 요소를 찾을 수 없습니다.");
+	        return;
+	    }
+	
+	    // 2. 선택된 값(userNum) 추출
+	    var userNum = selectEl.value;
+	    console.log("선택된 강사 번호: [" + userNum + "]");
+	
+	    // 표시 엘리먼트들
+	    var avgScoreDisp = document.getElementById('avgScoreDisplay');
+	    var totalStudentDisp = document.getElementById('totalStudentDisplay');
+	    var scoreTable = document.getElementById('scoreTableBody');
+	    var studentTable = document.getElementById('studentTableBody');
+	
+	    // 강사를 선택하지 않았을 경우 초기화 로직
+	    if (!userNum || userNum.trim() === "") {
+	        if(avgScoreDisp) avgScoreDisp.textContent = "-";
+	        if(totalStudentDisp) totalStudentDisp.textContent = "-";
+	        var emptyMsg = '<tr><td colspan="2" style="text-align:center; color:#ccc; border:none !important; padding:40px 0;">강사를 선택해 주세요.</td></tr>';
+	        if(scoreTable) scoreTable.innerHTML = emptyMsg;
+	        if(studentTable) studentTable.innerHTML = emptyMsg;
+	        return;
+	    }
+	
+	    // 3. 요청 URL 생성
+	    var contextPath = '<%=request.getContextPath()%>';
+	    var url = contextPath + '/admin/getLRep?userNum=' + encodeURIComponent(userNum);
+	    console.log("서버 요청 주소: " + url);
+	
+	    // 4. AJAX 요청
+	    fetch(url)
+	        .then(function(response) {
+	            if (!response.ok) throw new Error('네트워크 응답 에러');
+	            return response.json();
+	        })
+	        .then(function(data) {
+	            console.log("서버 데이터 수신 성공:", data);
+	
+	            if (data && data.length > 0) {
+	                if(avgScoreDisp) avgScoreDisp.textContent = data[0].totalAvg; 
+	                if(totalStudentDisp) totalStudentDisp.textContent = data[0].sumScore.toLocaleString();
+	
+	                var scoreRows = "";
+	                var studentRows = "";
+	                var courseOptions = '<option value="">강좌를 선택하세요</option>';
+	
+	                for (var i = 0; i < data.length; i++) {
+	                    var vo = data[i];
+	                    
+	                    courseOptions += '<option value="' + vo.claNum + '">' + vo.claTitle + '</option>';
+	                    
+	                    scoreRows += '<tr>' +
+	                        '<td style="width: 75%; text-align: left; padding-left: 20px; border:none !important;">' + vo.claTitle + '</td>' +
+	                        '<td style="width: 25%; text-align: center; border:none !important;">★ ' + vo.avgScore + '</td>' +
+	                        '</tr>';
+	                    
+	                    studentRows += '<tr>' +
+	                        '<td style="width: 75%; text-align: left; padding-left: 20px; border:none !important;">' + vo.claTitle + '</td>' +
+	                        '<td style="width: 25%; text-align: center; border:none !important;">' + vo.studentCount + '명</td>' +
+	                        '</tr>';
+	                }
+	                
+	                var sendCourseSelect = document.getElementById('send-course');
+	                
+	                if(sendCourseSelect) {
+	                	
+	                    sendCourseSelect.innerHTML = courseOptions;
+
+	                }
+	
+	                if(scoreTable) scoreTable.innerHTML = scoreRows;
+	                if(studentTable) studentTable.innerHTML = studentRows;
+	                
+	            } else {
+	                if(avgScoreDisp) avgScoreDisp.textContent = "0.0";
+	                if(totalStudentDisp) totalStudentDisp.textContent = "0";
+	                var noDataHtml = '<tr><td colspan="2" style="text-align:center; color:#ccc; border:none !important; padding:40px 0;">조회된 데이터가 없습니다.</td></tr>';
+	                if(scoreTable) scoreTable.innerHTML = noDataHtml;
+	                if(studentTable) studentTable.innerHTML = noDataHtml;
+	            }
+	        })
+	        .catch(function(error) {
+	            console.error('AJAX 처리 중 오류 발생:', error);
+	            alert('데이터를 불러오는 중 오류가 발생했습니다.');
+	        });
+	};
+
     /* 피드백 모달 열기 */
     function openFbModal(student, instructor, course, comment, score) {
         document.getElementById('fb-info').textContent =
@@ -303,10 +397,60 @@
 
     /* 피드백 알림 전송 */
     function doSend() {
-        /* 실제 서비스: fetch('/api/feedback/send', {method:'POST', body: ...}) */
-        alert('피드백 알림이 강사에게 전송되었습니다.');
-        closeModal('modal-send');
+    	
+    	var adminNum = "${sessionScope.loginUser.userNum}";
+    	
+    	if(!adminNum || adminNum === "") {
+            alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+            location.href = "<%=request.getContextPath()%>/commons/login"; 
+            return;
+        }
+    	
+    	var selectEl = document.getElementById('send-course');
+        
+        var claNum = selectEl.value;
+        var claTitle = selectEl.options[selectEl.selectedIndex].text; 
+        
+        var comment = document.getElementById('send-comment').value;
+
+        // 유효성 검사
+        if(!claNum) { 
+            alert('발송할 강좌를 선택해주세요.'); 
+            return; 
+        }
+        
+        if(!comment.trim()) { 
+            alert('평가 내용을 입력해주세요.'); 
+            return; 
+        }
+        
+        var data = {
+                userNum: adminNum,    
+                claNum: claNum,      
+                repContent: comment,  
+            };
+
+        fetch('<%=request.getContextPath()%>/admin/insertFeedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.text()) 
+		.then(result => {
+		    if(result === "success") { 
+		        alert('[' + claTitle + '] 강좌에 대한 피드백이 성공적으로 전송되었습니다.');
+		        document.getElementById('send-comment').value = '';
+		        closeModal('modal-send');
+		    } else {
+		        alert('서버 저장에 실패했습니다.');
+		    }
+		})
+        .catch(error => {
+            console.error('Error:', error);
+            alert('서버 연결에 실패했습니다.');
+        });
     }
+    
 </script>
 </body>
 </html>

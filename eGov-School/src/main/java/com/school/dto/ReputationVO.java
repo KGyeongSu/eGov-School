@@ -32,4 +32,11 @@ public class ReputationVO {
     private String userRole;
     private String claTitle;
     private String userName;
+    
+    // 관리자
+    private String claName;    
+    private double avgScore;
+    private double totalAvg;
+    private int studentCount;
+    
 }

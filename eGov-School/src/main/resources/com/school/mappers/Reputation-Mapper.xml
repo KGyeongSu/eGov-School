@@ -27,8 +27,8 @@
     </select>
 
     <insert id="insertReputation" parameterType="reputation">
-        INSERT INTO REPUTATION (REP_NUM, USER_NUM, CLA_NUM, REP_CONTENT, REP_SAT, REP_REGDATE)
-        VALUES (SEQ_REPUTATION.NEXTVAL, #{userNum}, #{claNum}, #{repContent}, #{repSat}, SYSDATE)
+        INSERT INTO REPUTATION (REP_NUM, USER_NUM, CLA_NUM, REP_CONTENT, REP_REGDATE)
+        VALUES (SEQ_REPUTATION.NEXTVAL, #{userNum}, #{claNum}, #{repContent}, SYSDATE)
     </insert>
 
     <update id="updateReputation" parameterType="reputation">
@@ -45,7 +45,7 @@
     </delete>
     
     
-    <select id="selectReputaioneqNext">
+    <select id="selectReputationSeqNext" resultType = "str">
     	SELECT SEQ_REPUTATION.NEXTVAL AS REP_NUM FROM DUAL
 	</select>
 	
@@ -111,5 +111,17 @@
 	    WHERE REP_NUM = #{repNum}
 	</update>
 
+	<select id="selectLClassRep" resultType="reputation">
+	    SELECT 
+	        c.cla_num, 
+	        c.cla_title, 
+	        ROUND(NVL(AVG(r.rep_sat), 0), 1) AS avgScore, 
+	        COUNT(DISTINCT a.user_num) AS studentCount 
+	    FROM class c
+	    LEFT JOIN classApply a ON c.cla_num = a.cla_num
+	    LEFT JOIN reputation r ON a.cla_num = r.cla_num AND a.user_num = r.user_num
+	    WHERE c.user_num = #{userNum}
+	    GROUP BY c.cla_num, c.cla_title
+	</select>
 
 </mapper>
