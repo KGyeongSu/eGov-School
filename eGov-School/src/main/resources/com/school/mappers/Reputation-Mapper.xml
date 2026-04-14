@@ -45,7 +45,7 @@
     </delete>
     
     
-    <select id="selectReputaioneqNext">
+     <select id="selectReputationSeqNext" resultType = "str">
     	SELECT SEQ_REPUTATION.NEXTVAL AS REP_NUM FROM DUAL
 	</select>
 	
@@ -110,6 +110,52 @@
 	    SET REP_CHECK = 'Y'
 	    WHERE REP_NUM = #{repNum}
 	</update>
+	
+	
+	<!-- 관리자 -->
+	<select id="selectReputationListForAdmin" resultType="reputation">
+    SELECT 
+        R.REP_NUM, R.REP_CONTENT, R.REP_SAT, R.REP_REGDATE,
+        C.CLA_TITLE, C.CLA_NUM,
+        U1.USER_NAME AS userName,
+        U2.USER_NAME AS lecturerName
+    FROM REPUTATION R
+    JOIN USERS U1 ON R.USER_NUM = U1.USER_NUM        
+    JOIN CLASS C ON R.CLA_NUM = C.CLA_NUM            
+    JOIN USERS U2 ON C.USER_NUM = U2.USER_NUM        
+    <where>
+        U1.USER_ROLE != '관리자' 
+        
+        <if test="lecturerName != null and lecturerName != ''">
+            AND U2.USER_NAME = #{lecturerName}
+        </if>
+        
+        <if test="repSat != null and repSat != 0">
+            AND R.REP_SAT = #{repSat}
+        </if>
+        
+        <if test="keyword != null and keyword != ''">
+            AND (
+                U1.USER_NAME LIKE '%' || #{keyword} || '%'
+                OR C.CLA_TITLE LIKE '%' || #{keyword} || '%'
+                OR R.REP_CONTENT LIKE '%' || #{keyword} || '%'
+            )
+        </if>
+    </where>
+    ORDER BY R.REP_REGDATE DESC
+</select>
 
+<select id="selectLClassRep" resultType="reputation">
+	    SELECT 
+	        c.cla_num, 
+	        c.cla_title, 
+	        ROUND(NVL(AVG(r.rep_sat), 0), 1) AS avgScore, 
+	        COUNT(DISTINCT a.user_num) AS studentCount 
+	    FROM class c
+	    LEFT JOIN classApply a ON c.cla_num = a.cla_num
+	    LEFT JOIN reputation r ON a.cla_num = r.cla_num AND a.user_num = r.user_num
+	    WHERE c.user_num = #{userNum}
+	    GROUP BY c.cla_num, c.cla_title
+	</select>
 
 </mapper>

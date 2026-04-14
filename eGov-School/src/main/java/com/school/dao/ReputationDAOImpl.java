@@ -44,9 +44,9 @@ public class ReputationDAOImpl implements ReputationDAO{
 	}
 
 	@Override
-	public int selectReputaioneqNext() throws SQLException {
+	public String selectReputaionSeqNext() throws SQLException {
 		
-		return session.selectOne("Reputation-Mapper.selectReputaioneqNext");
+		return session.selectOne("Reputation-Mapper.selectReputationSeqNext");
 	}
 	
 	// 강사
@@ -93,6 +93,18 @@ public class ReputationDAOImpl implements ReputationDAO{
 		
 	}
 
+	@Override
+	public List<ReputationVO> selectReputationListForAdmin(ReputationVO searchVO) throws SQLException {
+		
+		return session.selectList("Reputation-Mapper.selectReputationListForAdmin",searchVO);
+	}
+	
+	@Override
+	public List<ReputationVO> selectLClassRep(String userNum) throws SQLException {
+
+		return session.selectList("Reputation-Mapper.selectLClassRep", userNum);
+		
+	}
 	
 
 }

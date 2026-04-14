@@ -13,12 +13,13 @@
 
 <header>
     <div class="logo">
-        <a href="${pageContext.request.contextPath}/user/dashBoard">
+        <a href="${pageContext.request.contextPath}/main">
             <img src="${pageContext.request.contextPath}/resources/images/dashboardLogo.png" alt="로고">
         </a>
     </div>
     <nav class="menu">
         <ul>
+            <li><a href="${pageContext.request.contextPath}/user/dashBoard"><span>My 메인</span></a></li>
             <li><a href="${pageContext.request.contextPath}/user/myKang"><span>My 강좌</span></a></li>
             <li><a href="${pageContext.request.contextPath}/user/exam"><span>My 평가</span></a></li>
         </ul>
@@ -32,30 +33,31 @@
            <p><strong>${loginUser.userName}</strong>님의 대시보드</p>
         </div>
         <div class="logout_dash">
-            <div class="mes" style="position:relative; cursor:pointer;" onclick="fetchReceivedList()">
-                <i class="fa-regular fa-envelope" style="font-size: 40px; color: #595959; line-height: 75px;"></i>
-                <span id="unreadBadge" style="position:absolute; top:10px; right:5px; background-color:#d9534f; color:#fff; font-size:11px; padding:2px 6px; border-radius:50%; display:none; line-height:1; z-index:10;">0</span>
+            <div class="mes" onclick="fetchReceivedList()">
+                <i class="fa-regular fa-envelope"></i>
+                <span id="unreadBadge">0</span>
             </div>
             <div class="out">
                 <button type="button" class="btn btn-sm btn-info" 
-                        style="background-color: #1a6d91; border: none;"
-                        onclick="location.href='${pageContext.request.contextPath}/main'">로그아웃</button>
+                        onclick="location.href='/commons/logout'">로그아웃</button>
             </div>
         </div>
     </div>
 
     <div class="modal fade" id="msgBoxModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header" style="background:#0e506e; color:#fff; display:flex; justify-content:space-between; align-items:center;">
-                    <h5 class="modal-title" style="margin:0;"><i class="fa-regular fa-envelope"></i> 받은 쪽지함</h5>
-                    <button type="button" class="close" data-dismiss="modal" style="color:#fff; opacity:1; border:none; background:none; font-size:28px;">&times;</button>
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header custom-modal-header">
+                    <h5 class="modal-title custom-modal-title">
+                        <i class="fa-solid fa-paper-plane"></i> 받은 쪽지함
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div class="modal-body p-0" id="msgListContainer" style="max-height:400px; overflow-y:auto;">
+                <div class="modal-body p-0 msg-list-body" id="msgListContainer">
                 </div>
             </div>
         </div>
-    </div>
+  
 
     <script>
     var ctx = "${pageContext.request.contextPath}";
@@ -75,18 +77,24 @@
         $.get(ctx + '/user/receivedList', function(data) {
             var html = '';
             if (!data || data.length === 0) {
-                html = '<div class="p-4 text-center">받은 쪽지가 없습니다.</div>';
+                html = '<div class="msg-empty"><i class="fa-regular fa-folder-open"></i><p>새로운 쪽지가 없습니다.</p></div>';
             } else {
                 data.forEach(function(msg) {
-                    var style = (msg.msCheck === 'N') ? 'background:#f1f8fb; font-weight:bold; border-left:4px solid #1a6d91;' : '';
+                    var isUnread = (msg.msCheck === 'N');
+                    var cardClass = isUnread ? 'msg-card unread-card' : 'msg-card read-card';
+                    var iconClass = isUnread ? 'fa-envelope' : 'fa-envelope-open';
+                    var badgeHtml = isUnread ? '<span class="msg-new-badge">N</span>' : '';
                     var dateStr = !isNaN(msg.msSenddate) ? new Date(msg.msSenddate).toLocaleDateString() : msg.msSenddate;
 
-                    html += '<div style="padding:15px; border-bottom:1px solid #eee; cursor:pointer; ' + style + '" onclick="openMsgDetail(\''+msg.msNum+'\')">';
-                    html += '  <div style="display:flex; justify-content:space-between;">';
-                    html += '    <span style="color:#0e506e;">' + msg.msSenderName + '</span>';
-                    html += '    <small style="color:#888;">' + dateStr + '</small>';
+                    html += '<div class="' + cardClass + '" onclick="openMsgDetail(\''+msg.msNum+'\')">';
+                    html += '  <div class="msg-icon"><i class="fa-solid ' + iconClass + '"></i></div>';
+                    html += '  <div class="msg-info">';
+                    html += '    <div class="msg-card-header">';
+                    html += '      <span class="msg-sender">' + msg.msSenderName + badgeHtml + '</span>';
+                    html += '      <span class="msg-date">' + dateStr + '</span>';
+                    html += '    </div>';
+                    html += '    <div class="msg-preview">' + msg.msContent + '</div>';
                     html += '  </div>';
-                    html += '  <div style="font-size:13px; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + msg.msContent + '</div>';
                     html += '</div>';
                 });
             }
@@ -98,9 +106,17 @@
     function openMsgDetail(msNum) {
         $.post(ctx + '/user/detail', { msNum: msNum }, function(msg) {
             if(msg) {
-                Swal.fire({ title: 'From: ' + msg.msSenderName, text: msg.msContent, confirmButtonColor: '#0e506e' })
-                .then(function() { fetchReceivedList(); updateBadgeCount(); });
+                Swal.fire({ 
+                    title: '<span style="font-size:18px; color:#0e506e;">보낸 사람: ' + msg.msSenderName + '</span>', 
+                    html: '<div style="background:#f8fafc; padding:20px; border-radius:12px; font-size:15px; color:#334155; text-align:left; border:1px solid #e2e8f0;">' + msg.msContent + '</div>',
+                    confirmButtonColor: '#0e506e',
+                    confirmButtonText: '확인'
+                }).then(function() { 
+                    fetchReceivedList(); 
+                    updateBadgeCount(); 
+                });
             }
         });
     }
     </script>
+</div>

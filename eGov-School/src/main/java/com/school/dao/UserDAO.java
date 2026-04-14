@@ -31,4 +31,6 @@ public interface UserDAO {
 	
 	List <UserVO> getAdminList() throws SQLException;
 	
+	List <UserVO> getlectererList () throws SQLException;
+	
 }

@@ -87,4 +87,32 @@
       AND P.PRG_COMPLETE = 'Y'
 </select>
 
+<select id="selectLearningStatusList" parameterType="learningstatus" resultType="learningstatus">
+    SELECT 
+        PRG_NUM as prgNum,
+        USER_NUM as userNum, 
+        LSN_NUM as lsnNum, 
+        CLA_NUM as claNum, 
+        PRG_COMPLETE as prgComplete, 
+        PRG_LASTDATE as prgLastdate
+    FROM PROGRESS
+    WHERE USER_NUM = #{userNum, jdbcType=VARCHAR} 
+      AND CLA_NUM = #{claNum, jdbcType=VARCHAR}
+</select>
+
+<select id="selectStudentLearningStatusAtManage" resultType="learningstatus">
+    SELECT 
+        (SELECT 
+            CASE 
+                WHEN COUNT(*) = 0 THEN 0 
+                ELSE ROUND((SUM(CASE WHEN PRG_COMPLETE = 'Y' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 1) 
+            END 
+         FROM PROGRESS 
+         WHERE CLA_NUM = #{claNum} AND USER_NUM = #{userNum}) as progress,
+        (SELECT MAX(PRG_LASTDATE) 
+         FROM PROGRESS 
+         WHERE CLA_NUM = #{claNum} AND USER_NUM = #{userNum}) as prgLastdate
+    FROM DUAL
+</select>
+
 </mapper>

@@ -227,6 +227,34 @@ public class ClassServiceImpl implements ClassService {
 		return classDAO.selectUnsentStudentList(claNum, tetNum);
 		
 	}
+	
+	@Override
+	public List<ClassVO> selectTestClassListForDashboard(String userNum) throws SQLException {
+
+		return classDAO.selectTestClassListForDashboard(userNum);
+		
+	}
+
+	@Override
+	public List<ClassVO> selectWeeklyAverageProgress(String claNum) throws SQLException {
+
+		return classDAO.selectWeeklyAverageProgress(claNum);
+		
+	}
+
+	@Override
+	public double selectTestRateByClaNum(String claNum) throws SQLException {
+
+		return classDAO.selectTestRateByClaNum(claNum);
+		
+	}
+
+	@Override
+	public int selectRegiRate(String claNum) throws SQLException {
+
+		return classDAO.selectRegiRate(claNum);
+		
+	}
 
 	
  //관리자

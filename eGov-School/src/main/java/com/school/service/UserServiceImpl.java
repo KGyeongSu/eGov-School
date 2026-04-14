@@ -63,5 +63,12 @@ public class UserServiceImpl implements UserService {
 		return userDAO.getAdminList();
 		
 	}
+	
+	@Override
+	public List<UserVO> getlectererList() throws SQLException {
+
+		return userDAO.getlectererList();
+		
+	}
 
 }

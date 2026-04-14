@@ -45,7 +45,17 @@ public interface ClassDAO {
 	// 메시지 중복 발송 방지 학생 리스트
 	List <UserVO> selectUnsentStudentList (@Param("claNum") String claNum, @Param("tetNum") String tetNum);
 
-	
+	// 메인대시보드 출제 평가 리스트 응시율 뿌려주기 목적
+	List<ClassVO> selectTestClassListForDashboard(@Param("userNum") String userNum) throws SQLException;
+
+	// my 강의실 수강생 관리 주차별 진도율 뿌려주기 목적
+	List<ClassVO> selectWeeklyAverageProgress(String claNum) throws SQLException;
+
+	// my 강의실 수강생 관리 각 강의별 테스트 응시율 뿌려주기 목적
+	double selectTestRateByClaNum(String claNum) throws SQLException;
+
+	// 강의실 강의 등록률
+	int selectRegiRate(String claNum) throws SQLException;
 	
 	// 관리자용: 승인대기 강좌 목록
 	List<ClassVO> selectPendingClassList(@Param("pageMaker") PageMaker pageMaker) throws SQLException;

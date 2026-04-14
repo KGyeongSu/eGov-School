@@ -32,4 +32,14 @@ public class ReputationVO {
     private String userRole;
     private String claTitle;
     private String userName;
+    
+    //관리자
+    private String lecturerName; // ★ 강사 이름 (강의 개설자) 추가
+    private String keyword;
+    // 관리자
+    private String claName;    
+    private double avgScore;
+    private double totalAvg;
+    private int studentCount;
+    
 }

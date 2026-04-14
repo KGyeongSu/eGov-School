@@ -90,5 +90,17 @@
 	    FROM USERS
 	    WHERE USER_ROLE = '관리자'  ORDER BY USER_NAME ASC
 	</select>
+	
+	<!-- 은영 -->
+	<select id="getlectererList" resultType="user">
+	    SELECT 
+	    	user_num,
+	        user_email, 
+	        user_name 
+	    FROM users 
+	    WHERE user_role = '강사' 
+	      AND user_status = '활성'
+	    ORDER BY user_name ASC
+	</select>
 
 </mapper>

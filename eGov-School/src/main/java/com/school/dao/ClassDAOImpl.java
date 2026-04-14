@@ -152,7 +152,34 @@ public class ClassDAOImpl implements ClassDAO {
 	    return session.selectList("Class-Mapper.selectUnsentStudentList", dataMap);
 		
 	}
+	
+	@Override
+	public List<ClassVO> selectTestClassListForDashboard(String userNum) throws SQLException {
 
+		return session.selectList("Class-Mapper.selectTestClassListForDashboard", userNum);
+		
+	}
+
+	@Override
+	public List<ClassVO> selectWeeklyAverageProgress(String claNum) throws SQLException {
+
+		return session.selectList("Class-Mapper.selectWeeklyAverageProgress", claNum);
+		
+	}
+
+	@Override
+	public double selectTestRateByClaNum(String claNum) throws SQLException {
+
+		return session.selectOne("Class-Mapper.selectTestRateByClaNum", claNum);
+		
+	}
+
+	@Override
+	public int selectRegiRate(String claNum) throws SQLException {
+
+		return session.selectOne("Class-Mapper.selectRegiRate", claNum);
+		
+	}
 	
 	// 관리자 DAO 3개 method
 	@Override

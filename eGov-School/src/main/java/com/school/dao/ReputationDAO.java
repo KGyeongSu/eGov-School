@@ -10,7 +10,7 @@ import com.school.dto.ReputationVO;
 
 public interface ReputationDAO {
 	
-	
+	//사용자
 	List<ReputationVO>selectReputationList(String claNum)throws SQLException;
 	
 	ReputationVO selectReputationCount(String claNum)throws SQLException;
@@ -19,7 +19,7 @@ public interface ReputationDAO {
 	
 	void updateReputation(ReputationVO reputation)throws SQLException;
 	
-	int selectReputaioneqNext()throws SQLException;
+	String selectReputaionSeqNext()throws SQLException;
 	
 	// 강사
 	List <ReputationVO> selectReputationListByLecturer (PageMaker pageMaker, String userNum, RowBounds rows) throws SQLException;
@@ -33,5 +33,10 @@ public interface ReputationDAO {
 	
 	//페이지네이션 시
 	int selectReputationCountByLecturer (PageMaker pageMaker, String userNum) throws SQLException;
-
+	
+	// 관리자용 피드백 전체 목록 및 검색 조회
+	List<ReputationVO> selectReputationListForAdmin(ReputationVO searchVO) throws SQLException;
+	
+	// 관리자 강사 평가 관리
+	List <ReputationVO> selectLClassRep (String userNum) throws SQLException;
 }

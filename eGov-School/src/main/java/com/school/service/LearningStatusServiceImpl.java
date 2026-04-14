@@ -44,4 +44,46 @@ public class LearningStatusServiceImpl implements LearningStatusService {
     public int getLastLearningSeq(LearningStatusVO status) throws SQLException {
         return learningStatusDAO.selectLastLearningSeq(status);
     }
+    
+    @Override
+	public LearningStatusVO selectStudentLearningStatusAtManage(String userNum, String claNum) throws SQLException {
+		
+		LearningStatusVO statusManage = learningStatusDAO.selectStudentLearningStatusAtManage(userNum, claNum);
+		
+		// 신규 학생인 경우
+		if (statusManage == null) {
+			
+	        statusManage = new LearningStatusVO();
+	        statusManage.setProgress(0);
+	        statusManage.setStatus("미접속");
+	        
+	        return statusManage;
+	    }
+		
+		// 학습상태 확인
+		if (statusManage.getPrgLastdate() != null) {
+			
+	        long currentTime = System.currentTimeMillis();
+	        long lastTime = statusManage.getPrgLastdate().getTime();
+	        
+	        // 현재 시간 - 마지막 학습시간 < 10분(600,000ms)
+	        if (currentTime - lastTime < 600000) {
+	        	
+	        	statusManage.setStatus("학습중");
+	        	
+	        } else {
+	        	
+	        	statusManage.setStatus("미접속");
+	        	
+	        }
+	        
+	    } else {
+	    	
+	    	statusManage.setStatus("미접속");
+	    	
+	    }
+	    
+	    return statusManage;
+		
+	}
 }

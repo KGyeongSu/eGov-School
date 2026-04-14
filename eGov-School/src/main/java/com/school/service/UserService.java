@@ -28,4 +28,7 @@ public interface UserService {
 	
 	// 관리자 리스트 조회
 	List <UserVO> getAdminList () throws SQLException;
+	
+	// 강사 리스트 조회
+	List <UserVO> getlectererList () throws SQLException;
 }

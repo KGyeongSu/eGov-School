@@ -1,7 +1,7 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ include file="../modules/lecHeader.jsp"%>
 
@@ -60,12 +60,14 @@
 			<div class="left">
 			    <h2 style="font-size: 20px; font-weight: 600;">학습 데이터</h2>
 			    
-			    <div class="per">
-			        <div class="chart1" style="width: 780px; height: 285px; margin: 0px auto; margin-top: 20px; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #d1d1d1; box-sizing: border-box;">
-			            <canvas id="chart1"></canvas>
-			        </div>
-			        <span style="margin-top: 15px !important; margin-bottom: 18px !important;">평균 진도율</span>
-			    </div>
+			    <div class="per" style="overflow-x: auto;">
+				    <div class="chart-scroll-wrapper">
+				        <div id="chart1Container">
+				            <canvas id="chart1"></canvas>
+				        </div>
+				    </div>
+				    <span>평균 진도율</span>
+				</div>
 			
 			    <div class="per">
 			        <div class="chart2" style="width: 780px; height: 285px; margin: 0px auto; background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #d1d1d1; box-sizing: border-box;">
@@ -114,26 +116,28 @@
 										            <div style="font-size: 12px; color: #868e96;">${student.userEmail}</div>
 										        </td>
 										        <td style="padding: 12px 15px;">
-										            <c:set var="fakeProgress" value="${90 - (vs.index * 7)}" />
-										            <c:if test="${fakeProgress < 10}"><c:set var="fakeProgress" value="12" /></c:if>
-										            
 										            <div style="width: 100px; background: #e9ecef; height: 6px; border-radius: 3px; position: relative;">
-										                <div style="width: ${fakeProgress}%; background: #27ae60; height: 100%; border-radius: 3px;"></div>
+										                <div style="width: ${student.progress}%; background: #27ae60; height: 100%; border-radius: 3px;"></div>
 										            </div> 
-										            <span style="font-size: 12px; color: #27ae60; font-weight: bold;">${fakeProgress}%</span>
+										            <span style="font-size: 12px; color: #27ae60; font-weight: bold;">${student.progress}%</span>
 										        </td>
 										        <td style="padding: 12px 15px; color: #495057;">
-										            2026.04.0${(vs.index % 9) + 1}
+										            <c:choose>
+										                <c:when test="${not empty student.prgLastdate}">
+										                    <fmt:formatDate value="${student.prgLastdate}" pattern="yyyy.MM.dd"/>
+										                </c:when>
+										                <c:otherwise>-</c:otherwise>
+										            </c:choose>
 										        </td>
 										        <td style="padding: 12px 15px; text-align: center;">
 										            <c:choose>
-										                <c:when test="${vs.index % 3 == 0}">
-										                    <span style="background: #e7f5ff; color: #228be6; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">학습중</span>
-										                </c:when>
-										                <c:otherwise>
-										                    <span style="background: #fff4e6; color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">미접속</span>
-										                </c:otherwise>
-										            </c:choose>
+												        <c:when test="${student.userStatus eq '학습중'}">
+												            <span style="background: #e7f5ff; color: #228be6; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">학습중</span>
+												        </c:when>
+												        <c:otherwise>
+												            <span style="background: #fff4e6; color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">미접속</span>
+												        </c:otherwise>
+												    </c:choose>
 										        </td>
 										    </tr>
 										</c:forEach>
@@ -162,7 +166,7 @@
 <script src="/resources/js/commons.js"></script>
 
 <script>
-// 그래디언트 배경색 생성을 위한 유틸리티 함수
+
 function getGradient(ctx, chartArea, color) {
     if (!chartArea) return null;
     const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
@@ -171,86 +175,104 @@ function getGradient(ctx, chartArea, color) {
     return gradient;
 }
 
-// 1. 꺾은선 그래프 (진도율 추이) - 디자인 수정
+const labels = [
+    <c:forEach var="vo" items="${weeklyProgress}" varStatus="s">
+        '${vo.label}'${!s.last ? ',' : ''}
+    </c:forEach>
+];
+
+const dataValues = [
+    <c:forEach var="vo" items="${weeklyProgress}" varStatus="s">
+        ${vo.value}${!s.last ? ',' : ''}
+    </c:forEach>
+];
+
+const container = document.getElementById('chart1Container');
+const dynamicWidth = labels.length * 100;
+container.style.width = (dynamicWidth > 780 ? dynamicWidth : 780) + 'px';
+
 const ctx1 = document.getElementById('chart1').getContext('2d');
-const mainColor = '#0e506e'; // 테마 컬러
+const mainColor = '#0e506e';
 
 new Chart(ctx1, {
     type: 'line',
     data: {
-        labels: ['1주차', '2주차', '3주차', '4주차', '5주차'],
+        labels: labels,
         datasets: [{
-            label: '진도율',
-            data: [15, 38, 55, 72, 88],
+            label: '평균 진도율',
+            data: dataValues,
             borderColor: mainColor,
-            backgroundColor: function(context) { // 동적 그래디언트 적용
+            backgroundColor: function(context) {
                 const chart = context.chart;
                 const {ctx, chartArea} = chart;
                 return getGradient(ctx, chartArea, mainColor);
             },
-            fill: true,                // 선 아래 채우기
-            tension: 0.4,              // 부드러운 곡선 효과
-            pointRadius: 5,            // 점 크기 키움
-            pointBackgroundColor: '#fff', // 점 내부 흰색
-            pointBorderWidth: 2,       // 점 테두리
-            pointHoverRadius: 7        // 마우스 올렸을 때 점 크기
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 2
         }]
     },
     options: {
         responsive: true,
         maintainAspectRatio: false,
-        layout: { padding: { top: 10, bottom: 10 } },
         plugins: {
-            legend: { display: false }, // 상단 범례 숨김 (깔끔하게)
-            tooltip: {
-                callbacks: {
-                    label: function(context) { return context.parsed.y + '%'; } // 툴팁에 % 추가
-                }
-            }
+            legend: { display: false },
+    		
+		    tooltip: {
+		        callbacks: {
+		            label: function(context) {
+		                let label = context.dataset.label || '';
+		                if (label) {
+		                    label += ': ';
+		                }
+		                if (context.parsed.y !== null) {
+		                    label += context.parsed.y + '%'; 
+		                }
+		                return label;
+		            }
+		        }
+		    }
+    
         },
         scales: {
             y: { 
                 beginAtZero: true, 
-                max: 100, 
-                ticks: { 
-                    stepSize: 20,
-                    callback: v => v + '%' // Y축 라벨에 % 추가
-                },
-                grid: { color: 'rgba(0, 0, 0, 0.03)' } // 연한 그리드 선
+                max: 100,
+                ticks: { callback: v => v + '%' }
             },
-            x: { grid: { display: false } } // X축 그리드 숨김
+            x: { grid: { display: false } }
         }
     }
 });
 
-// 2. 도넛 그래프 (시험 응시율) - 디자인 수정 (중앙 퍼센트 플러그인 포함)
+// 도넛 그래프 (시험 응시율)
 const ctx2 = document.getElementById('chart2').getContext('2d');
-// 실제 데이터는 서버에서 가져온 testRate 변수 등을 활용하세요.
-const attendanceRate = 82; // 예시 응시율
-const successColor = '#27ae60'; // 응시 완료 컬러
+const attendanceRate = ${not empty roomDetail.testRate ? roomDetail.testRate : 0};
+const successColor = '#27ae60'; 
 
-// 도넛 중앙에 텍스트를 그리는 커스텀 플러그인 정의
 const centerTextPlugin = {
     id: 'centerText',
-    afterDraw(chart, args, options) {
-        const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+    afterDraw(chart) {
+        const { ctx, chartArea: { top, bottom, left, right } } = chart;
         ctx.save();
         
-        // 중앙 위치 계산
+        // 차트 중앙
         const centerX = (left + right) / 2;
         const centerY = (top + bottom) / 2;
 
-        // 텍스트 스타일 설정 (퍼센트 숫자)
+        // 퍼센트 숫자
         ctx.font = 'bold 36px "나눔 고딕", sans-serif';
         ctx.fillStyle = successColor;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(attendanceRate + '%', centerX, centerY - 5); // 숫자를 살짝 위로
+        ctx.fillText(attendanceRate + '%', centerX, centerY - 10); 
 
-        // 텍스트 스타일 설정 (단위/설명)
+        // '응시율' 글씨
         ctx.font = '14px "나눔 고딕", sans-serif';
         ctx.fillStyle = '#868e96';
-        ctx.fillText('응시율', centerX, centerY + 25); // '응시율' 텍스트를 숫 아래에
+        ctx.fillText('응시율', centerX, centerY + 30); 
 
         ctx.restore();
     }
@@ -262,30 +284,37 @@ new Chart(ctx2, {
         labels: ['응시 완료', '미응시'],
         datasets: [{
             data: [attendanceRate, 100 - attendanceRate],
-            backgroundColor: [successColor, '#f1f3f5'], // 초록색과 연회색 조화
+            backgroundColor: [successColor, '#f1f3f5'],
             hoverOffset: 4,
-            borderWidth: 0,
-            weight: 1 // 도넛 두께감 조절
+            borderWidth: 0
         }]
     },
     options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '80%', // 숫자가 들어갈 공간 확보
+
+        layout: {
+            padding: {
+            	left: 130,
+                right: 20 
+            }
+        },
+        cutout: '80%',
         plugins: {
             legend: {
-                position: 'right', // 범례를 오른쪽에 배치
+                position: 'right',
+                align: 'center', 
                 labels: {
-                    boxWidth: 10,
-                    padding: 20,
-                    font: { size: 13, weight: 'bold' },
-                    usePointStyle: true // 범례 박스를 점(원) 모양으로
+                    boxWidth: 12,
+                    padding: 25,
+                    font: { size: 14, weight: 'bold' },
+                    usePointStyle: true
                 }
             },
-            tooltip: { enabled: false } // 중앙에 숫자가 있으니 툴팁은 숨김 (깔끔하게)
+            tooltip: { enabled: false }
         }
     },
-    plugins: [centerTextPlugin] // 위에서 정의한 플러그인 등록
+    plugins: [centerTextPlugin]
 });
 	
 	$(document).ready(function() {

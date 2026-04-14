@@ -1,6 +1,9 @@
 package com.school.service;
 
 import java.sql.SQLException;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.school.dto.LearningStatusVO;
 
 public interface LearningStatusService {
@@ -18,4 +21,6 @@ public interface LearningStatusService {
     LearningStatusVO getLearningStatus(LearningStatusVO status) throws SQLException;
     
     int getLastLearningSeq(LearningStatusVO status) throws SQLException;
+    
+    LearningStatusVO selectStudentLearningStatusAtManage (@Param("userNum") String userNum, @Param("claNum") String claNum) throws SQLException;
 }

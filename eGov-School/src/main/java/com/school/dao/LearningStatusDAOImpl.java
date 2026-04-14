@@ -1,9 +1,12 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+
 import com.school.dto.LearningStatusVO;
 
 
@@ -41,5 +44,23 @@ public class LearningStatusDAOImpl implements LearningStatusDAO {
 		// 만약 데이터가 없으면 null이 반환될 수 있으므로 기본값을 처리
 	    Integer lastSeq = session.selectOne("LearningStatus-Mapper.selectLastLearningSeq", status);
 	    return (lastSeq == null) ? 1 : lastSeq;
+	}
+
+	
+	@Override
+	public List<LearningStatusVO> selectLearningStatusList(LearningStatusVO status) throws SQLException {
+	    return session.selectList("LearningStatus-Mapper.selectLearningStatusList", status);
+	}
+	
+	@Override
+	public LearningStatusVO selectStudentLearningStatusAtManage(String userNum, String claNum) throws SQLException {
+		
+		Map <String, Object> statusManage = new HashMap <> ();
+		
+		statusManage.put("userNum", userNum);
+		statusManage.put("claNum", claNum);
+		
+		return session.selectOne("LearningStatus-Mapper.selectStudentLearningStatusAtManage", statusManage);
+		
 	}
 }

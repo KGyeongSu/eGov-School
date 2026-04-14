@@ -23,5 +23,8 @@ public class LearningStatusVO {
     private Date prgLastdate;    
     
     private double watchTime;    
-    private double progress;     
+    private double progress;    
+    
+    // 강사 강의 관리 학생 진도율
+    private String status;
 }
