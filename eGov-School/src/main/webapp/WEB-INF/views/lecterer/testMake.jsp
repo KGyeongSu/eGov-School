@@ -150,7 +150,7 @@
 	                    <div class="status_content" data-idx="${i}">
 	                        <ul class="question_status_list">
 	                            <!-- 등록 완료 상태 -->
-	                            <c:forEach var="i" begin="1" end="20">
+	                            <c:forEach var="i" begin="1" end="3">
 		                            <li class="item ${i == 1 ? 'active' : ''}" data-idx="${i}" style="cursor: pointer !important;">
 		                                <span class="q_no">${i < 10 ? '0' : ''}${i}</span>
 		                                <span class="q_title">미등록 문항</span>
@@ -196,7 +196,7 @@ const editData = {
 };
 
 // 식별자 선언 & 초기화
-const totalQuestions = 20;
+const totalQuestions = 3;
 let currentNum = 1;     
 let questionList = editData.questions.length > 0 ? editData.questions : []; 
 
@@ -402,7 +402,10 @@ function refreshUI(num) {
     	        saveTemp();
 
     	        if (questionList.filter(q => q).length < totalQuestions) {
-    	            if (!confirm("미작성 문항이 있습니다.")) return;
+    	        	
+    	            alert( totalQuestions + "문항을 모두 작성해야 등록됩니다."); 
+    	    		return;
+    	    		
     	        }
 
     	        const finalData = {
@@ -452,6 +455,30 @@ function refreshUI(num) {
     	    // 페이지 로드 시 첫 번째 문항 초기화
     	    refreshUI(1);
     	});
+ 	
+    $(document).ready(function() {
+    	
+        // 알림 배지 초기 로드 및 1분마다 갱신
+        updateReputationAlarm();
+        setInterval(updateReputationAlarm, 60000);
+        
+    });
+
+    // 알림 배지 AJAX 함수
+    function updateReputationAlarm() {
+        $.ajax({
+            url: '${pageContext.request.contextPath}/lecterer/reputationAlarm',
+            type: 'GET',
+            success: function(count) {
+                const badge = $('#repBadge');
+                if (count > 0) {
+                    badge.text(count).show();
+                } else {
+                    badge.hide();
+                }
+            }
+        });
+    }
 
 </script>
 

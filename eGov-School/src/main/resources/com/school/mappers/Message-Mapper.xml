@@ -11,7 +11,7 @@
 
 	<insert id="insertMessage" parameterType="message">
 		INSERT INTO MESSAGE(MS_NUM, MS_CONTENT, MS_SENDER_NUM, MS_RECEIVER_NUM, TET_NUM)
-		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum}, #{tetNum})
+		VALUES(#{msNum}, #{msContent}, #{msSenderNum}, #{msReceiverNum}, #{tetNum, jdbcType=VARCHAR})
 	</insert>
 
 	<select id="selectReceivedList" parameterType="str" resultType="message">

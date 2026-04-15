@@ -1,4 +1,4 @@
-	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 	<!DOCTYPE html>
@@ -61,13 +61,11 @@
 	                            <div class="course-card-custom shadow-sm">
 	                                <div class="card-thumb-area">
 									    <c:choose>
-									        <%-- VO에 추가한 claSaveName이 있는지 확인 --%>
 									        <c:when test="${not empty apply.claSaveName}">
 									            <img src="${pageContext.request.contextPath}${apply.claSavePath}/${apply.claSaveName}" 
 									                 style="width:100%; height:100%; object-fit:cover;"
 									                 onerror="this.src='${pageContext.request.contextPath}/resources/images/no-image.png'">
 									        </c:when>
-									        <%-- 없으면 기본 이미지 --%>
 									        <c:otherwise>
 									            <img src="${pageContext.request.contextPath}/resources/images/no-image.png" 
 									                 style="width:100%; height:100%; object-fit:cover;">
@@ -131,7 +129,6 @@
 	                        </div>
 	                    </div>
 	
-	                    <!-- 미니 캘린더 + 힌트 -->
 	                    <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
 	                        <div id="mini-calendar" style="flex:1; min-height:0;"></div>
 	                        <div class="calendar-hint">
@@ -145,7 +142,6 @@
 	        </div>
 	    </div>
 	
-	    <!-- 일정 관리 모달 -->
 	    <div class="modal fade" id="calendarModal" tabindex="-1">
 	        <div class="modal-dialog modal-xl">
 	            <div class="modal-content">
@@ -197,16 +193,27 @@
 	        new Chart(document.getElementById('evaluationChart'), {
 	            type: 'bar',
 	            data: {
-	                labels: [<c:forEach items="${result.endList}" var="e" end="3">'${e.claName}',</c:forEach>],
+	                labels: [
+	                    <c:forEach items="${result.endList}" var="e" end="3" varStatus="status">
+	                        '${e.claName}'${!status.last ? ',' : ''}
+	                    </c:forEach>
+	                ],
 	                datasets: [{
 	                    label: '취득 점수',
-	                    data: [<c:forEach items="${result.endList}" var="e" end="3">${e.erScore},</c:forEach>],
-	                    backgroundColor: '#0e506e',
+	                    data: [
+	                        <c:forEach items="${result.endList}" var="e" end="3" varStatus="status">
+	                            ${e.erScore}${!status.last ? ',' : ''}
+	                        </c:forEach>
+	                    ],
+	                    backgroundColor: [
+	                        <c:forEach items="${result.endList}" var="e" end="3" varStatus="status">
+	                            '${e.erScore >= 60 ? "#28a745" : "#dc3545"}'${!status.last ? ',' : ''}
+	                        </c:forEach>
+	                    ],
 	                    borderRadius: 6,
 	                    borderSkipped: false,
 	                    categoryPercentage: 0.3, 
 	                    barPercentage: 0.8
-	                   
 	                }]
 	            },
 	            options: {
@@ -247,25 +254,17 @@
 	                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' },
 	                dayCellContent: (info) => info.date.getDate(),
 	                events: loadEvents(),
-	
-	                // 날짜 선택 → 일정 추가
 	                select: function(info) {
 	                    const startLabel = info.startStr.slice(0,10);
 	                    const endDate   = new Date(info.end); endDate.setDate(endDate.getDate()-1);
 	                    const endLabel  = endDate.toISOString().slice(0,10);
 	                    const dateLabel = startLabel === endLabel ? startLabel : startLabel + ' ~ ' + endLabel;
-	
 	                    Swal.fire({
 	                        title: '<span style="font-size:18px; font-weight:800; color:#0e506e;">새 일정 추가</span>',
 	                        html: '<div style="font-size:12px; color:#64748b; margin-bottom:8px;"><i class="fa-solid fa-calendar-day" style="color:#0e506e;"></i> ' + dateLabel + '</div>',
 	                        input: 'text',
 	                        inputPlaceholder: '일정 제목을 입력하세요',
 	                        inputAttributes: { maxlength: 30 },
-	                        customClass: {
-	                            input: 'swal-custom-input',
-	                            confirmButton: 'swal-confirm-btn',
-	                            cancelButton: 'swal-cancel-btn'
-	                        },
 	                        showCancelButton: true,
 	                        confirmButtonColor: '#0e506e',
 	                        confirmButtonText: '<i class="fa-solid fa-plus"></i> 추가',
@@ -273,8 +272,6 @@
 	                        didOpen: () => {
 	                            const input = Swal.getInput();
 	                            input.style.cssText = 'border-radius:8px; border:1.5px solid #cbd5e1; font-size:14px; padding:10px 14px; box-sizing:border-box;';
-	                            input.addEventListener('focus', () => { input.style.borderColor = '#0e506e'; input.style.outline = 'none'; input.style.boxShadow = '0 0 0 3px rgba(14,80,110,0.15)'; });
-	                            input.addEventListener('blur',  () => { input.style.borderColor = '#cbd5e1'; input.style.boxShadow = 'none'; });
 	                        }
 	                    }).then((result) => {
 	                        if (result.isConfirmed && result.value && result.value.trim()) {
@@ -290,18 +287,11 @@
 	                        fullCalendar.unselect();
 	                    });
 	                },
-	
-	                // 이벤트 클릭 → 삭제
 	                eventClick: function(info) {
 	                    const startStr = info.event.startStr ? info.event.startStr.slice(0,10) : '';
 	                    Swal.fire({
 	                        title: '<span style="font-size:16px; font-weight:800; color:#1e293b;">일정 삭제</span>',
-	                        html: '<div style="margin:10px 0;">' +
-	                              '<div style="background:#fef2f2; border-radius:8px; padding:12px; margin-bottom:8px;">' +
-	                              '<div style="font-weight:700; color:#dc3545; font-size:14px;">' + info.event.title + '</div>' +
-	                              (startStr ? '<div style="font-size:12px; color:#94a3b8; margin-top:3px;"><i class="fa-solid fa-calendar"></i> ' + startStr + '</div>' : '') +
-	                              '</div>' +
-	                              '<div style="font-size:12px; color:#64748b;">이 일정을 삭제하면 복구할 수 없습니다.</div></div>',
+	                        html: '<div style="margin:10px 0;"><div style="background:#fef2f2; border-radius:8px; padding:12px; margin-bottom:8px;"><div style="font-weight:700; color:#dc3545; font-size:14px;">' + info.event.title + '</div>' + (startStr ? '<div style="font-size:12px; color:#94a3b8; margin-top:3px;"><i class="fa-solid fa-calendar"></i> ' + startStr + '</div>' : '') + '</div><div style="font-size:12px; color:#64748b;">이 일정을 삭제하면 복구할 수 없습니다.</div></div>',
 	                        icon: 'warning',
 	                        showCancelButton: true,
 	                        confirmButtonColor: '#dc3545',
@@ -314,7 +304,6 @@
 	                            Swal.fire({
 	                                icon: 'success',
 	                                title: '삭제되었습니다',
-	                                text: '저장하기를 눌러 반영하세요.',
 	                                timer: 1800,
 	                                showConfirmButton: false,
 	                                toast: true,
@@ -324,14 +313,11 @@
 	                    });
 	                }
 	            });
-	
 	            fullCalendar.render();
 	        }
 	
-	        // ── 4. 저장하기 ──────────────────────────────────────
 	        document.getElementById('saveBtn').addEventListener('click', function() {
 	            if (!fullCalendar) return;
-	
 	            const currentEvents = fullCalendar.getEvents().map(e => ({
 	                id: e.id || Date.now().toString(),
 	                title: e.title,
@@ -340,29 +326,15 @@
 	                allDay: e.allDay,
 	                color: '#0e506e'
 	            }));
-	
 	            saveEvents(currentEvents);
-	
-	            // 미니 캘린더 갱신
 	            miniCalendar.getEvents().forEach(e => e.remove());
 	            currentEvents.forEach(e => miniCalendar.addEvent(e));
-	
 	            $('#calendarModal').modal('hide');
-	
 	            setTimeout(() => {
-	                Swal.fire({
-	                    icon: 'success',
-	                    title: '저장 완료!',
-	                    text: '일정이 대시보드에 반영되었습니다.',
-	                    timer: 2000,
-	                    showConfirmButton: false,
-	                    toast: true,
-	                    position: 'top-end'
-	                });
+	                Swal.fire({ icon: 'success', title: '저장 완료!', timer: 2000, showConfirmButton: false, toast: true, position: 'top-end' });
 	            }, 300);
 	        });
 	
-	        // ── 5. 모달 열고 닫기 ────────────────────────────────
 	        $('#calendarModal').on('shown.bs.modal', function() { buildFullCalendar(); });
 	        $('#calendarModal').on('hidden.bs.modal', function() {
 	            if (fullCalendar) { fullCalendar.destroy(); fullCalendar = null; }

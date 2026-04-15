@@ -169,7 +169,7 @@
         document.getElementById('submitBtn').style.display = "none";
         
         var headerHtml = '<span>최종 점수: <b style="color:red; font-size:1.3em;">' + resultData.erScore + '</b>점</span>' +
-                         '<button class="nav-btn" style="margin-left:20px; background:#e9ecef;" onclick="location.href=\'${pageContext.request.contextPath}/user/main\'">목록으로</button>';
+                         '<button class="nav-btn" style="margin-left:20px; background:#e9ecef;" onclick="location.href=\'${pageContext.request.contextPath}/user/exam\'">목록으로</button>';
         document.getElementById('headerTitle').innerHTML = headerHtml;
         
         loadQuestion(1);

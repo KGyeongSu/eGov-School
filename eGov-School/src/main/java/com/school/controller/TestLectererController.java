@@ -210,7 +210,7 @@ public class TestLectererController {
 	// messageForm에 사용자 패논패 뿌려줄 목적
 	@ResponseBody
 	@GetMapping("/passStudent")
-	public String passStudent (String userNum, String claNum) throws Exception {
+	public String passStudent (@RequestParam("userNum") String userNum, @RequestParam("claNum") String claNum) throws Exception {
 		
 		// 서비스 부르기
 		String pnp = messageService.selectPassStudentByUserNum(userNum, claNum);

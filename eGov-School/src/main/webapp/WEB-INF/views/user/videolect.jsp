@@ -67,7 +67,7 @@
                         <c:choose>
                             <c:when test="${not empty lesson.lsnVideo}">
                                 <video id="lectureVideo" controls controlsList="nodownload" oncontextmenu="return false;">
-                                    <source src="${pageContext.request.contextPath}/resources/upload/lesson/${lesson.lsnVideo}" type="video/mp4">
+                                    <source src="${pageContext.request.contextPath}/upload/lesson/${lesson.lsnVideo}" type="video/mp4">
                                     브라우저가 비디오 재생을 지원하지 않습니다.
                                 </video>
                             </c:when>
