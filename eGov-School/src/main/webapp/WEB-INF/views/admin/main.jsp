@@ -189,16 +189,6 @@
 							<input type='text' name="perPageNum" value="" /> 
 							<input type='text' name="searchType" value="" /> 
 							<input type='text' name="keyword" value="" />
-							<c:choose>
-						        <%-- 1. 객체에 값이 있는 경우 우선순위 --%>
-						        <c:when test="${not empty roomDetail.claNum}">
-						            <input type='hidden' name="claNum" value="${roomDetail.claNum}" /> 
-						        </c:when>
-						        <%-- 2. 객체는 없지만 URL 파라미터에 있는 경우 --%>
-						        <c:when test="${not empty param.claNum}">
-						            <input type='hidden' name="claNum" value="${param.claNum}" />				            
-						        </c:when>
-						    </c:choose>
 						</form>
                     </div>
                 </div>
@@ -297,16 +287,6 @@
 							<input type='text' name="perPageNum" value="" /> 
 							<input type='text' name="searchType" value="" /> 
 							<input type='text' name="keyword" value="" />
-							<c:choose>
-						        <%-- 1. 객체에 값이 있는 경우 우선순위 --%>
-						        <c:when test="${not empty roomDetail.claNum}">
-						            <input type='hidden' name="claNum" value="${roomDetail.claNum}" /> 
-						        </c:when>
-						        <%-- 2. 객체는 없지만 URL 파라미터에 있는 경우 --%>
-						        <c:when test="${not empty param.claNum}">
-						            <input type='hidden' name="claNum" value="${param.claNum}" />				            
-						        </c:when>
-						    </c:choose>
 						</form>
                     </div>
                 </div>
@@ -329,8 +309,8 @@
                 <label>강좌 선택</label>
                 <select id="reg-cla-num" class="full">
                     <option value="">-- 강좌를 선택하세요 --</option>
-                    <c:forEach var="lesson" items="${lessonList}">
-                        <option value="${lesson.claNum}">${lesson.claName}</option>
+                    <c:forEach var="cla" items="${classList}">
+                        <option value="${cla.claNum}">${cla.claTitle}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -356,13 +336,13 @@
 
 <script>
     /* 가산점 기준 생성 모달 열기 */
-    function openRegModal(courseName, courseId) {
+/*     function openRegModal(courseName, courseId) {
         document.getElementById('gen-course').value    = courseName;
         document.getElementById('gen-course-id').value = courseId;
         document.getElementById('gen-detail').value   = '';
         document.getElementById('gen-note').value     = '';
         openModal('modal-gen');
-    }
+    } */
 
     /* 저장 */
     function saveGen() {

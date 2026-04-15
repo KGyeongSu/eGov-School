@@ -9,11 +9,9 @@ import com.school.cmd.PageMaker;
 import com.school.dao.BonusCriteriaDAO;
 import com.school.dao.ClassDAO;
 import com.school.dao.ExamResultDAO;
-import com.school.dto.BonusCriteriaVO;
 import com.school.dto.BonusStudentVO;
 import com.school.dto.BonusSubjectVO;
 import com.school.dto.ClassVO;
-import com.school.dto.LessonVO;
 import com.school.dto.RegInlearningVO;
 
 @Service
@@ -50,5 +48,10 @@ public class AdminServiceImpl implements AdminService {
 		int offset = pageMaker.getStartRow();
 		int limit = pageMaker.getPage() * pageMaker.getPerPageNum();
     	return examResultDAO.getBStList(offset, limit);
+	}
+
+	@Override
+	public List<ClassVO> getClassList() throws SQLException {	
+		return classDAO.getClassList();
 	}
 }
