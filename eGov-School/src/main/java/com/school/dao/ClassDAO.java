@@ -66,5 +66,6 @@ public interface ClassDAO {
 	void approveClass(ClassVO classVO) throws SQLException;
 	
 	int updateClassStaEndDate(RegInlearningVO regInlearningVO) throws SQLException;
+	
 }
  

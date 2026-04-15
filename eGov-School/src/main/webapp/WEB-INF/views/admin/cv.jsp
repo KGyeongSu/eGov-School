@@ -12,7 +12,8 @@
 </head>
 <body>
 
-<!-- ===== 헤더 ===== -->
+
+ <!-- ===== 헤더 ===== -->
 <header>
     <div class="logo">
         <a href="/admin/main">
@@ -23,7 +24,7 @@
         <span class="hd-user">${adminName} 님의 대시보드</span>
         <button class="btn-logout" onclick="doLogout()">로그아웃</button>
     </div>
-</header>
+</header> 
 
 <!-- ===== 레이아웃 ===== -->
 <div class="layout">

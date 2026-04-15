@@ -15,7 +15,7 @@ public class BonusCriteriaVO {
     private String bcNum;
     private String claNum;
     private String bcContent;
-    private Integer bcScore;
+    private int bcScore;
     private String bcNote;
     private String userNum;
     private Date bcRegdate;

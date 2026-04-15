@@ -51,4 +51,12 @@ public class AdminServiceImpl implements AdminService {
 		int limit = pageMaker.getPage() * pageMaker.getPerPageNum();
     	return examResultDAO.getBStList(offset, limit);
 	}
+    
+    @Override
+	public int regBonus(BonusCriteriaVO bc) throws SQLException {
+		String bcNum = bonusCriteriaDAO.selectBonusCriteriaSeqNext();
+		bc.setBcNum(bcNum);
+		return bonusCriteriaDAO.insertBonusCriteria(bc);
+	};
+    
 }

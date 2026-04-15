@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function openRegModal() {
-    document.getElementById('reg-cla-num').value    = '';
     document.getElementById('reg-bc-content').value = '';
     document.getElementById('reg-bc-score').value   = '';
     document.getElementById('reg-bc-note').value    = '';
@@ -71,21 +70,20 @@ function openRegModal() {
 }
 
 function submitReg() {
-    var claNum    = document.getElementById('reg-cla-num').value;
     var bcContent = document.getElementById('reg-bc-content').value.trim();
-    var bcScore   = document.getElementById('reg-bc-score').value.trim();
-    var bcNote    = document.getElementById('reg-bc-note').value.trim();
+    var bcNote = document.getElementById('reg-bc-note').value.trim();
+    var bcScore = document.getElementById('reg-bc-score').value.trim();
+	var userNum = document.getElementById('userNum').value;
 
-    if (!claNum)    { alert('강좌를 선택하세요.');          return; }
-    if (!bcContent) { alert('가산점 상세내용을 입력하세요.'); return; }
-    if (!bcScore)   { alert('가산점 점수를 입력하세요.');    return; }
+    if (!bcContent) { alert('카테고리명을 입력하세요.'); return; }
+    if (!bcNote) { alert('가산점 상세내용을 입력하세요.'); return; }
+    if (!bcScore) { alert('가산점 점수를 입력하세요.'); return; }
 
     var data = {
-        claNum    : parseInt(claNum),
         bcContent : bcContent,
-        bcScore   : parseInt(bcScore),
-        bcNote    : bcNote,
-        userNum   : LOGIN_USER_NUM
+		bcNote : bcNote,
+        bcScore : parseInt(bcScore),
+		userNum : userNum
     };
 
     fetch('/admin/regBonus', {
@@ -104,7 +102,7 @@ function submitReg() {
         }
     })
     .catch(function(err) {
-        console.error(err);
+        console.log(err);
         alert('서버 오류가 발생했습니다.');
     });
 }

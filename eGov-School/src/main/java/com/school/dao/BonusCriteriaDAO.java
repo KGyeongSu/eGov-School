@@ -13,7 +13,7 @@ public interface BonusCriteriaDAO {
 
 	String selectBonusCriteriaSeqNext() throws SQLException;
 	
-	void insertBonusCriteria(BonusCriteriaVO bonus) throws SQLException;
+	int insertBonusCriteria(BonusCriteriaVO bonus) throws SQLException;
 	
 	List<BonusCriteriaVO> selectBonusCriteriaList() throws SQLException;
 	

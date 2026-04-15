@@ -1,7 +1,9 @@
 package com.school.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +73,7 @@ public class AdminController {
 	public void showMain(@RequestParam("num") int num, PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
 		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
 		model.addAttribute("adminName", loginUser.getUserName());
+		model.addAttribute("adminNum", loginUser.getUserNum());
 		if (num == 0) {
 			List<BonusSubjectVO> bonusSubjectVOList = adminService.getBSbList(pageMaker);
 			model.addAttribute("bsbVOs", bonusSubjectVOList);
@@ -88,10 +91,7 @@ public class AdminController {
 		model.addAttribute("pageMaker", pageMaker);
 	}
 
-	@GetMapping("/curriculum")
-	public void getCurriculum() {
-		
-	}
+	
     
     // 육상우
     @GetMapping("/feedback")
@@ -174,6 +174,23 @@ public class AdminController {
         }
     }
     
+    @GetMapping("/cv")
+    public String cv(Model model) throws Exception {
+        return "admin/cv";
+    }
     
-
+    @PostMapping("/regBonus")
+	@ResponseBody
+	public Map<String, Object> regBonus(@RequestBody BonusCriteriaVO bc) {
+		Map<String, Object> result = new HashMap<>();
+	    try {
+	        // 서비스 로직 실행
+	        adminService.regBonus(bc);
+	        result.put("success", true);
+	    } catch (Exception e) {
+	        result.put("success", false);
+	        result.put("message", "저장 중 오류가 발생했습니다.");
+	    }
+	    return result;
+	}
 }

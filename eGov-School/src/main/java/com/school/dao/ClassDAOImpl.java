@@ -218,5 +218,6 @@ public class ClassDAOImpl implements ClassDAO {
 	    map.put("completeCondition", regInlearningVO.getCompleteCondition());
 	    return session.update("Class-Mapper.updateClassStaEndDate", map);
 	}
+	
 
 }

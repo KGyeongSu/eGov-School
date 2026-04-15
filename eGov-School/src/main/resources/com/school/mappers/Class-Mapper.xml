@@ -353,11 +353,6 @@
     WHERE cla_num = #{courseNo}
 </update>
 
-<select id="getClassList" resultType="com.school.dto.ClassVO">
-    SELECT CLA_NUM, CLA_TITLE 
-    FROM CLASS
-    ORDER BY CLA_REGDATE DESC
-</select>
 
 <insert id="insertBonusCriteria" parameterType="com.school.dto.BonusCriteriaVO">
     INSERT INTO BONUS_CRITERIA (BC_NUM, CLA_NUM, BC_CONTENT, BC_SCORE, BC_NOTE, USER_NUM, BC_REGDATE)

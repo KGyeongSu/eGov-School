@@ -16,4 +16,5 @@ public interface AdminService {
 	
 	public List<BonusSubjectVO> getBSbList(PageMaker pageMaker) throws SQLException;
 	public List<BonusStudentVO> getBStList(PageMaker pageMaker) throws SQLException;
+	public int regBonus(BonusCriteriaVO bc) throws SQLException;
 }

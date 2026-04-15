@@ -22,13 +22,14 @@
 		<div class="logo" style="margin-left:20px">
 			<a href="/main"><img src="../../../resources/images/dashboardLogo.png" /></a>
 		</div>
+		
 
 		<nav class="menu">
 			<ul>
-				<li><a href=""><span>공무원 선발 가산점</span></a></li>
-                <li><a href=""><span>강좌 평가</span></a></li>
-				<li><a href=""><span>강사지원자 이력서 확인</span></a></li>
-				<li><a href=""><span>강좌 커리큘럼 확인</span></a></li>
+				<li><a href="/admin/main?num=2"><span>공무원 선발 가산점</span></a></li>
+                <li><a href="/admin/feedback"><span>강좌 평가</span></a></li>
+				<li><a href="/admin/cv"><span>강사지원자 이력서 확인</span></a></li>
+				<li><a href="/admin/curriculum"><span>강좌 커리큘럼 확인</span></a></li>
 			</ul>
 		</nav>
 </header>

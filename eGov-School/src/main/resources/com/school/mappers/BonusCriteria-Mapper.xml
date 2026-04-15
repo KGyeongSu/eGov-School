@@ -12,8 +12,8 @@
 
 	<!-- 가산점 기준 등록 -->
 	<insert id="insertBonusCriteria" parameterType="bonus">
-		INSERT INTO BONUS_CRITERIA(BC_NUM, CLA_NUM, BC_CONTENT, BC_SCORE, BC_NOTE, USER_NUM)
-		VALUES(#{bcNum}, #{claNum}, #{bcContent}, #{bcScore}, #{bcNote}, #{userNum})
+		INSERT INTO BONUS_CRITERIA (bc_num, bc_content, bc_score, bc_note, user_num, bc_regdate, cla_num)
+		VALUES(#{bcNum}, #{bcContent}, #{bcScore}, #{bcNote}, #{userNum}, SYSDATE, #{claNum, jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 가산점 기준 전체 목록 조회 (강좌명 JOIN) -->
