@@ -20,7 +20,7 @@
         </a>
     </div>
     <div class="header-right">
-        <span class="hd-user">김진아 님의 대시보드</span>
+        <span class="hd-user">${adminName} 님의 대시보드</span>
         <button class="btn-logout">로그아웃</button>
     </div>
 </header>
@@ -37,7 +37,7 @@
             <a href="/admin/curriculum" class="on">강좌 커리큘럼 확인</a>
         </div>
         <div class="side-bottom">
-            <strong>김진아</strong>
+            <strong>${adminName}</strong>
             관리자
         </div>
     </div>
@@ -69,7 +69,7 @@
                                     <!--
                                         DB: SELECT course_no FROM courses WHERE id = ?
                                     -->
-                                    <input type="text" id="courseNo" class="full" value="C-2026-001" readonly>
+                                    <input type="text" id="courseNo" class="full" value="34" readonly>
                                 </td>
                             </tr>
                             <tr>
@@ -139,12 +139,6 @@
             <div class="section-box" style="flex:1; margin-bottom:0;">
                 <div class="section-head">커리큘럼</div>
                 <div class="section-body" style="padding:10px;">
-                    <!--
-                        DB: SELECT lec_no, lec_title, lec_time
-                            FROM lectures
-                            WHERE course_id = ?
-                            ORDER BY lec_no ASC
-                    -->
                     <table class="board-table">
                         <thead>
                             <tr>
@@ -171,10 +165,6 @@
                 <div class="section-box" style="margin-bottom:10px;">
                     <div class="section-head">학습목표</div>
                     <div class="section-body">
-                        <!--
-                            DB: SELECT learn_goal FROM courses WHERE id = ?
-                            관리자가 수정 가능
-                        -->
                         <textarea id="learnGoal" class="full" rows="4"
                                   placeholder="학습목표를 입력하세요.">행정법의 기본 원리와 체계를 이해하고
 공무원으로서 행정업무에 적용할 수 있는
@@ -210,9 +200,9 @@
     </div><!-- /.main -->
 </div><!-- /.layout -->
 
-<footer>
+<!-- <footer>
     <strong>대전광역시 인재개발원</strong> | eGov-School 관리자 페이지 &nbsp;|&nbsp; Copyright &copy; 2026
-</footer>
+</footer> -->
 
 
 </body>

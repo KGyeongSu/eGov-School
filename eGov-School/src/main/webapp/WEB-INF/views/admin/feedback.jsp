@@ -1,15 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
-    <!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin 공무원 대시보드 - 강사 피드백</title>
-    <link rel="stylesheet" href="/resources/css/admin/admin.css">
+    <title>강사 피드백 - 관리자 대시보드</title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/lecterer/commons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <script src="/resources/js/admin.js"></script>
 </head>
+
 <body>
 
 <!-- ===== 헤더 ===== -->
@@ -20,7 +19,7 @@
         </a>
     </div>
     <div class="header-right">
-        <span class="hd-user">김진아 님의 대시보드</span>
+        <span class="hd-user">${adminName} 님의 대시보드</span>
         <button class="btn-logout" onclick="doLogout()">로그아웃</button>
     </div>
 </header>
@@ -37,7 +36,7 @@
             <a href="/admin/curriculum">강좌 커리큘럼 확인</a>
         </div>
         <div class="side-bottom">
-            <strong>김진아</strong>
+            <strong>${adminName}</strong>
             관리자
         </div>
     </div>
@@ -81,45 +80,12 @@
                         <button class="btn btn-sm" onclick="resetFeedback()">초기화</button>
                     </div>
 
-                    <!-- 피드백 카드 그리드 -->
-                    <!--
-                        DB 연결 시:
-                        SELECT f.id, s.name, i.name as instructor, c.course_name, f.score, f.comment
-                        FROM feedback f
-                        JOIN students s ON f.student_id = s.id
-                        JOIN instructors i ON f.instructor_id = i.id
-                        JOIN courses c ON f.course_id = c.id
-                    -->
+
                     <div class="card-grid" id="fbGrid">
                         <div class="card-item" data-instructor="김강사" data-score="높음" data-name="홍길동"
                              onclick="openFbModal('홍길동','김강사','행정법 기초','강의가 매우 유익했습니다.',4.5)">
                             <div class="card-thumb">피드백 카드</div>
                             <div class="card-info">홍길동 | 행정법 기초<br>강사: 김강사 ★★★★☆ 4.5</div>
-                        </div>
-                        <div class="card-item" data-instructor="이강사" data-score="높음" data-name="이영희"
-                             onclick="openFbModal('이영희','이강사','세무직 실무','설명이 명확하고 이해하기 쉬웠습니다.',5.0)">
-                            <div class="card-thumb">피드백 카드</div>
-                            <div class="card-info">이영희 | 세무직 실무<br>강사: 이강사 ★★★★★ 5.0</div>
-                        </div>
-                        <div class="card-item" data-instructor="김강사" data-score="낮음" data-name="박민수"
-                             onclick="openFbModal('박민수','김강사','관세법 정리','조금 어려웠지만 도움이 됐습니다.',3.0)">
-                            <div class="card-thumb">피드백 카드</div>
-                            <div class="card-info">박민수 | 관세법 정리<br>강사: 김강사 ★★★☆☆ 3.0</div>
-                        </div>
-                        <div class="card-item" data-instructor="이강사" data-score="높음" data-name="김지은"
-                             onclick="openFbModal('김지은','이강사','보건직 과정','실무에 바로 적용할 수 있었습니다.',4.0)">
-                            <div class="card-thumb">피드백 카드</div>
-                            <div class="card-info">김지은 | 보건직 과정<br>강사: 이강사 ★★★★☆ 4.0</div>
-                        </div>
-                        <div class="card-item" data-instructor="박강사" data-score="낮음" data-name="최영준"
-                             onclick="openFbModal('최영준','박강사','디지털 행정','내용이 너무 어려웠습니다.',2.5)">
-                            <div class="card-thumb">피드백 카드</div>
-                            <div class="card-info">최영준 | 디지털 행정<br>강사: 박강사 ★★☆☆☆ 2.5</div>
-                        </div>
-                        <div class="card-item" data-instructor="이강사" data-score="높음" data-name="정수현"
-                             onclick="openFbModal('정수현','이강사','세무직 실무','최고의 강의였습니다.',4.8)">
-                            <div class="card-thumb">피드백 카드</div>
-                            <div class="card-info">정수현 | 세무직 실무<br>강사: 이강사 ★★★★★ 4.8</div>
                         </div>
                     </div>
                 </div>
@@ -144,9 +110,6 @@
                             <thead><tr><th>강좌</th><th>평점</th></tr></thead>
                             <tbody>
                                 <tr><td class="left">행정법 기초</td><td>4.5</td></tr>
-                                <tr><td class="left">세무직 실무</td><td>4.9</td></tr>
-                                <tr><td class="left">관세법 정리</td><td>3.8</td></tr>
-                                <tr><td class="left">보건직 과정</td><td>4.0</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -163,9 +126,6 @@
                         <table class="board-table" style="margin-top:10px;">
                             <thead><tr><th>강좌</th><th>수강생</th></tr></thead>
                             <tbody>
-                                <tr><td class="left">행정법 기초</td><td>312명</td></tr>
-                                <tr><td class="left">세무직 실무</td><td>280명</td></tr>
-                                <tr><td class="left">관세법 정리</td><td>198명</td></tr>
                                 <tr><td class="left">보건직 과정</td><td>180명</td></tr>
                             </tbody>
                         </table>

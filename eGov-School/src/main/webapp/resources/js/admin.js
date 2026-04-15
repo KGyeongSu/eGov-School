@@ -62,6 +62,53 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+function openRegModal() {
+    document.getElementById('reg-cla-num').value    = '';
+    document.getElementById('reg-bc-content').value = '';
+    document.getElementById('reg-bc-score').value   = '';
+    document.getElementById('reg-bc-note').value    = '';
+    openModal('modal-reg');
+}
+
+function submitReg() {
+    var claNum    = document.getElementById('reg-cla-num').value;
+    var bcContent = document.getElementById('reg-bc-content').value.trim();
+    var bcScore   = document.getElementById('reg-bc-score').value.trim();
+    var bcNote    = document.getElementById('reg-bc-note').value.trim();
+
+    if (!claNum)    { alert('강좌를 선택하세요.');          return; }
+    if (!bcContent) { alert('가산점 상세내용을 입력하세요.'); return; }
+    if (!bcScore)   { alert('가산점 점수를 입력하세요.');    return; }
+
+    var data = {
+        claNum    : parseInt(claNum),
+        bcContent : bcContent,
+        bcScore   : parseInt(bcScore),
+        bcNote    : bcNote,
+        userNum   : LOGIN_USER_NUM
+    };
+
+    fetch('/admin/regBonus', {
+        method  : 'POST',
+        headers : { 'Content-Type': 'application/json' },
+        body    : JSON.stringify(data)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(result) {
+        if (result.success) {
+            alert('가산점 기준이 등록되었습니다.');
+            closeModal('modal-reg');
+            location.reload();
+        } else {
+            alert('등록 실패: ' + (result.message || '다시 시도해주세요.'));
+        }
+    })
+    .catch(function(err) {
+        console.error(err);
+        alert('서버 오류가 발생했습니다.');
+    });
+}
+
 /* ========================
    전체 체크박스 선택/해제
 ======================== */
@@ -142,6 +189,46 @@ function doLogout() {
 /* ========================
    엑셀 다운로드 (알림만)
 ======================== */
-function exportExcel() {
+/*function exportExcel() {
     alert('엑셀 파일로 다운로드합니다.\n(실제 서비스에서는 서버에서 파일 생성 후 다운로드)');
+}*/
+
+
+
+/* ========================
+   인러닝 등록
+======================== */
+function publishToInlearning() {
+	const courseNo = document.getElementById("courseNo").value
+	const eduStart = document.getElementById("eduStart").value
+	const eduEnd = document.getElementById("eduEnd").value
+	const maxStudents = document.getElementById("maxStudents").value
+	const completeCondition = document.getElementById("completeCondition").value
+	
+	fetch('/admin/regInlearning', {
+	  method: 'POST',
+	  headers: {
+	    'Content-Type': 'application/json'
+	  },
+	  body: JSON.stringify({
+	    courseNo: courseNo,
+	    eduStart: eduStart,
+	    eduEnd: eduEnd,
+	    maxStudents: maxStudents,
+	    completeCondition: completeCondition
+	  })
+	})
+	.then(response => {
+	  return response.json();
+	})
+	.then(result => {
+	  if (result === 1) {
+	    alert("등록 성공");
+	  } else {
+	    alert("등록 실패. 강좌가 없거나 서버 오류입니다.");
+	  }
+	})
+	.catch(error => {
+	  console.error('오류:', error);
+	});
 }

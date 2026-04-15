@@ -78,7 +78,7 @@ public class PageMaker {
 	
 	private void calcData() {
 		
-		realEndPage = (int) (Math.ceil(totalCount / (double) perPageNum));
+		realEndPage = Math.max(1, (int) (Math.ceil(totalCount / (double) perPageNum)));
 		
 		endPage = (int) (Math.ceil(page / (double) displayPageNum) * displayPageNum);
 		startPage = (endPage - displayPageNum) + 1;

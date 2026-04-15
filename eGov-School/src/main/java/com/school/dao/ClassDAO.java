@@ -8,7 +8,9 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
+import com.school.dto.RegInlearningVO;
 import com.school.dto.UserVO;
+
 
 public interface ClassDAO {
 	
@@ -41,6 +43,8 @@ public interface ClassDAO {
 	int selectApprovedClassListCount(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
 
 	void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException;
+
+	int updateClassStaEndDate(RegInlearningVO regInlearningVO) throws SQLException;
 
 }
  

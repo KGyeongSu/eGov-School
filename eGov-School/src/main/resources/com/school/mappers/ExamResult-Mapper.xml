@@ -40,15 +40,34 @@
   	</insert>
   	
   	<select id="selectExamResultByTetAndUser" parameterType="examResult" resultType="examResult">
-    SELECT * FROM EXAM_RESULT 
-    WHERE TET_NUM = #{tetNum} 
-      AND USER_NUM = #{userNum}
-</select>
+	    SELECT * FROM EXAM_RESULT 
+	    WHERE TET_NUM = #{tetNum} 
+	      AND USER_NUM = #{userNum}
+	</select>
   	
   	
-  	 <select id="selectExamResultSeqNext" resultType="int">
-    SELECT SEQ_EXAM_RESULT.NEXTVAL AS ER_NUM FROM DUAL
-</select>
+  	<select id="selectExamResultSeqNext" resultType="int">
+	    SELECT SEQ_EXAM_RESULT.NEXTVAL AS ER_NUM FROM DUAL
+	</select>
   	
-  	
+  	<select id="getBStList" resultType="com.school.dto.BonusStudentVO">
+  		SELECT userName, subjectName, bcScore, passed FROM (
+		    SELECT ROWNUM RN,
+		    	U.USER_NAME AS userName,
+		    	C.CLA_TITLE AS subjectName,
+		    	C.CLA_BONUS AS bcScore,
+		    	E.ER_PASS AS passed
+		    FROM EXAM_RESULT E
+		    JOIN USERS U ON E.USER_NUM = U.USER_NUM
+		    JOIN TEST T ON E.TET_NUM = T.TET_NUM
+		    JOIN CLASS C ON T.CLA_NUM = C.CLA_NUM
+	    	WHERE ROWNUM &lt;= #{limit}
+		)
+		WHERE RN >= #{offset}
+	    
+	</select>
+		<select id="selectCount" resultType="int">
+		select count(*)
+		from EXAM_RESULT
+	</select>
   </mapper>

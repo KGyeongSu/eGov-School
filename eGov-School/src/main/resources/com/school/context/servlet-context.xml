@@ -3,11 +3,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+		https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
 
-	
 	<view-controller path="/page/l_recruit"/>
 	<view-controller path="/page/l_recruit_detail"/>
 	<view-controller path="/page/l_recruit_apply"/>
@@ -17,35 +23,32 @@
 	<view-controller path="/admin/cv" />
 	<view-controller path="/admin/curriculum" />
 	<view-controller path="/admin/curriculum_detail" />
-	
+
 	<view-controller path="/user/dashBoard" view-name="user/dashBoard"/>
 	<view-controller path="/lecterer/testMake" />
-	
-	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
-	<!-- @Controller,@RequestMapping 동작 -->
+
+	<!-- @Controller, @RequestMapping 동작 -->
 	<annotation-driven />
 
-	<!-- css,js 이미지 파일 접근 허용 -->
+	<!-- __css__,__js__ 이미지 파일 접근 허용 -->
 	<resources mapping="/resources/**" location="/resources/" />
-	
+
 	<!-- 강의 수정 시 업로드 허용 -->
 	<resources mapping="/upload/lesson/**" location="file:///C:/lesson/file/upload/" />
-	
+
 	<!-- 파일 업로드 처리 -->
-	<beans:bean id="multipartResolver" 
-	class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
-     
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+
 	<!-- View Resolver 경로 -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
+
 	<context:property-placeholder location="classpath:com/school/properties/*.properties" />
 	<resources mapping="/display/**" location="file:///c:/lecterer/picture/upload/" />
-	
-	<context:component-scan base-package="com.school.controller" />
-	
-		
+
+	<context:component-scan base-package="com.school.controller, com.school.config" />
+
 </beans:beans>

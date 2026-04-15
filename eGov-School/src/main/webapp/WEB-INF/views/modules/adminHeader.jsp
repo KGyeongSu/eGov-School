@@ -14,20 +14,21 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- bootstrap -->
-<link rel="stylesheet"
-	href="../../../resources/bootstrap/dist/css/adminlte.min.css">
+
+<link rel="stylesheet" href="../../../../resources/bootstrap/dist/css/adminlte.min.css">
 </head>
 <body>	
 <header>
-		<div class="logo">
-			<a href="mainDashBoard"><img src="../../../resources/images/dashboardLogo.png" /></a>
+		<div class="logo" style="margin-left:20px">
+			<a href="/main"><img src="../../../resources/images/dashboardLogo.png" /></a>
 		</div>
 
 		<nav class="menu">
 			<ul>
-				<li onclick="OpenWindow('profile', 'My 프로필', 700, 900);" style="cursor: pointer;"><span>My 프로필</span></li>
-				<li onclick="location.href='myRoom';" style="cursor: pointer;"><span>My 강의실</span></li>
-				<li onclick="location.href='resultManage';" style="cursor: pointer;"><span>My &nbsp; 평가</span></li>
+				<li><a href=""><span>공무원 선발 가산점</span></a></li>
+                <li><a href=""><span>강좌 평가</span></a></li>
+				<li><a href=""><span>강사지원자 이력서 확인</span></a></li>
+				<li><a href=""><span>강좌 커리큘럼 확인</span></a></li>
 			</ul>
 		</nav>
 </header>

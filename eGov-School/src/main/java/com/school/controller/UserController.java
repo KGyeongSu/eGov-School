@@ -151,7 +151,7 @@ public class UserController {
         String role = auth.getAuthorities().iterator().next().getAuthority();
         
         if ("ROLE_관리자".equals(role)) {
-            return "redirect:/admin/main";
+            return "redirect:/admin/main?num=2";
         } else if ("ROLE_강사".equals(role)) {
             return "redirect:/lecterer/mainDashBoard";
         } else {

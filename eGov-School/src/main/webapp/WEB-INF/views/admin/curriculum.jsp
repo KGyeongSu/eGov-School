@@ -20,7 +20,7 @@
         </a>
     </div>
     <div class="header-right">
-        <span class="hd-user">김진아 님의 대시보드</span>
+        <span class="hd-user">${adminName} 님의 대시보드</span>
         <button class="btn-logout">로그아웃</button>
     </div>
 </header>
@@ -37,7 +37,7 @@
             <a href="/admin/curriculum" class="on">강좌 커리큘럼 확인</a>
         </div>
         <div class="side-bottom">
-            <strong>김진아</strong>
+            <strong>${adminName}</strong>
             관리자
         </div>
     </div>
@@ -51,15 +51,6 @@
             <div class="section-head">강좌 커리큘럼 리스트</div>
             <div class="section-body">
 
-                <!-- 검색 -->
-                <!--
-                    DB 연결 시 (PHP 예시):
-                    $sql = "SELECT c.id, i.name AS 강사명, c.course_no, c.course_name, c.summary
-                            FROM courses c
-                            JOIN instructors i ON c.instructor_id = i.id
-                            WHERE c.course_name LIKE ?
-                            ORDER BY c.id DESC";
-                -->
                 <div class="search-bar">
                     <input type="text" id="searchInput" placeholder="강좌명, 강사명 검색">
                     <button class="btn btn-blue btn-sm" onclick="filterList()">검색</button>
@@ -78,24 +69,12 @@
                         </tr>
                     </thead>
                     <tbody id="curriculumBody">
-                        <!--
-                            DB 연결 시:
-                            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo '<tr>';
-                                echo '<td>'.$row['강사명'].'</td>';
-                                echo '<td>'.$row['course_no'].'</td>';
-                                echo '<td class="left">'.$row['course_name'].'</td>';
-                                echo '<td class="left">'.$row['summary'].'</td>';
-                                echo '<td><a href="/admin/curriculum/'.$row['id'].'" class="btn btn-sm">상세보기</a></td>';
-                                echo '</tr>';
-                            }
-                        -->
                         <tr>
                             <td>김강사</td>
                             <td>C-2026-001</td>
                             <td class="left">공무원 행정법 기초 과정</td>
                             <td class="left">행정법 개요, 행정행위, 행정절차법 등</td>
-                            <td><a href="/admin/curriculum/1" class="btn btn-sm">상세보기</a></td>
+                            <td><a href="/admin/curriculum_detail" class="btn btn-sm">상세보기</a></td>
                         </tr>
                         <tr>
                             <td>이강사</td>
@@ -154,12 +133,6 @@
             </div>
         </div>
     </div><!-- /.main -->
-</div><!-- /.layout -->
-
-<footer>
-    <strong>대전광역시 인재개발원</strong> | eGov-School 관리자 페이지 &nbsp;|&nbsp; Copyright &copy; 2026
-</footer>
-
 
 </body>
 </html>

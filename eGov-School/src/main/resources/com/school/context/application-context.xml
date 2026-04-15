@@ -105,7 +105,11 @@
 	<bean id="examNoticeService" class="com.school.service.ExamNoticeServiceImpl"
 	    c:examNoticeDAO-ref="examNoticeDAO" />
 
-
+	<bean id="adminService" class="com.school.service.AdminServiceImpl">
+		<constructor-arg index="0" ref="classDAO" />
+		<constructor-arg index="1" ref="bonusCriteriaDAO" />
+		<constructor-arg index="2" ref="examResultDAO" />
+	</bean>
 
 
 		<!-- utils -->

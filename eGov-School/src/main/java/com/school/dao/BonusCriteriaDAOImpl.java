@@ -1,11 +1,15 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import com.school.dto.BonusCriteriaVO;
+import com.school.dto.BonusStudentVO;
+import com.school.dto.BonusSubjectVO;
 
 public class BonusCriteriaDAOImpl implements BonusCriteriaDAO{
 
@@ -49,4 +53,18 @@ public class BonusCriteriaDAOImpl implements BonusCriteriaDAO{
 	public int selectBonusScoreByUser(String userNum) throws SQLException {
 		return session.selectOne("BonusCriteria-Mapper.selectBonusScoreByUser", userNum);
 	}
-}   
+	
+	@Override
+	public List<BonusSubjectVO> getBSbList(int offset, int limit) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("offset", offset);
+        paramMap.put("limit", limit);
+        return session.selectList("BonusCriteria-Mapper.getBSbList", paramMap);
+	}
+
+	@Override
+	public int selectCount() throws SQLException {
+		return session.selectOne("BonusCriteria-Mapper.selectCount");
+	}
+	
+}
