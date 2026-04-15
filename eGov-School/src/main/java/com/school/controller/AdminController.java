@@ -1,7 +1,9 @@
 package com.school.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.school.cmd.PageMaker;
+import com.school.dto.BonusCriteriaVO;
 import com.school.dto.BonusStudentVO;
 import com.school.dto.BonusSubjectVO;
 import com.school.dto.ClassVO;
@@ -46,6 +49,7 @@ public class AdminController {
 	public void showMain(@RequestParam("num") int num, PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
 		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
 		model.addAttribute("adminName", loginUser.getUserName());
+		model.addAttribute("adminNum", loginUser.getUserNum());
 		if (num == 0) {
 			List<BonusSubjectVO> bonusSubjectVOList = adminService.getBSbList(pageMaker);
 			model.addAttribute("bsbVOs", bonusSubjectVOList);
@@ -61,12 +65,26 @@ public class AdminController {
 			model.addAttribute("bstVOs", bonusStudentVOList);		
 		}
 		model.addAttribute("pageMaker", pageMaker);
-		List<ClassVO> classList = adminService.getClassList();
-		model.addAttribute("classList", classList);
 	}
 
 	@GetMapping("/curriculum")
 	public void getCurriculum() {
 		
 	}
+	
+	@PostMapping("/regBonus")
+	@ResponseBody
+	public Map<String, Object> regBonus(@RequestBody BonusCriteriaVO bc) {
+		Map<String, Object> result = new HashMap<>();
+	    try {
+	        // 서비스 로직 실행
+	        adminService.regBonus(bc);
+	        result.put("success", true);
+	    } catch (Exception e) {
+	        result.put("success", false);
+	        result.put("message", "저장 중 오류가 발생했습니다.");
+	    }
+	    return result;
+	}
+	
 } 

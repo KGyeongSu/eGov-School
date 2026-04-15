@@ -211,11 +211,6 @@
     VALUES (BC_SEQ.NEXTVAL, #{claNum}, #{bcContent}, #{bcScore}, #{bcNote}, #{userNum}, SYSDATE)
 </insert>
 
-<select id="getClassList" resultType="classs">
-    SELECT c.cla_num, c.cla_title 
-    FROM CLASS c
-    ORDER BY CLA_REGDATE DESC
-</select>
 </mapper>
 
 

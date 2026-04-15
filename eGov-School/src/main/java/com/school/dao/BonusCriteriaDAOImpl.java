@@ -25,8 +25,8 @@ public class BonusCriteriaDAOImpl implements BonusCriteriaDAO{
 	}
 
 	@Override
-	public void insertBonusCriteria(BonusCriteriaVO bonus) throws SQLException {
-		session.insert("BonusCriteria-Mapper.insertBonusCriteria", bonus);
+	public int insertBonusCriteria(BonusCriteriaVO bonus) throws SQLException {
+		return session.insert("BonusCriteria-Mapper.insertBonusCriteria", bonus);
 	}
 
 	@Override
@@ -66,5 +66,4 @@ public class BonusCriteriaDAOImpl implements BonusCriteriaDAO{
 	public int selectCount() throws SQLException {
 		return session.selectOne("BonusCriteria-Mapper.selectCount");
 	}
-	
 }

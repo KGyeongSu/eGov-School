@@ -306,27 +306,19 @@
         </div>
         <div class="modal-body">
             <div class="form-row">
-                <label>강좌 선택</label>
-                <select id="reg-cla-num" class="full">
-                    <option value="">-- 강좌를 선택하세요 --</option>
-                    <c:forEach var="cla" items="${classList}">
-                        <option value="${cla.claNum}">${cla.claTitle}</option>
-                    </c:forEach>
-                </select>
+                <label>카테고리 추가</label><br>
+                <input type="text" id="reg-bc-content" class="full">
             </div>
             <div class="form-row">
                 <label>가산점 상세내용</label>
-                <textarea id="reg-bc-content" class="full" rows="4"
+                <textarea id="reg-bc-note" class="full" rows="4"
                           placeholder="예: 수강률 100%, test 60점 이상"></textarea>
             </div>
             <div class="form-row">
                 <label>가산점 (점수)</label>
                 <input type="number" id="reg-bc-score" class="full" placeholder="예: 3" min="0" max="100">
             </div>
-            <div class="form-row">
-                <label>비고</label>
-                <input type="text" id="reg-bc-note" class="full" placeholder="비고 입력 (선택)">
-            </div>
+            <input type="hidden" id="userNum" value="${adminNum}">
         </div>
     </div>
 </div>

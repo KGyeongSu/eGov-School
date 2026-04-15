@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import com.school.cmd.PageMaker;
-import com.school.dto.ClassSimpleVO;
 import com.school.dto.ClassVO;
 import com.school.dto.RegInlearningVO;
 import com.school.dto.UserVO;
@@ -46,8 +45,6 @@ public interface ClassDAO {
 	void updateClassProgress(String userNum, String claNum, int progressPercent) throws SQLException;
 
 	int updateClassStaEndDate(RegInlearningVO regInlearningVO) throws SQLException;
-	
-	List<ClassVO> getClassList() throws SQLException;
 
 }
  

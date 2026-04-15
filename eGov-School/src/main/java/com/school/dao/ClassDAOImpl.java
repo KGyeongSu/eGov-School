@@ -10,7 +10,6 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
-import com.school.dto.ClassSimpleVO;
 import com.school.dto.ClassVO;
 import com.school.dto.RegInlearningVO;
 import com.school.dto.UserVO;
@@ -157,9 +156,4 @@ public class ClassDAOImpl implements ClassDAO {
 	    return session.update("Class-Mapper.updateClassStaEndDate", map);
 	}
 	
-	@Override
-	public List<ClassVO> getClassList() throws SQLException {
-		return session.selectList("Class-Mapper.getClassList");
-	}
-
 }

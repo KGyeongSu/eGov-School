@@ -13,7 +13,7 @@ public interface BonusCriteriaDAO {
 
 	String selectBonusCriteriaSeqNext() throws SQLException;
 	
-	void insertBonusCriteria(BonusCriteriaVO bonus) throws SQLException;
+	int insertBonusCriteria(BonusCriteriaVO bonus) throws SQLException;
 	
 	List<BonusCriteriaVO> selectBonusCriteriaList() throws SQLException;
 	
@@ -28,4 +28,5 @@ public interface BonusCriteriaDAO {
 	List<BonusSubjectVO> getBSbList(@Param("offset") int offset, @Param("limit") int limit) throws SQLException;
 	
 	int selectCount() throws SQLException;
+
 }
