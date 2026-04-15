@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassApplyVO;
 import com.school.dto.ClassVO;
+import com.school.dto.RegInlearningVO;
 import com.school.dto.UserVO;
 
 public class ClassDAOImpl implements ClassDAO {
@@ -205,6 +206,17 @@ public class ClassDAOImpl implements ClassDAO {
 	@Override
 	public void approveClass(ClassVO classVO) throws SQLException {
 		session.update("Class-Mapper.approveClass", classVO);
+	}
+	
+	@Override
+	public int updateClassStaEndDate(RegInlearningVO regInlearningVO) throws SQLException {
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("courseNo", regInlearningVO.getCourseNo());
+	    map.put("eduStart", regInlearningVO.getEduStart().toString()); // "yyyy-MM-dd"
+	    map.put("eduEnd",   regInlearningVO.getEduEnd().toString());
+	    map.put("maxStudents", regInlearningVO.getMaxStudents());
+	    map.put("completeCondition", regInlearningVO.getCompleteCondition());
+	    return session.update("Class-Mapper.updateClassStaEndDate", map);
 	}
 
 }

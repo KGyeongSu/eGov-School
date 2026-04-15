@@ -20,7 +20,7 @@
         </a>
     </div>
     <div class="header-right">
-        <span class="hd-user">김진아 님의 대시보드</span>
+        <span class="hd-user">${adminName} 님의 대시보드</span>
         <button class="btn-logout" onclick="doLogout()">로그아웃</button>
     </div>
 </header>
@@ -37,7 +37,7 @@
             <a href="/admin/curriculum">강좌 커리큘럼 확인</a>
         </div>
         <div class="side-bottom">
-            <strong>김진아</strong>
+            <strong>${adminName}</strong>
             관리자
         </div>
     </div>
@@ -51,14 +51,6 @@
             <div class="section-head">강사 지원자 이력서 확인</div>
             <div class="section-body">
 
-                <!-- 검색/필터 (ES-A04-009) -->
-                <!--
-                    DB 연결 시:
-                    SELECT a.id, a.receipt_no, s.name, s.phone, a.job_type, a.career, a.status
-                    FROM applications a
-                    JOIN applicants s ON a.applicant_id = s.id
-                    WHERE a.job_type LIKE ? AND (s.name LIKE ? OR a.career LIKE ?)
-                -->
                 <div class="search-bar">
                     <label>지원직무</label>
                     <select id="cvJobFilter">
@@ -98,16 +90,6 @@
                         </tr>
                     </thead>
                     <tbody id="cvBody">
-                        <!--
-                            DB 연결 예시 (PHP):
-                            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo '<tr data-job="'.$row['job_type'].'" data-status="'.$row['status'].'">';
-                                echo '<td>'.$row['receipt_no'].'</td>';
-                                echo '<td>'.$row['name'].'</td>';
-                                ...
-                                echo '</tr>';
-                            }
-                        -->
                         <tr data-job="관세직" data-status="검토중">
                             <td>d247</td>
                             <td>홍길동</td>
@@ -178,10 +160,6 @@
 
     </div><!-- /.main -->
 </div><!-- /.layout -->
-
-<footer>
-    <strong>대전광역시 인재개발원</strong> | eGov-School 관리자 페이지 &nbsp;|&nbsp; Copyright &copy; 2026
-</footer>
 
 <!-- ===== 모달: 이력서 상세 ===== -->
 <div class="modal-overlay" id="modal-cv">

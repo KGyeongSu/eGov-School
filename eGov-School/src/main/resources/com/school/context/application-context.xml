@@ -117,7 +117,11 @@
 		class="com.school.service.ReputationServiceImpl"
 		c:reputationDAO-ref="reputationDAO"/>
 
-
+	<bean id="adminService" class="com.school.service.AdminServiceImpl">
+		<constructor-arg index="0" ref="classDAO" />
+		<constructor-arg index="1" ref="bonusCriteriaDAO" />
+		<constructor-arg index="2" ref="examResultDAO" />
+	</bean>
 
 		<!-- utils -->
 		<bean id="fileUploadUtils"

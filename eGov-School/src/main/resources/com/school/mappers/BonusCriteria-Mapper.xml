@@ -53,4 +53,17 @@
 		WHERE CA.USER_NUM = #{userNum}
 	</select>
 
+	<select id="getBSbList" resultType="com.school.dto.BonusSubjectVO">
+		SELECT BC_CONTENT, BC_SCORE FROM (
+			SELECT ROWNUM RN, BC_CONTENT, BC_SCORE
+			FROM BONUS_CRITERIA
+			WHERE ROWNUM &lt;= #{limit}
+		)
+		WHERE RN >= #{offset}
+	</select>
+	
+	<select id="selectCount" resultType="int">
+		select count(*)
+		from BONUS_CRITERIA
+	</select>
 </mapper>

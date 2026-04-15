@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.ClassVO;
+import com.school.dto.RegInlearningVO;
 import com.school.dto.UserVO;
 
 public interface ClassDAO {
@@ -63,5 +64,7 @@ public interface ClassDAO {
 	int selectPendingClassListCount(@Param("pageMaker") PageMaker pageMaker) throws SQLException;
 	// 관리자용: 강좌 승인 처리
 	void approveClass(ClassVO classVO) throws SQLException;
+	
+	int updateClassStaEndDate(RegInlearningVO regInlearningVO) throws SQLException;
 }
  

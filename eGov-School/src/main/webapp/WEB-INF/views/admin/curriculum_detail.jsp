@@ -23,7 +23,7 @@
         </a>
     </div>
     <div class="header-right">
-        <span class="hd-user">김진아 님의 대시보드</span>
+        <span class="hd-user">${adminName} 님의 대시보드</span>
         <button class="btn-logout">로그아웃</button>
     </div>
 </header>
@@ -40,7 +40,7 @@
             <a href="/admin/curriculum" class="on">강좌 커리큘럼 확인</a>
         </div>
         <div class="side-bottom">
-            <strong>김진아</strong>
+           <strong>${adminName}</strong>
             관리자
         </div>
     </div>
@@ -50,10 +50,7 @@
         <div class="page-title">강좌 커리큘럼 확인</div>
         <div class="page-sub">IN_learn / dash / admin / cur_check / detail</div>
 
-        <!-- 인러닝에 게시하기 버튼
-        <div style="text-align:right; margin-bottom:12px;">
-            <button class="btn btn-blue" onclick="publishToInlearning()">인러닝에 게시하기</button>
-        </div> -->
+        
 
         <!-- ===== 상단: 강좌 기본 정보 ===== -->
         <div class="section-box">
@@ -210,9 +207,7 @@
     </div><!-- /.main -->
 </div><!-- /.layout -->
 
-<footer>
-    <strong>대전광역시 인재개발원</strong> | eGov-School 관리자 페이지 &nbsp;|&nbsp; Copyright &copy; 2026
-</footer>
+
 
 <script>
     /* 가산점 기준 드롭다운 변경 시 */

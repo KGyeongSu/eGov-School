@@ -22,7 +22,7 @@
         </a>
     </div>
     <div class="header-right">
-        <span class="hd-user">김진아 님의 대시보드</span>
+        <span class="hd-user">${adminName} 님의 대시보드</span>
         <button class="btn-logout">로그아웃</button>
     </div>
 </header>
@@ -39,7 +39,7 @@
             <a href="/admin/curriculum" class="on">강좌 커리큘럼 확인</a>
         </div>
         <div class="side-bottom">
-            <strong>김진아</strong>
+            <strong>${adminName}</strong>
             관리자
         </div>
     </div>
@@ -120,9 +120,7 @@
     </div><!-- /.main -->
 </div><!-- /.layout -->
 
-<footer>
-    <strong>대전광역시 인재개발원</strong> | eGov-School 관리자 페이지 &nbsp;|&nbsp; Copyright &copy; 2026
-</footer>
+
 
 
 </body>

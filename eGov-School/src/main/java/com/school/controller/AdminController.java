@@ -1,7 +1,10 @@
 package com.school.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.school.cmd.PageMaker;
 import com.school.dto.BonusCriteriaVO;
+import com.school.dto.BonusStudentVO;
+import com.school.dto.BonusSubjectVO;
 import com.school.dto.ClassVO;
 import com.school.dto.LessonVO;
+import com.school.dto.RegInlearningVO;
 import com.school.dto.ReputationVO;
 import com.school.dto.UserVO;
+import com.school.service.AdminService;
 import com.school.service.BonusCriteriaService;
 import com.school.service.ClassService;
 import com.school.service.LessonService;
@@ -36,18 +43,55 @@ public class AdminController {
     private final LessonService lessonService;
     private final BonusCriteriaService bonusCriteriaService;
     private final UserService userService;
+    private final AdminService adminService;
     
     public AdminController(ClassService classService, 
     					   LessonService lessonService, 
     					   BonusCriteriaService bonusCriteriaService,
     					   ReputationService reputationService,
-    					   UserService userService) {
+    					   UserService userService,
+    					   AdminService adminService) {
         this.classService = classService;
         this.lessonService = lessonService;
         this.bonusCriteriaService = bonusCriteriaService;
         this.reputationService = reputationService;
         this.userService = userService;
+        this.adminService = adminService;
     }
+    
+    @PostMapping("/regInlearning")
+	@ResponseBody
+    public ResponseEntity<Integer> regInlearing(@RequestBody RegInlearningVO regInlearningVO) throws SQLException {
+        //log.info(regInlearningVO);
+		int result = adminService.regInlearning(regInlearningVO);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+	@GetMapping("/main")
+	public void showMain(@RequestParam("num") int num, PageMaker pageMaker, HttpSession session, Model model) throws SQLException {
+		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+		model.addAttribute("adminName", loginUser.getUserName());
+		if (num == 0) {
+			List<BonusSubjectVO> bonusSubjectVOList = adminService.getBSbList(pageMaker);
+			model.addAttribute("bsbVOs", bonusSubjectVOList);
+		}
+		else if (num == 1) {
+			List<BonusStudentVO> bonusStudentVOList = adminService.getBStList(pageMaker);
+			model.addAttribute("bstVOs", bonusStudentVOList);	
+		} 
+		else {
+			List<BonusSubjectVO> bonusSubjectVOList = adminService.getBSbList(pageMaker);
+			model.addAttribute("bsbVOs", bonusSubjectVOList);
+			List<BonusStudentVO> bonusStudentVOList = adminService.getBStList(pageMaker);
+			model.addAttribute("bstVOs", bonusStudentVOList);		
+		}
+		model.addAttribute("pageMaker", pageMaker);
+	}
+
+	@GetMapping("/curriculum")
+	public void getCurriculum() {
+		
+	}
     
     // 육상우
     @GetMapping("/feedback")

@@ -1,10 +1,13 @@
 package com.school.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.school.dto.BonusStudentVO;
 import com.school.dto.ExamResultVO;
 
 public class ExamResultDAOImpl implements ExamResultDAO{
@@ -43,6 +46,19 @@ public class ExamResultDAOImpl implements ExamResultDAO{
 	public ExamResultVO selectExamResultByTetAndUser(ExamResultVO examresult) throws SQLException {
 		
 		return session.selectOne("ExamResult-Mapper.selectExamResultByTetAndUser",examresult);
+	}
+	
+	@Override
+	public List<BonusStudentVO> getBStList(int offset, int limit) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("offset", offset);
+        paramMap.put("limit", limit);
+		return session.selectList("ExamResult-Mapper.getBStList", paramMap);
+	}
+	
+	@Override
+	public int selectCount() throws SQLException {
+		return session.selectOne("ExamResult-Mapper.selectCount");
 	}
 
 }
