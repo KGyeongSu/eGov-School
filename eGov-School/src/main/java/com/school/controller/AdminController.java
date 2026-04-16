@@ -114,8 +114,11 @@ public class AdminController {
 
     // 강좌 커리큘럼 리스트
     @GetMapping("/curriculum")
-    public String curriculum(PageMaker pageMaker, Model model) throws Exception {
-        List<ClassVO> classList = classService.selectPendingClassList(pageMaker);
+    public String curriculum(PageMaker pageMaker, HttpSession session, Model model) throws Exception {
+    	UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        model.addAttribute("adminName", loginUser.getUserName());
+    	
+    	List<ClassVO> classList = classService.selectPendingClassList(pageMaker);
         model.addAttribute("classList", classList);
         model.addAttribute("pageMaker", pageMaker);
         return "admin/curriculum";
@@ -123,8 +126,11 @@ public class AdminController {
 
     // 강좌 커리큘럼 상세
     @GetMapping("/curriculum_detail")
-    public String curriculumDetail(@RequestParam("claNum") String claNum, Model model) throws Exception {
-        ClassVO classVO = classService.selectClassByCla_num(claNum);
+    public String curriculumDetail(@RequestParam("claNum") String claNum, HttpSession session, Model model) throws Exception {
+    	UserVO loginUser = (UserVO) session.getAttribute("loginUser");
+        model.addAttribute("adminName", loginUser.getUserName());
+    	
+    	ClassVO classVO = classService.selectClassByCla_num(claNum);
         List<LessonVO> lessonList = lessonService.selectLessonList(claNum);
         List<BonusCriteriaVO> bonusList = bonusCriteriaService.selectBonusCriteriaList();
         model.addAttribute("classVO", classVO);

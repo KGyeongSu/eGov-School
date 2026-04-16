@@ -58,7 +58,7 @@
 
 	<header>
 		<div class="logo">
-			<a href="/admin/main"> <img src="/images/dashBoardLogo.png"
+			<a href="/admin/main"> <img src="../../../resources/images/dashboardLogo.png"
 				alt="대전광역시 인재개발원">
 			</a>
 		</div>

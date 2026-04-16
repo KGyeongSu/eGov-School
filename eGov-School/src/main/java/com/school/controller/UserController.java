@@ -117,7 +117,7 @@ public class UserController {
 
     // 회원가입 처리
     @PostMapping("/commons/join")
-    public String regist(UserVO user, HttpSession session) throws SQLException {
+    public String regist(UserVO user, HttpSession session, RedirectAttributes rttr) throws SQLException {
 
         Boolean verified = (Boolean) session.getAttribute("emailVerified");
         if (verified == null || !verified) {
@@ -126,8 +126,9 @@ public class UserController {
 
         userService.regist(user);
         session.removeAttribute("emailVerified");
-
-        return "commons/login";
+        
+        rttr.addFlashAttribute("joinMsg", "회원가입이 완료되었습니다. 로그인해주세요.");
+        return "redirect:/commons/login";
     }
 
 

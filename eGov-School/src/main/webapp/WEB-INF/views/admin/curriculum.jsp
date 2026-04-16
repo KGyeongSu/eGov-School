@@ -18,11 +18,11 @@
 <header>
     <div class="logo">
         <a href="/admin/main">
-            <img src="/images/dashboardLogo.png" alt="대전광역시 인재개발원">
+            <img src="../../../resources/images/dashboardLogo.png" alt="대전광역시 인재개발원">
         </a>
     </div>
     <div class="header-right">
-        <span class="hd-user">${adminName} 님의 대시보드</span>
+        <span class="hd-user">${adminName}님의 대시보드</span>
         <button class="btn-logout">로그아웃</button>
     </div>
 </header>

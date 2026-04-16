@@ -1,44 +1,109 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<link type="text/css" rel="stylesheet"
-      href="../../../resources/css/admin/admin.css" />
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin 공무원 대시보드 - 공무원 선발 가산점</title>
+<link rel="stylesheet" href="/resources/css/admin/admin.css">
+<!-- font awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- bootstrap -->
+<!-- <link rel="stylesheet" href="/resources/bootstrap/dist/css/adminlte.min.css"> -->
+<script src="/resources/js/admin.js"></script>
 
-<title>inlearning_admin_main</title>
+<style>
+/* 페이지네이션 보정 */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+.page-item .page-link {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    color: #0e506e;
+    text-decoration: none;
+    font-size: 13px;
+    background: #fff;
+}
+.page-item .page-link:hover {
+    background: #eef5f8;
+    text-decoration: none;
+}
+.page-item.active .page-link {
+    background: #0e506e;
+    color: #fff;
+    border-color: #0e506e;
+}
+.pagination.justify-content-center {
+    justify-content: center;
+}
+.header-right {
+    display: flex;
+    align-items: center;
+}
+.logout_dash {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+</style>
 
 </head>
-
 <body>
 
-<%@ include file="../modules/adminHeader.jsp"%>
+<!-- ===== 헤더 ===== -->
+<header>
+	<div class="logo">
+		<a href="/main"> <img src="../../../resources/images/dashboardLogo.png"
+			alt="대전광역시 인재개발원">
+		</a>
+	</div>
+	<div class="header-right">
+		<span class="hd-user">${adminName} 님의 대시보드</span>
+		<div class="logout_dash">
+			<div class="mes">
+				<a href=""><i class="fa-regular fa-envelope"></i></a>
+			</div>
+			<div class="out">
+				<button type="button" class="btn btn-sm"
+					style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px;">로그아웃
+				</button>
+			</div>
+		</div>
+	</div>
+</header>
 
+<!-- ===== 전체 레이아웃 ===== -->
+<div class="layout">
 
-<div class="content">
+	<!-- 사이드바 -->
+	<div class="sidebar">
+		<div class="side-menu">
+			<a href="/admin/main?num=2">공무원 선발 가산점</a>
+			<a href="/admin/feedback">강사 피드백</a>
+			<a href="/admin/cv">강사지원자 이력서 확인</a>
+			<a href="/admin/curriculum">강좌 커리큘럼 확인</a>
+		</div>
+		<div class="side-bottom">
+			<strong>${adminName}</strong> 관리자
+		</div>
+	</div>
 
-    <div class="top">
-        <div class="icon">
-            <a href=""><i class="fa-regular fa-user"></i></a>
-        </div>
-        <div class="state_bar">
-            <p>${adminName}님의 메인 대시보드</p>
-        </div>
-        <div class="logout_dash">
-            <div class="mes">
-                <a href=""><i class="fa-regular fa-envelope"></i></a>
-            </div>
-            <div class="out">
-                <button type="button" class="btn btn-sm"
-                    style="background-color: #1a6d91; color: white; border-radius: 4px; font-size: 12px;">로그아웃
-                </button>
-            </div>
-        </div>
-    </div>
+	<!-- 메인 -->
+	<div class="main">
+		<div class="page-title">공무원 선발 가산점</div>
 
-    <div class="mid admin-wrap" style="padding: 30px 40px;">
-
-        <div class="page-title">공무원 선발 가산점</div>
-
-        <div class="tab-bar" data-group="main">
+		<!-- 탭 (ES-A04-001~004) -->
+		<div class="tab-bar" data-group="main">
             <a href="#" class="on" onclick="showTab('tab-gen', this)">가산점 기준 생성</a>
             <a href="#" onclick="search_list(1, 0);showTab('tab-list', this)">가산점 기준 리스트 확인</a>
             <a href="#" onclick="search_list(1, 1);showTab('tab-check', this)">수강생 별 가산점 현황 조회</a>
