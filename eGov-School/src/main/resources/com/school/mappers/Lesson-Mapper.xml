@@ -13,6 +13,15 @@
         <result property="lsnContent" column="LSN_CONTENT" />
         <result property="lsnVideo" column="LA_SAVE_NAME" /> 
         <result property="claName" column="CLA_TITLE" />
+        
+        <collection property="lessonFiles" ofType="lessonAttach">
+            <id property="laNum" column="LA_NUM" />
+            <result property="lsnNum" column="LSN_NUM" />
+            <result property="laName" column="LA_NAME" />
+            <result property="laSaveName" column="LA_SAVE_NAME" />
+            <result property="laPath" column="LA_PATH" />
+            <result property="laType" column="LA_TYPE" />
+        </collection>
     </resultMap>
 
     <resultMap id="lessonMap" type="lesson">

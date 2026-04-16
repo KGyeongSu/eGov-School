@@ -62,7 +62,7 @@
         </div>
         <form action="/lecturer/testMake" method="post" id="testForm">
         		<input type="hidden" id="claNum" value="${not empty testEditInfo ? testEditInfo.claNum : testMake.claNum}">
-			    <input type="hidden" name="quePoint" value="5"> 
+			    <input type="hidden" name="quePoint" value="33"> 
 			    <input type="hidden" name="testTimeLimit" value="40"> 
 	        <div class="main">
 	            <div class="ques">

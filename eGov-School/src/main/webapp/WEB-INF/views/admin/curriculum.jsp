@@ -23,7 +23,7 @@
     </div>
     <div class="header-right">
         <span class="hd-user">${adminName}님의 대시보드</span>
-        <button class="btn-logout">로그아웃</button>
+        <button class="btn-logout" onclick="location.href='/commons/logout'">로그아웃</button>
     </div>
 </header>
 
