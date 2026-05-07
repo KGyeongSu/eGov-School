@@ -29,7 +29,7 @@ public class MimeAttachNotifier {
 		// 받는사람
 		helper.setTo(new InternetAddress(receiver));
 		// 보내는사람
-		helper.setFrom("rudtn778@naver.com", "eGov-School");
+		helper.setFrom("YOUR_NAVER_id", "eGov-School");
 		// 제목
 		helper.setSubject("[eGov-School] 회원가입 이메일 인증번호");
 		// 내용 (HTML)
