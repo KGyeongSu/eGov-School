@@ -27,8 +27,8 @@
 			</props>
 		</property>
 		<property name="defaultEncoding" value="utf-8" />
-		<property name="username" value="rudtn778" />
-		<property name="password" value="1SRBQ397BH1F" />
+		<property name="username" value="YOUR_NAVER_ID" />
+		<property name="password" value="YOUR_APP_PASSWORD" />
 	</bean>	
 	
 </beans>
